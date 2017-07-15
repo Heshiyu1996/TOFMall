@@ -10,8 +10,14 @@ import byType from './../components/Search/byType'
 import ItemInfo from './../components/Item/ItemInfo'
 
 import Order from './../components/Order/Order'
+import ShoppingCart from './../components/ShoppingCart/ShoppingCart'
 
 export default [
+	{
+		path: '/ShoppingCart',
+		name: 'ShoppingCart',
+		component: ShoppingCart,
+	},
 	{
 		path: '/Order',
 		name: 'Order',
