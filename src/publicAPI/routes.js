@@ -5,10 +5,9 @@ import Registerbox from './../components/User/comsforUser/registerbox'
 import UpdateUserInfoBox from './../components/Center/comsforCenter/UpdateUserInfoBox'
 import GetUserinfobox from './../components/Center/comsforCenter/Getuserinfobox'
 import ChangePassword from './../components/Center/comsforCenter/ChangePassword'
-
 import byCategory from './../components/Search/byCategory'
 import byType from './../components/Search/byType'
-
+import ItemInfo from './../components/Item/ItemInfo'
 
 
 export default [
@@ -16,25 +15,29 @@ export default [
 		path: '/',
 		name: 'app',
 		component: App,
-			children:[
-			 	]
 	},
 
-			{
-				path:'/byType',
-				component:byType,
-				meta: {
-					keepAlive: true
-				},
-			},
+	{
+		path:'/ItemInfo',
+		name: 'ItemInfo',
+		component:ItemInfo,
+	},
+	{
+		path:'/byType',
+		component:byType,
+		meta: {
+			keepAlive: true
+		},
+	},
 
-			{
-				path:'/byCategory',
-				component:byCategory,
-				meta: {
-					keepAlive: true
-				},
-			},
+	{
+		path:'/byCategory',
+		component:byCategory,
+		meta: {
+			keepAlive: true
+		},
+	},
+	
 	{
 		path: '/login',
 		name: 'login',

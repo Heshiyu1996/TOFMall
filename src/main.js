@@ -11,6 +11,8 @@ import config from './publicAPI/config'
 import './../node_modules/vue/dist/vue.js'
 import 'element-ui/lib/theme-default/index.css'
 
+
+
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
