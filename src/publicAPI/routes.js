@@ -9,8 +9,14 @@ import byCategory from './../components/Search/byCategory'
 import byType from './../components/Search/byType'
 import ItemInfo from './../components/Item/ItemInfo'
 
+import Order from './../components/Order/Order'
 
 export default [
+	{
+		path: '/Order',
+		name: 'Order',
+		component: Order,
+	},
 	{
 		path: '/',
 		name: 'app',
@@ -37,7 +43,7 @@ export default [
 			keepAlive: true
 		},
 	},
-	
+
 	{
 		path: '/login',
 		name: 'login',
