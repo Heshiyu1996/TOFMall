@@ -5,9 +5,15 @@
     <title>Test</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1>测试各个板块：</h1>
+      <p>
+      <router-link to="/">Index</router-link>
+        <router-link to="/login">Login</router-link>
+      </p><hr>
+      <router-view></router-view>
+    </div>
 
-              <router-view>
-              </router-view>
+
   </body>
 </html>
