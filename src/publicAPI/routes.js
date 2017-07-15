@@ -4,6 +4,7 @@ import LoginBox from './../components/User/comsforUser/loginbox'
 import Registerbox from './../components/User/comsforUser/registerbox'
 import UpdateUserInfoBox from './../components/Center/comsforCenter/UpdateUserInfoBox'
 import GetUserinfobox from './../components/Center/comsforCenter/Getuserinfobox'
+import ChangePassword from './../components/Center/comsforCenter/ChangePassword'
 
 
 
@@ -38,5 +39,10 @@ export default [
 		path: '/updateuserinfobox',
 		name: 'updateuserinfobox',
 		component: UpdateUserInfoBox,
+	},
+	{
+		path: '/ChangePassword',
+		name: 'ChangePassword',
+		component: ChangePassword,
 	},
 ]
