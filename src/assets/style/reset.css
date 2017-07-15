@@ -41,14 +41,6 @@ a{text-decoration:none;color:#656565;}
 /*!!!!!       注意！css尽量写在自己的.vue里，不要写在这些地方，会全局污染的！        !!!!!*/
 
 
-/*交易平台-技术需求*/
-.el-submenu__title{
-	font-size: 16px !important;
-	height: 74px !important;
-	margin-top: 10px;
-	line-height: 58px !important;
-}
-
 /*首页的table*/
 .tableDIV td div{
 	/*padding: 0 2px !important;*/
@@ -76,31 +68,6 @@ td div{
 	text-align: center
 }
 
-.openIndexNewsBox .el-table tr td{
-	border-bottom:1px dashed gray;
-filter:Alpha(opacity=50)
-
-}
-.openIndexNewsBox tr div{
-	font-weight: normal;
-	background-color: rgb(247,247,247)
-}
-/*
-.askList .el-table{
-	border:0px solid red
-}
-.askList tr div{
-	font-weight: normal;
-	background-color:white
-
-}*/
-/*筛选条件的标签*/
-.timeRange .el-input--small .el-input__inner{
-  width:190px !important
-}
-.timeRange .el-input__icon{
-	    width: 100px !important
-}
 .wangEditor-menu-container {
   top:auto !important;
   position:static !important
