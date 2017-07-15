@@ -6,6 +6,9 @@ import UpdateUserInfoBox from './../components/Center/comsforCenter/UpdateUserIn
 import GetUserinfobox from './../components/Center/comsforCenter/Getuserinfobox'
 import ChangePassword from './../components/Center/comsforCenter/ChangePassword'
 
+import byCategory from './../components/Search/byCategory'
+import byType from './../components/Search/byType'
+
 
 
 export default [
@@ -13,8 +16,25 @@ export default [
 		path: '/',
 		name: 'app',
 		component: App,
+			children:[
+			 	]
 	},
 
+			{
+				path:'/byType',
+				component:byType,
+				meta: {
+					keepAlive: true
+				},
+			},
+
+			{
+				path:'/byCategory',
+				component:byCategory,
+				meta: {
+					keepAlive: true
+				},
+			},
 	{
 		path: '/login',
 		name: 'login',
@@ -44,5 +64,8 @@ export default [
 		path: '/ChangePassword',
 		name: 'ChangePassword',
 		component: ChangePassword,
+	},
+	{//重定向到首页
+		path: '*', redirect: '/'
 	},
 ]
