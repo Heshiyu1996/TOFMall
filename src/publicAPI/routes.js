@@ -2,7 +2,8 @@ import App from './../App'
 import Login from './../components/User/login'
 import LoginBox from './../components/User/comsforUser/loginbox'
 import Registerbox from './../components/User/comsforUser/registerbox'
-import UpdateUserinfobox from './../components/Center/comsforCenter/updateuserinfobox'
+import UpdateUserInfoBox from './../components/Center/comsforCenter/UpdateUserInfoBox'
+import GetUserinfobox from './../components/Center/comsforCenter/Getuserinfobox'
 
 
 
@@ -29,8 +30,13 @@ export default [
 		component: Registerbox,
 	},
 	{
-		path: '/UpdateUserinfobox',
-		name: 'UpdateUserinfobox',
-		component: UpdateUserinfobox,
+		path: '/getUserinfobox',
+		name: 'getUserinfobox',
+		component: GetUserinfobox,
+	},
+	{
+		path: '/updateuserinfobox',
+		name: 'updateuserinfobox',
+		component: UpdateUserInfoBox,
 	},
 ]

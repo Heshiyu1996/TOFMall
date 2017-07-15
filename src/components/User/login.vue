@@ -9,7 +9,7 @@
         <div class="clearfix" style="padding-top:110px;"></div>
         <el-carousel style="border:2px solid white;
           "i ndicator-position="outside" width="400px" height="260px">
-    		    <el-carousel-item v-for="item in imgSource">
+    		    <el-carousel-item v-for="(key,item) in imgSource" :key="key">
     		      <img :src="item" width="100%"  />
     		    </el-carousel-item>
     		</el-carousel>
