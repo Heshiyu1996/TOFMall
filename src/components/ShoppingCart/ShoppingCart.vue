@@ -1,6 +1,5 @@
 <template>
   <div style="width:860px;margin:0 auto;">
-
     <div class="css-top">我的购物车</div>
     <div class="clearfix"></div>
     <hr>
