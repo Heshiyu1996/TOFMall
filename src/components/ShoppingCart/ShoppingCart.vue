@@ -63,7 +63,7 @@
       <div class="css-footer">
         <div class="css-footer-count">已选商品 <span class="css-footer-count-num">0</span>件</div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
-        <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div>
+        <div class="css-footer-btn"><el-button type="primary">去结算</el-button></div>
       </div>
     </section>
   </div>
@@ -237,7 +237,6 @@ export default {
       }
       .css-footer-btn {
         float:left;
-        background-color: green;
       }
     }
 </style>
