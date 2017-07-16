@@ -72,3 +72,7 @@ td div{
   top:auto !important;
   position:static !important
 }
+
+.el-checkbox__label {
+	display: none !important
+}
