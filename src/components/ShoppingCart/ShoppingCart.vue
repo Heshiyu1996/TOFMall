@@ -61,6 +61,7 @@
     </el-checkbox-group>
     <section>
       <div class="css-footer">
+        <div class="css-footer-count">已选商品 <span class="css-footer-count-num">0</span>件</div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
         <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div>
       </div>
@@ -206,6 +207,21 @@ export default {
     .css-footer {
       margin-top: 10px;
       float: right;
+
+      .css-footer-count {
+        padding-top: 0px;
+        line-height: 45px;
+        width: 200px;
+        height:35px;
+        font-size: 16px;
+        float:left;
+        .css-footer-count-num {
+          font-weight: bold;
+          margin: 10px;
+          color: red;
+        }
+      }
+
       .css-footer-sum {
         padding-top: 5px;
         width: 200px;
@@ -215,6 +231,7 @@ export default {
         float:left;
         .css-footer-sum-num {
           margin-left: 10px;
+          font-weight: bold;
           color: red;
         }
       }
