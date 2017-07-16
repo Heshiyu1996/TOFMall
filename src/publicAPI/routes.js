@@ -12,7 +12,14 @@ import ItemInfo from './../components/Item/ItemInfo'
 import Order from './../components/Order/Order'
 import ShoppingCart from './../components/ShoppingCart/ShoppingCart'
 
+import Header from './../components/Public/Header/Header'
+
 export default [
+	{
+		path: '/Header',
+		name: 'Header',
+		component: Header,
+	},
 	{
 		path: '/ShoppingCart',
 		name: 'ShoppingCart',

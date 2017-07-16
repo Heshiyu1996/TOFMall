@@ -3,14 +3,13 @@
     <el-form :model="Form_Register" :rules="rules" ref="Form_Register" label-width="110px" class="demo-Form_Register">
 
       <div class="register-box">
-
         <div style="margin-bottom:16px;width:280px;">
           <h4 style="margin-left:-10px;float:left;">新用户注册</h4>
         </div>
         <div class="errorM" style="margin:0;color:#FF4949;"></div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="Form_Register.username"></el-input>
+            <el-input @blur="checkAccount()" v-model="Form_Register.username"></el-input>
           </el-form-item>
         </div>
         <div style="height:40px;margin-left:-15px">
@@ -52,18 +51,18 @@
           </el-form-item>
         </div>
         <div class="clear"></div>
-        <div style="width:380px;margin-left:-25px;margin-top:-5px">
-
-          <div style="margin-left:-40px">
-          <el-form-item label="" prop="agreement">
-            <el-checkbox-group v-model="Form_Register.agreement">
-              <el-checkbox label="我已阅读并同意《TOF商城协议》" name="agreement"></el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
+        <div style="width:350px;margin-left:-25px;margin-top:-05px">
+          <div style="margin-left:-40px;">
+            <el-form-item label="" prop="agreement">
+              <el-checkbox-group v-model="Form_Register.agreement">
+                <el-checkbox label="" name="agreement"></el-checkbox>
+                <span>我已阅读并同意《TOF商城协议》</span>
+              </el-checkbox-group>
+            </el-form-item>
+          </div>
         </div>
-        </div>
 
-        <div style="margin-left:-35px;margin-top:-15px">
+        <div style="margin-left:-35px;margin-top:-10px">
           <div style="margin-top:-10px;margin-left:62px">
             <el-button type="primary" @click="submitForm('Form_Register')">注&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;册</el-button>
           </div>
@@ -144,7 +143,27 @@ export default {
     }
   },
   methods:{
+     checkUserName(){
+       let that = this
+             axios.get(that.rootURL+'/queryBtype.do')
+             .then(function(res){
+               for( that.idx of res.data.btypeList ){
+                 var bt = {};
+                 bt.value = that.idx.btid;
+                 bt.label = that.idx.btname;
+                 that.types.push(bt)
+               }
 
+              that.btid = '';
+               for( that.idx in that.types){
+                 that.btid = that.types[that.idx].value;
+                 that.getSmallTypes(that.idx,that.btid);
+               }
+             })
+             .catch(function(error){
+               console.error(error)
+             })
+     },
 
       submitForm(formName) {
           this.$refs[formName].validate((valid) => {
@@ -234,7 +253,7 @@ export default {
 
  .register-box b span{
  	font-size: 20px;
- 	color:  #377ab7;
+ 	color:  #20A0FF;
  }
 
  .register-box input[type="text"],
@@ -271,24 +290,24 @@ export default {
  .register-box button{
  	width: 280px;
  	height: 40px;
- 	border: 1px solid #377ab7;
+ 	border: 1px solid #20A0FF;
  	outline: none;
  	border-radius: 2px;
  	font-size: 16px;
  	color: #fff;
- 	background: #377ab7;
+ 	background: #20A0FF;
  	padding: 3px 10px;
 
 
  }
 
  .register-box button:hover{
- 	background: #377AB7;
- 	border: 1px solid #377ab7;
+ 	background: #20A0FF;
+ 	border: 1px solid #20A0FF;
  }
 
  .register-box a{
- 	color: #377ab7;
+ 	color: #20A0FF;
  	font-size:12px;
  	margin-top: 2px;
  	float: right;

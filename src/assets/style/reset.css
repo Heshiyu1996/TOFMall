@@ -50,23 +50,6 @@ a{text-decoration:none;color:#656565;}
 }
 
 
-th, th div{
-	/*1D8CE0 | 20A0FF | 2EB3BA*/
-	background: #20A0FF  !important;
-	color: #fff !important;
-	font-weight: normal;
-	text-align: center
-}
-
-tr{
-	font-size: 14px;
-
-}
-td div{
-	height: 40px !important;
-	line-height: 40px !important;
-	text-align: center
-}
 
 .wangEditor-menu-container {
   top:auto !important;

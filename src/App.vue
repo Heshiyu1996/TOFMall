@@ -2,7 +2,28 @@
   <div id="app">
     <div style="background-color:#359DF2">
       <div class="css-body">
-        啊
+        <div class="css-body-bigPics">
+          <el-carousel indicator-position="outside" height="362px">
+            <el-carousel-item v-for="(item,key) in pics" :key="key">
+    		      <img :src="item" height="100%"  />
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div class="css-body-content">
+          <div class="css-body-content-type">
+            
+          </div>
+          <div class="css-body-content-search">
+            <el-input placeholder="请输入内容" v-model="input5">
+              <el-select v-model="select" slot="prepend" placeholder="请选择">
+                <el-option label="餐厅名" value="1"></el-option>
+                <el-option label="订单号" value="2"></el-option>
+                <el-option label="用户电话" value="3"></el-option>
+              </el-select>
+              <el-button slot="append" icon="search"></el-button>
+            </el-input>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -18,6 +39,12 @@ export default {
   },
   data () {
     return {
+      pics: [
+  		   require('./assets/img/index0.png'),
+		  	 require('./assets/img/index1.png'),
+		  	 require('./assets/img/index2.png'),
+		  	 require('./assets/img/index3.png'),
+      ]
     }
   }
 }
@@ -25,11 +52,39 @@ export default {
 
 <style lang="scss">
   .css-body {
-    background-color:#359DF2;
     width:1210px;
     margin:0 auto;
-    height:550px;
-    padding-right:40px;
-    padding-bottom:50px;
+    .css-body-bigPics {
+      margin:0 auto;
+      padding:20px;
+      height: 385px;
+    }
+    .css-body-content {
+      margin-top: 15px;
+      background-color: red;
+
+      .css-body-content-type {
+        width: 400px;
+      }
+      .css-body-content-search {
+        width: 400px;
+      }
+    }
   }
+
+  .el-carousel__item h3 {
+     color: #475669;
+     font-size: 18px;
+     opacity: 0.75;
+     line-height: 300px;
+     margin: 0;
+   }
+
+   .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+   }
+
+   .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+   }
 </style>

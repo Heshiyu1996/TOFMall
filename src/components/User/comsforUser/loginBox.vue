@@ -2,7 +2,7 @@
   <div>
     <el-form :model="Form_Login" :rules="rules" ref="Form_Login" label-width="100px" class="demo-Form_Login">
       <div class="login-box">
-        <div style="margin-bottom:15px;width:280px;">
+        <div style="margin-bottom:15px;width:295px;">
           <h4 style="margin:0 auto;float:left;">用户登录</h4>
           <a href="#/tradeSystem/register">立即注册</a>
         </div>
@@ -25,7 +25,7 @@
         <div style="font-size:12px;width:280px;margin:-10px 0 6px 20px;">
            <input type="checkbox" id="rememPass"/>
           <label style="margin-top: 2px;margin-left: 6px;float:left;line-height:15px">记住密码</label>
-          <label style="margin-top: 2px;float:right;color:#377ab7;cursor:pointer;">忘记密码?</label>
+          <label style="margin-top: 2px;float:right;color:#20A0FF;cursor:pointer;">忘记密码?</label>
         </div>
         <div style="margin-top:16px;margin-left:15px">
           <el-button type="primary"@click="submitForm('Form_Login')" >登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
@@ -47,7 +47,7 @@
   },
   data(){
     return{
-        rootURL:config.URL,
+        rootURL:config.JXURL,
         userAccount:'',
         Form_Login: {
             username :'',
@@ -67,72 +67,37 @@
     }
   },
   methods:{
-            submitForm(formName) {
+    submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let that = this
+            axios.get(that.rootURL+'loginUser.do?unickname='+ that.Form_Login.username +'&upassword='+  that.Form_Login.password )
+            .then(function(res){
+              if(res.data.status){
+                alert(res.data.msg);
+              } else {
+                alert(res.data.msg)
+              }
+            })
+            .catch(function(error){
+              console.error(error)
+            })
+          } else {
+            console.log('提交错误!请保存您的信息！');
+            return false;
+          }
+        });
+      },
 
-                this.$refs[formName].validate((valid) => {
-                  if (valid) {
-
-                              var querystring = require('querystring');//Json数据查询器
-
-                    let that = this
-                      axios.post(config.URL+'/user/loginbyaccount',
-                         querystring.stringify({
-                         username :this.Form_Login.username,
-                         password:this.Form_Login.password,
-                         })
-                        )
-                      .then(function(res){
-                                      that.userAccount = res.data[0].obj.account
-                                        localStorage.setItem('tokennum',res.data[1].obj.tokennum);
-                                        localStorage.setItem('userID',res.data[0].obj.id);
-                                        localStorage.setItem('account',res.data[0].obj.account)
-                                        localStorage.setItem('userName',res.data[0].obj.name)
-                                        localStorage.setItem('create_time',res.data[0].obj.create_time)
-                                        localStorage.setItem('isRealName',res.data[0].obj.isRealName)
-                                        localStorage.setItem('headPhoto','http://og07ks0jb.bkt.clouddn.com/'+res.data[0].obj.headPhotoslist[0].url)
-
-                                        localStorage.setItem('comeBack',that.$route.path)
-
-                    if(localStorage.getItem('comeBack')!='/tradeSystem/login'){
-
-                        that.$router.push({path:localStorage.getItem('comeBack')})
-                        localStorage.removeItem('comeBack')
-                         window.location.reload()
-
-                    }else{
-                      window.location = '#/tradeSystem'
-
-                      Notification.success({
-                                title: '登录成功！',
-                                message: that.userAccount+' 为你跳转到主页…',
-                                  offset: 65,
-                                  duration:2000
-                              })
-                    }
-
-                      })
-                      .catch(function(error){
-                        Message.error('账号不存在或者密码错误，也有可能是服务器的问题');
-
-                      });
-
-
-
-
-
-                  } else {
-                    console.log('提交错误!请保存您的信息！');
-                    return false;
-                  }
-                });
-              },
-
-      say(){
-        alert(1)
-      }
-  },
-  activated(){
-    alert(1)
+      // getUserInfo(){
+      //   axios.get(that.rootURL+'queryInfo.do')
+      //   .then(function(res){
+      //       localStorage.setItem('unickname',res.data.obj.unickname);
+      //   })
+      //   .catch(function(error){
+      //     console.error(error)
+      //   })
+      // }
   },
 
   }
@@ -176,7 +141,7 @@
 
  .login-box b span{
  	font-size: 20px;
- 	color:  #377ab7;
+ 	color:  #20A0FF;
  }
 
  .login-box input[type="text"],
@@ -213,24 +178,24 @@
  .login-box button{
  	width: 280px;
  	height: 40px;
- 	border: 1px solid #377ab7;
+ 	border: 1px solid #20A0FF;
  	outline: none;
  	border-radius: 2px;
  	font-size: 16px;
  	color: #fff;
- 	background: #377ab7;
+ 	background: #20A0FF;
  	padding: 3px 10px;
 
 
  }
 
  .login-box button:hover{
- 	background: #377AB7;
- 	border: 1px solid #377ab7;
+ 	background: #20A0FF;
+ 	border: 1px solid #20A0FF;
  }
 
  .login-box a{
- 	color: #377ab7;
+ 	color: #20A0FF;
  	font-size:12px;
  	margin-top: 2px;
  	float: right;
