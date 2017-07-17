@@ -1,5 +1,6 @@
 <template>
   <div style="width:100%">
+   	<myHeader></myHeader>
     <div class="clearfix"></div>
     <div style="background-color:#359DF2">
     <div style="background-color:#359DF2;width:1210px;margin:0 auto;height:550px;padding-right:40px;padding-bottom:50px">
@@ -10,7 +11,7 @@
         <el-carousel style="border:2px solid white;
           "indicator-position="outside" width="400px" height="260px">
     		    <el-carousel-item v-for="(key,item) in imgSource" :key="key">
-    		      <img :src="item" width="100%"  />
+    		      <img :src="key" width="100%"  />
     		    </el-carousel-item>
     		</el-carousel>
 
@@ -33,10 +34,12 @@
 </template>
 
 <script>
+import myHeader from './../Public/Header/Header'
 import loginBox from './comsforUser/loginBox'
 
 export default {
   components:{
+    myHeader,
     loginBox,
   },
   data () {

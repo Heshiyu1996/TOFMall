@@ -45,11 +45,11 @@
           </el-form-item>
         </div>
 
-        <div style="height:40px;margin-left:-15px">
+        <!-- <div style="height:40px;margin-left:-15px">
           <el-form-item label="联系电话" prop="phone">
             <el-input v-model="Form_Register.phone"></el-input>
           </el-form-item>
-        </div>
+        </div> -->
         <div class="clear"></div>
         <div style="width:350px;margin-left:-25px;margin-top:-05px">
           <div style="margin-left:-40px;">
@@ -93,14 +93,13 @@ export default {
     }
   };
     return{
-        rootURL:config.URL,
+        rootURL:config.JXURL,
         Form_Register: {
             username:'',
             password:'',
             passConf:'',
             passAsk:'',
             passAnswer:'',
-            phone: '',
             agreement:[],
           },
           rules: {
@@ -124,10 +123,6 @@ export default {
               { required: true, message: '请再次输入密码提示答案', trigger: 'blur' },
               {  min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
             ],
-            phone: [
-              { required: true, message: '请再次输入联系电话', trigger: 'blur' },
-              {  min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
-            ],
             agreement: [
                {type: 'array', required: true, message: '注册前请详细阅读！', trigger: 'change' }
              ],
@@ -143,62 +138,63 @@ export default {
     }
   },
   methods:{
-     checkUserName(){
-       let that = this
-             axios.get(that.rootURL+'/queryBtype.do')
-             .then(function(res){
-               for( that.idx of res.data.btypeList ){
-                 var bt = {};
-                 bt.value = that.idx.btid;
-                 bt.label = that.idx.btname;
-                 that.types.push(bt)
-               }
+     checkAccount(){
 
-              that.btid = '';
-               for( that.idx in that.types){
-                 that.btid = that.types[that.idx].value;
-                 that.getSmallTypes(that.idx,that.btid);
-               }
-             })
-             .catch(function(error){
-               console.error(error)
-             })
+            //  let that = this
+            //  axios.get(that.rootURL+'/queryBtype.do')
+            //  .then(function(res){
+            //    for( that.idx of res.data.btypeList ){
+            //      var bt = {};
+            //      bt.value = that.idx.btid;
+            //      bt.label = that.idx.btname;
+            //      that.types.push(bt)
+            //    }
+             //
+            //   that.btid = '';
+            //    for( that.idx in that.types){
+            //      that.btid = that.types[that.idx].value;
+            //      that.getSmallTypes(that.idx,that.btid);
+            //    }
+            //  })
+            //  .catch(function(error){
+            //    console.error(error)
+            //  })
      },
 
       submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-                        var querystring = require('querystring');//Json数据查询器
+              var querystring = require('querystring');//Json数据查询器
               let that = this
-              axios.post(config.URL+'/user/addUser',
+              axios.post(that.rootURL +'/signUp.do',
                  querystring.stringify({
-                   username:this.Form_Register.username,
-                   type:1,
-                   password:this.Form_Register.password,
-                   phone:this.Form_Register.phone,
-                   email:this.Form_Register.email
+                   unickname:this.Form_Register.username,
+                   upassword:this.Form_Register.password,
+                   uconfirmPassword:this.Form_Register.passConf,
+                   uquestion:this.Form_Register.passAsk,
+                   uanswer:this.Form_Register.passAnswer,
                  })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
                 )
                 .then(function(res){
-                if(res.data.status=="fail")
+                if(res.data.status){
+                  Notification.success({
+                            title: '注册成功！',
+                            message: res.data.msg,
+                            offset: 65,
+                              duration:2000
+                          })
+                } else {
                   Notification.error({
                             title: '注册失败！',
                             message: res.data.msg,
                             offset: 65,
                               duration:2000
                           })
-                else{
-                  alert('注册成功！')
-            window.location = '#/tradeSystem/login'
-
+                  // window.location = '#/tradeSystem/login'
                 }
-                    // localStorage.setItem('tokennum_test',res.data[1].obj.tokennum)
                 })
                 .catch(function(error){
-                  console.error('注册不成功！');
-
                   Message.error('注册不成功！');
-
                 });
 
 
@@ -219,11 +215,12 @@ export default {
 <style scoped>
  .register-box{
  	width: 370px;
- 	height: 555px;
+ 	height: 505px;
  	float: left;
  	border-radius: 4px;
  	background: #fff;
  	padding:20px;
+  padding-left: 30px;
   margin-right:10px;
  	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
  }

@@ -67,16 +67,43 @@
     }
   },
   methods:{
+
+    getUserInfo(uid){
+      let that = this
+      axios.get(that.rootURL+'/mgr/queryInfo.do?uid='+uid)
+      .then(function(res){
+        if(res.data.status){
+          console.log(res.data.msg);
+        } else {
+          console.log(res.data.msg)
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    },
+
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let that = this
-            axios.get(that.rootURL+'loginUser.do?unickname='+ that.Form_Login.username +'&upassword='+  that.Form_Login.password )
+            axios.get(that.rootURL+'/loginUser.do?unickname='+ that.Form_Login.username +'&upassword='+  that.Form_Login.password )
             .then(function(res){
               if(res.data.status){
-                alert(res.data.msg);
+                Notification.success({
+                          title: '登录成功！',
+                          message: res.data.msg,
+                          offset: 65,
+                            duration:2000
+                        })
+                that.getUserInfo(res.data.uid);
               } else {
-                alert(res.data.msg)
+                Notification.error({
+                          title: '登录失败！',
+                          message: res.data.msg,
+                          offset: 65,
+                            duration:2000
+                        })
               }
             })
             .catch(function(error){

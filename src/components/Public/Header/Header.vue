@@ -21,12 +21,21 @@
           </el-submenu>
             </el-menu>
       </div>
-      <div class="css-top-right">
-        <router-link to="/tradeSystem/register">
+      <!-- <div class="css-top-right">
+        <router-link to="/register">
           <el-button>注册</el-button>
         </router-link>
-        <router-link to="/tradeSystem/login">
+        <router-link to="/login">
         <el-button type="primary">登录</el-button>
+        </router-link>
+      </div> -->
+
+      <div class="css-top-right">
+        <!-- <router-link to="/register"> -->
+          <el-button @click="getUserInfo()">我</el-button>
+        <!-- </router-link> -->
+        <router-link to="/login">
+        <el-button type="danger" @click="logout()">退出</el-button>
         </router-link>
       </div>
     </div>
@@ -36,23 +45,70 @@
 </template>
 
 <script>
+
+import axios from 'axios'
+
+import config from './../../../publicAPI/config'
 import { Notification } from 'element-ui';
+
 export default {
   data () {
     return {
+      rootURL: config.JXURL,
       activeIndex2:'1',
     }
   },
 
   methods: {
-  handleSelect(key, keyPath) {
-    // console.log(key, keyPath);
+    logout(){
+      let that = this ;
+      axios.get(that.rootURL+'/logoutUser.do' )
+      .then(function(res){
+        if(res.data.status){
+          Notification.success({
+                    title: '注销成功！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+        } else {
+          Notification.error({
+                    title: '注销失败！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    },
+
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    getUserInfo(){
+      let that = this
+      axios.get(that.rootURL+'/queryInfo.do')
+      .then(function(res){
+        if(res.data.status){
+          console.log(res.data.msg);
+        } else {
+          console.log(res.data.msg)
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    }
+
+
   },
 
-
-},
-
   created(){
+    let that = this ;
+    that.getUserInfo();
   }
 
 }

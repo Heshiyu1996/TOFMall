@@ -1,5 +1,6 @@
 import App from './../App'
 import Login from './../components/User/login'
+import Register from './../components/User/register'
 import LoginBox from './../components/User/comsforUser/loginbox'
 import Registerbox from './../components/User/comsforUser/registerbox'
 import UpdateUserInfoBox from './../components/Center/comsforCenter/UpdateUserInfoBox'
@@ -61,6 +62,11 @@ export default [
 		path: '/login',
 		name: 'login',
 		component: Login,
+	},
+	{
+		path: '/register',
+		name: 'register',
+		component: Register,
 	},
 	{
 		path: '/loginbox',
