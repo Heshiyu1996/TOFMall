@@ -23,9 +23,9 @@
       </div>
 
       <div class="css-top-right">
-        <!-- <router-link to="/register"> -->
-          <el-button @click="getUserInfo()">我</el-button>
-        <!-- </router-link> -->
+        <router-link to="/userIndex">
+          <el-button @click="getUserInfo()">个人中心</el-button>
+        </router-link>
         <router-link to="/login">
         <el-button type="danger" @click="logout()">退出</el-button>
         </router-link>

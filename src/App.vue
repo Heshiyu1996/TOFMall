@@ -31,10 +31,10 @@ export default {
   data () {
     return {
       pics: [
-  		   require('./assets/img/index0.png'),
+  		   require('./assets/img/index3.png'),
 		  	 require('./assets/img/index1.png'),
 		  	 require('./assets/img/index2.png'),
-		  	 require('./assets/img/index3.png'),
+		  	 require('./assets/img/index0.png'),
       ]
     }
   }

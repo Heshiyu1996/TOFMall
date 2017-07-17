@@ -14,8 +14,24 @@ import Order from './../components/Order/Order'
 import ShoppingCart from './../components/ShoppingCart/ShoppingCart'
 
 import Header from './../components/Public/Header/Header'
+import UserIndex from './../components/Center/UserIndex'
+import patents_Management from './../components/Center/comsforCenter/patents_Management'
 
 export default [
+	{
+		path: '/UserIndex',
+		name: 'UserIndex',
+		component: UserIndex,
+		children:[{
+			 path:'',
+		},
+		{
+			 path:'patents',
+			 component:patents_Management
+		},
+		]
+
+	},
 	{
 		path: '/Header',
 		name: 'Header',
