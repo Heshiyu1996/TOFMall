@@ -10,15 +10,20 @@
         </div>
         <div class="errorM" style="margin:0;color:#FF4949;"></div>
         <div style="height:40px;">
-          <el-form-item label="密码" prop="password">
-            <el-input  type="password" v-model="Form_ChangePassword.password"></el-input>
+          <el-form-item label="旧密码" prop="oldPassword">
+            <el-input  type="password" v-model="Form_ChangePassword.oldPassword"></el-input>
+          </el-form-item>
+        </div>
+        <div style="height:40px;">
+          <el-form-item label="新密码" prop="newPassword">
+            <el-input  type="password" v-model="Form_ChangePassword.newPassword"></el-input>
           </el-form-item>
         </div>
 
 
         <div style="height:40px;">
-          <el-form-item label="确认密码" prop="passConf">
-            <el-input  type="password" v-model="Form_ChangePassword.passConf"></el-input>
+          <el-form-item label="确认新密码" prop="newpassConf">
+            <el-input  type="password" v-model="Form_ChangePassword.newPassConf"></el-input>
           </el-form-item>
         </div>
 
@@ -47,24 +52,30 @@ export default {
       var validatePass2 = (rule, value, callback) => {
     if (value === '') {
       callback(new Error('请再次输入密码'));
-    } else if (value !== this.Form_ChangePassword.password) {
+    } else if (value !== this.Form_ChangePassword.newPassword) {
       callback(new Error('两次输入密码不一致!'));
     } else {
       callback();
     }
   };
     return{
-        rootURL:config.URL,
+        rootURL:config.JXURL,
         Form_ChangePassword: {
-            password: '',
-            passConf: '',
+            oldPassword: '',
+            newPassword: '',
+            newPassConf: '',
           },
-          rules: {    password: [
-                { required: true, message: '请输入密码', trigger: 'blur' },
+          rules: {
+              oldPassword: [
+                { required: true, message: '请输入旧密码', trigger: 'blur' },
                 {  min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
               ],
-              passConf: [
-                { required: true, message: '请再次输入密码', trigger: 'blur' },
+              newPassword: [
+                { required: true, message: '请输入新密码', trigger: 'blur' },
+                {  min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+              ],
+              newPassConf: [
+                { required: true, message: '请再次输入新密码', trigger: 'blur' },
                 { validator: validatePass2, trigger: 'blur' }
               ],
           },
@@ -78,29 +89,30 @@ export default {
       submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-                        var querystring = require('querystring');//Json数据查询器
+              var querystring = require('querystring');//Json数据查询器
               let that = this
-              axios.post(config.URL+'/user/addUser',
+              axios.post(that.rootURL+'/modifyPassword.do',
                  querystring.stringify({
-                   username:this.Form_ChangePassword.username,
-                   type:1,
-                   password:this.Form_ChangePassword.password,
-                   phone:this.Form_ChangePassword.phone,
-                   email:this.Form_ChangePassword.email
+                   oldPassword:that.Form_ChangePassword.oldPassword,
+                   newPassword:that.Form_ChangePassword.newPassword,
+                   confirmPassword:that.Form_ChangePassword.newPassConf,
                  })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
                 )
                 .then(function(res){
-                if(res.data.status=="fail")
+                if(!res.data.status)
                   Notification.error({
-                            title: '注册失败！',
+                            title: '修改密码失败！',
                             message: res.data.msg,
                             offset: 65,
                               duration:2000
                           })
                 else{
-                  alert('注册成功！')
-            window.location = '#/tradeSystem/login'
-
+                  Notification.success({
+                            title: '修改密码成功！',
+                            message: res.data.msg,
+                            offset: 65,
+                              duration:2000
+                          })
                 }
                     // localStorage.setItem('tokennum_test',res.data[1].obj.tokennum)
                 })

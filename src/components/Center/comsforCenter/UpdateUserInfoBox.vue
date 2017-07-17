@@ -75,17 +75,8 @@ export default {
   components: {
   },
   data(){
-      var validatePass2 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.Form_Userinfo.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
     return{
-        rootURL:config.URL,
+        rootURL:config.JXURL,
         Form_Userinfo: {
             isUpdate: false,
             email:'',
@@ -106,7 +97,7 @@ export default {
             ],
             realName: [
               { required: true, message: '请再次真实姓名', trigger: 'blur' },
-              { validator: validatePass2, trigger: 'blur' }
+              {  min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
             ],
             ecode: [
               { required: true, message: '请输入邮编', trigger: 'blur' },
@@ -125,6 +116,27 @@ export default {
     }
   },
   methods:{
+      getMyInfo(){
+        let that = this
+        axios.get(that.rootURL+'/queryInfo.do')
+        .then(function(res){
+          let item = res.data ;
+          if(item.uid!=null){
+            that.Form_Userinfo.email = item.uemail;
+            that.Form_Userinfo.ecode = item.upostcode;
+            that.Form_Userinfo.address = item.uaddress;
+            that.Form_Userinfo.phone = item.uphone;
+            that.Form_Userinfo.realName = item.uname;
+            that.Form_Userinfo.idCard = item.uidcard;
+          } else {
+            console.log(2)
+          }
+        })
+        .catch(function(error){
+          console.error(error)
+        })
+      },
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
@@ -132,29 +144,33 @@ export default {
       submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {
-                        var querystring = require('querystring');//Json数据查询器
+              var querystring = require('querystring');//Json数据查询器
               let that = this
-              axios.post(config.URL+'/user/addUser',
+              axios.post(that.rootURL+'/modify.do',
                  querystring.stringify({
-                   username:this.Form_Userinfo.username,
-                   type:1,
-                   password:this.Form_Userinfo.password,
-                   phone:this.Form_Userinfo.phone,
-                   email:this.Form_Userinfo.email
+                    uemail:that.Form_Userinfo.email,
+                    upostcode:that.Form_Userinfo.ecode,
+                    uaddress:that.Form_Userinfo.address,
+                   uphone:that.Form_Userinfo.phone,
+                    uname:that.Form_Userinfo.realName,
+                    uidcard:that.Form_Userinfo.idCard
                  })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
                 )
                 .then(function(res){
-                if(res.data.status=="fail")
+                if(!res.data.status){
                   Notification.error({
-                            title: '注册失败！',
+                            title: res.data.msg,
                             message: res.data.msg,
                             offset: 65,
                               duration:2000
                           })
-                else{
-                  alert('注册成功！')
-            window.location = '#/tradeSystem/login'
-
+                }else{
+                  Notification.success({
+                            title: res.data.msg,
+                            message: res.data.msg,
+                            offset: 65,
+                              duration:2000
+                          })
                 }
                     // localStorage.setItem('tokennum_test',res.data[1].obj.tokennum)
                 })
@@ -175,6 +191,10 @@ export default {
             }
           });
         },
+  },
+  created(){
+    let that = this ;
+    that.getMyInfo();
   }
 }
 

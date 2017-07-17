@@ -6,6 +6,7 @@ import routes from './publicAPI/routes'
 import './assets/style/reset.css'
 import ElementUI from 'element-ui'
 import axios from 'axios'
+axios.defaults.withCredentials=true;
 
 import config from './publicAPI/config'
 import './../node_modules/vue/dist/vue.js'

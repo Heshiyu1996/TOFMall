@@ -6,22 +6,10 @@
           <h4 style="margin-left:-10px;float:left;">我的个人信息</h4>
         </div>
         <div class="errorM" style="margin:0;color:#FF4949;"></div>
-        <!-- <div style="height:40px;margin-left:-15px">
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="Form_Userinfo.username"></el-input>
-          </el-form-item>
-        </div> -->
-        <!-- <div style="height:40px;margin-left:-15px">
-          <el-form-item label="密码" prop="password">
-            <el-input  type="password" v-model="Form_Userinfo.password"></el-input>
-          </el-form-item>
-        </div> -->
 
         <div style="height:40px;margin-left:-15px ">
           <el-form-item label="邮箱" prop="email">
-            <!-- <el-input v-model="Form_Userinfo.email"></el-input> -->
             <el-input
-              :placeholder="test"
               v-model="Form_Userinfo.email"
               :disabled="true">
             </el-input>
@@ -30,9 +18,7 @@
 
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="邮编" prop="ecode">
-            <!-- <el-input v-model="Form_Userinfo.ecode"></el-input> -->
             <el-input
-              placeholder="请输入内容"
               v-model="Form_Userinfo.ecode"
               :disabled="true">
             </el-input>
@@ -40,9 +26,7 @@
         </div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="收货地址" prop="address">
-            <!-- <el-input v-model="Form_Userinfo.address"></el-input> -->
             <el-input
-              placeholder="请输入内容"
               v-model="Form_Userinfo.address"
               :disabled="true">
             </el-input>
@@ -50,9 +34,7 @@
         </div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="联系电话" prop="phone">
-            <!-- <el-input v-model="Form_Userinfo.phone"></el-input> -->
             <el-input
-              placeholder="请输入内容"
               v-model="Form_Userinfo.phone"
               :disabled="true">
             </el-input>
@@ -60,9 +42,7 @@
         </div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="真实姓名" prop="realName">
-            <!-- <el-input v-model="Form_Userinfo.realName"></el-input> -->
             <el-input
-              placeholder="请输入内容"
               v-model="Form_Userinfo.realName"
               :disabled="true">
             </el-input>
@@ -70,9 +50,7 @@
         </div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="身份证号" prop="idCard">
-            <!-- <el-input v-model="Form_Userinfo.idCard"></el-input> -->
             <el-input
-              placeholder="请输入内容"
               v-model="Form_Userinfo.idCard"
               :disabled="true">
             </el-input>
@@ -95,7 +73,7 @@ export default {
   },
   data(){
     return{
-        rootURL:config.URL,
+        rootURL:config.JXURL,
         test:'hshs',
         Form_Userinfo: {
             isUpdate: false,
@@ -109,53 +87,30 @@ export default {
     }
   },
   methods:{
-
-      submitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-                        var querystring = require('querystring');//Json数据查询器
-              let that = this
-              axios.post(config.URL+'/user/addUser',
-                 querystring.stringify({
-                   username:this.Form_Userinfo.username,
-                   type:1,
-                   password:this.Form_Userinfo.password,
-                   phone:this.Form_Userinfo.phone,
-                   email:this.Form_Userinfo.email
-                 })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
-                )
-                .then(function(res){
-                if(res.data.status=="fail")
-                  Notification.error({
-                            title: '注册失败！',
-                            message: res.data.msg,
-                            offset: 65,
-                              duration:2000
-                          })
-                else{
-                  alert('注册成功！')
-            window.location = '#/tradeSystem/login'
-
-                }
-                    // localStorage.setItem('tokennum_test',res.data[1].obj.tokennum)
-                })
-                .catch(function(error){
-                  console.error('注册不成功！');
-
-                  Message.error('注册不成功！');
-
-                });
-
-
-
-
-
-            } else {
-              console.log('提交错误!请保存您的信息！');
-              return false;
-            }
-          });
-        },
+    getMyInfo(){
+      let that = this
+      axios.get(that.rootURL+'/queryInfo.do')
+      .then(function(res){
+        let item = res.data ;
+        if(item.uid!=null){
+          that.Form_Userinfo.email = item.uemail;
+          that.Form_Userinfo.ecode = item.upostcode;
+          that.Form_Userinfo.address = item.uaddress;
+          that.Form_Userinfo.phone = item.uphone;
+          that.Form_Userinfo.realName = item.uname;
+          that.Form_Userinfo.idCard = item.uidcard;
+        } else {
+          console.log(2)
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    }
+  },
+  created(){
+    let that = this ;
+    that.getMyInfo();
   }
 }
 
