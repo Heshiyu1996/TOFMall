@@ -18,7 +18,7 @@
               <el-button type="primary" @click="handleCat"> 搜 索 </el-button>
             </div>
             <div>
-              <el-button type="success" @click="goBack">按 类 型</el-button>
+              <el-button type="success" @click="goBack">按 关 键 字</el-button>
             </div>
           </div>
           <div style="float:left;margin-left:12px;width:380px;">
@@ -33,18 +33,17 @@
             <!-- 所有专利（模糊）开始 -->
             <div  v-if="true" style="width:200px;float:left;margin:10px">
               <div style="height:900px;margin-left:-70px;padding:10px;width:1100px;text-align:left" >
-                <div v-for="esingle in SomeList" style="width:200px;float:left;margin:10px;margin-bottom:25px">
+                <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;margin-bottom:25px">
                   <router-link :to="'/' + esingle.id">
                     <el-card class="box-card" :body-style="{ padding: '0px' }">
-                      <img :src="esingle.img" class="image">
+                      <img :src="esingle.img" class="image" style="width=100%">
                       <div style="padding:10px;">
-                        <div style="float:left;width:200px;margin-top:-8px">
+                        <div style="float:left;width:180px;margin-top:-8px">
                           <el-tag type="primary" v-for="single in esingle.cat">{{single}}</el-tag>
                         </div>
                         <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
-                        <div id="price" class="omit" style="font-size:16px;line-height:30px;width:50px;height:35px;float:left">{{esingle.name}}</div>
-                        <div style="text-align:left;float:left;width:80px;font-size:12px;color:gray;" >卖家：
-                          <div style="float:left;text-align:right;width:40px;font-size:14px;float:right;line-height:20px;color:rgb(230, 94, 64)" class="omit" >{{esingle.seller}}</div>
+                        <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                          <div style="text-align:left;width:40px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
                         </div>
                         <div class="clearfix"></div>
                       </div>
@@ -87,50 +86,24 @@ export default {
   },
   data () {
     return {
-      rootURL: config.URL,	//请求的url
+      rootURL: config.JXURL,	//请求的url
 
       idList:[],
       item:'',
 
-
-      rootURL: config.URL,	//请求的url
       tableData:[],
       loading3: true,
 
       currentCatId: '',
       currentCatName: '',
-      Tip:'请通过左侧下拉框，选择目录名来查询技术',
+      Tip:'请通过左侧下拉框，选择标签来查询商品',
       Some:false,
       SomeList:[{
         img:require('./../../assets/img/car7.jpg'),
         id:'2',
         name:'3',
-        seller:'5',
-        cat:'6'
-      },{
-        img:require('./../../assets/img/car7.jpg'),
-        id:'2',
-        name:'3',
-        seller:'5',
-        cat:'6'
-      },{
-        img:require('./../../assets/img/car7.jpg'),
-        id:'2',
-        name:'3',
-        seller:'5',
-        cat:'6'
-      },{
-        img:require('./../../assets/img/car7.jpg'),
-        id:'2',
-        name:'3',
-        seller:'5',
-        cat:'6'
-      },{
-        img:require('./../../assets/img/car7.jpg'),
-        id:'2',
-        name:'3',
-        seller:'5',
-        cat:'6'
+        price:'5',
+        remain:'6'
       }],
 
       totalPage: 0,
@@ -139,28 +112,6 @@ export default {
 
       paths_Msg:[],
       paths_Tips:[],
-      // types: [{
-      //    value: 'zhinan',
-      //    label: '指南',
-      //    children: [{
-      //      value: 'shejiyuanze',
-      //      label: '设计原则'
-      //     },
-      //     {
-      //      value: 'daohang',
-      //      label: '导航'
-      //     }]
-      //   }, {
-      //    value: 'zujian',
-      //    label: '组件',
-      //    children: [{
-      //      value: 'basic',
-      //      label: 'Basic'
-      //    },{
-      //      value: 'others',
-      //      label: 'Others'
-      //    }]
-      //  }],
       types: [],
       selectedOptions: [],//级联读取结果
       value: '',
@@ -228,7 +179,29 @@ export default {
     },
 
     handleChange(value) {
-      console.log(value);
+      let that = this;
+      var bt = value[0];
+      var st = value[1];
+      var tmpList = {
+
+      };
+      that.SomeList = [];
+      axios.get(that.rootURL+'/search.do?btid='+ bt + '&' +'stid=' + st)
+      .then(function(res){
+        for( that.idx of res.data ){
+          tmpList = [];
+          tmpList.img = require('./../../assets/img/car7.jpg'),
+          tmpList.id = that.idx.cid;
+          tmpList.name = that.idx.cname;
+          tmpList.price = that.idx.cprice;
+          tmpList.remain = that.idx.cremain;
+          console.log(tmpList)
+          that.SomeList.push(tmpList);
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
     },
     goBack(){
       let that = this
