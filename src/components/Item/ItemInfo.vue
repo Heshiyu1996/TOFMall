@@ -109,7 +109,7 @@
 
                                   <div style="float:left;margin-left:20px">
                                      <!-- <router-link :to="'/tradeSystem/patentOrderDetail/'+product_id"> -->
-                                       <el-button  @click="buildUp">提交订单</el-button>
+                                       <el-button >提交订单</el-button>
                                      <!-- </router-link> -->
                                   </div>
                             </div>
@@ -135,9 +135,10 @@
                       <div style="text-align:left">
                           <el-collapse v-model="activeNames" style="width:861px">
                             <el-collapse-item title="评论区" name="1">
-                                <div style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px solid gray">
-                                  <div>用户名:</div>
-                                  <div >评论在这</div>
+                                <div v-for="esingle in reviewList" style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px solid gray">
+                                  <div>用户名:{{esingle.username}}</div>
+                                  <div>{{esingle.text}}</div>
+                                  <div>{{esingle.time}}</div>
                                 </div>
                             </el-collapse-item>
                           </el-collapse>
@@ -168,7 +169,7 @@ export default {
             outputContent: '',
             uploadURL: '',
             item: '',
-            rootURL: config.URL,
+            rootURL: config.JXURL,
             xx: [
                 require('./../../assets/img/buy.png'),
             ],
@@ -209,174 +210,65 @@ export default {
             myName_Msg: '',
 
             sellerName_Msg: '',
+            reviewList: [],
         }
     },
     methods: {
-      // pleaseLogin(){
-      //   localStorage.setItem('comeBack',this.$route.path)
-      //     window.location = '#/tradeSystem/login'
-      // },
+      getItemInfo(){
+          let that = this;
+          that.reviewList = [];
+
+          axios.get(that.rootURL+'/queryReview.do?cid=' + 3)
+          .then(function(res){
+            for( that.idx of res.data.list ){
+              var myRev = {
+              };
+              myRev.id = that.idx.id;
+              myRev.text = that.idx.text;
+              myRev.time = that.idx.time;
+              myRev.username = that.idx.username;
+
+              that.reviewList.push(myRev)
+            }
+          })
+          .catch(function(error){
+            console.error(error)
+          })
+      },
+      getReviewInfo(){
+          let that = this;
+          that.reviewList = [];
+
+          axios.get(that.rootURL+'/queryReview.do?cid=' + 3)
+          .then(function(res){
+            for( that.idx of res.data.list ){
+              var myRev = {
+              };
+              myRev.id = that.idx.id;
+              myRev.text = that.idx.text;
+              myRev.time = that.idx.time;
+              myRev.username = that.idx.username;
+
+              that.reviewList.push(myRev)
+            }
+          })
+          .catch(function(error){
+            console.error(error)
+          })
+      },
+
+
       setLocalStorage(id){
           let that = this
           localStorage.setItem('catID',id)
           that.$router.push({path:'/tradeSystem/search/byCategory'})
       },
-      buildUp() {
-          let that = this
-          this.loading3 = true
-          var querystring = require('querystring');//Json数据查询器
-          var tokennum = localStorage.getItem("tokennum");
-          axios.post(config.URL+'/order/addOrder',
-             querystring.stringify({
-              product_id:that.product_id,
-              type:1,
-              tokennum:tokennum
-             })
-            )
-            .then(function(res){
-              if(res.data.status == "fail")
-              Message.error(res.data.msg);
-              if(res.data.obj!=null){
-              that.list_ID_Msg = res.data.obj.order_id;
-              Notification.success({
-                        title: '订单生成好了！',
-                        message:'订单号：'+that.list_ID_Msg,
-                          offset: 65,
-                          duration:10000
-                      })
-               that.$router.push({path:'/tradeSystem/patentOrderDetail/'+that.list_ID_Msg})
-             }
-
-            })
-            .catch(function(error){
-              Message.error('尚未登录！');
-            });
-        },
-        chan() {
-            let that = this
-            that.sho = true
-        },
-
-        clickHandle(i){
-          window.location = '#/Patent/fixPriceInfo/' + i
-        },
-
-        getFixPriceInfo() {
-            let that = this
-            that.paths_Msg = []
-            axios.get(that.rootURL + '/orderfixedprice/getOrderFixPriceById?id=' + that.C)
-                .then(function(res) {
-                  if(res.data.obj!=null){
-                  var ite = res.data.obj
-                  //购买按按钮
-                  if(localStorage.getItem('tokennum')!=null){
-                    if(ite.status=='1'){
-                       that.buyNow=true;
-                     }
-                     if(ite.status=='2'){
-                       that.notExist=true;
-                     }
-                  }else{
-                    if(ite.status=='2'){
-                      that.notExist=true;
-                    }else{
-                      that.notLogin=true;
-                    }
-                  }
-                    // 阅读量自增 开始
-                    axios.get(that.rootURL + '/orderfixedprice/add_readnum?fpId=' + that.C)
-                        .then(function(res) {
-                          console.log(res.data.msg)
-
-                        })
-                        .catch(function(error) {
-                            console.error(error)
-                        })
-                    // 阅读量自增 结束
-                   that.product_id = ite.id
-
-                   that.patentName_Msg = ite.patent.name
-                   that.patentPurpose_Msg = ite.patent.purpose
-                   that.patentPrice_Msg = ite.price
-                   that.sellerName_Msg = ite.seller.name
-                   that.myName_Msg = localStorage.getItem('userName')
-
-
-                    that.goodsDescription_Msg = ''
-                    that.goodsDescription_Msg = (ite.description)
-                    that.name_Msg = (ite.patent.name)
-                    that.purpose_Msg = (ite.patent.purpose)
-                    that.number_Msg = (ite.patent.patent_num)
-                    that.readNumber_Msg = (ite.read_number)
-                    if (ite.patent.catalog1en != null) {
-                        that.paths_Msg.push({id:ite.patent.catalog1en.id,name:ite.patent.catalog1en.name})
-                        if (ite.patent.catalog2en != null) {
-                            that.paths_Msg.push({id:ite.patent.catalog2en.id,name:ite.patent.catalog2en.name})
-                            if (ite.patent.catalog3en != null) {
-                                that.paths_Msg.push({id:ite.patent.catalog3en.id,name:ite.patent.catalog3en.name})
-                                if (ite.patent.catalog4en != null) {
-                                    that.paths_Msg.push({id:ite.patent.catalog4en.id,name:ite.patent.catalog4en.name})
-                                }
-                            }
-                        }
-                    }
-                    // that.paths_Msg.push({id:ite.id,name:ite.patent.name})
-                    that.photosList = []
-                    for (var i of ite.patent.patentImages) {
-                        if (i.url != null) {
-                            that.photosList.push(('http://og07ks0jb.bkt.clouddn.com/' + i.url))
-                        }
-                    }
-                    if (that.photosList.length == 0) {
-                        that.photosList = that.xx;
-                    }
-                    that.chan()
-                    that.price_Msg = ite.price
-                    if (ite.status == 1)
-                        that.status_Msg = '进行中'
-                    else
-                        that.status_Msg = '已结束'
-                    that.startTime_Msg = ite.patent.create_time
-                    that.seller_Msg = ite.seller.name
-                    that.descrip_Msg = ite.patent.description
-                    that.design_Msg = ite.patent.design
-                  }else{
-                    alert(res.data.msg)
-                    let that = this
-                    window.location = '#/tradeSystem'
-                  }
-
-                })
-                .catch(function(error) {
-                    console.error(error)
-                })
-        },
-
-
-
-        hsytt() {
-            let that = this
-            var id = this.$route.params.id;
-            that.C = id
-              this.getFixPriceInfo();
-              // this.getHotFixPriceList()
-        },
-        render(){
-            let that = this
-            // console.log(that.$route.matched[0].name)
-            if(that.$route.matched[0].name == 'fixPriceInfoDetail'){
-            that.buyNow = false
-            that.notExist = false
-            that.notLogin = false
-            that.sho = false
-            this.hsytt()
-          }
-        },
 
 
     },
     created() {
-        this.hsytt()
+      this.getReviewInfo();
+      this.getItemInfo();
     },
     watch:{
       '$route':'render'
