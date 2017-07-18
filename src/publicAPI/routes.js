@@ -15,7 +15,7 @@ import ShoppingCart from './../components/ShoppingCart/ShoppingCart'
 
 import Header from './../components/Public/Header/Header'
 import UserIndex from './../components/Center/UserIndex'
-import patents_Management from './../components/Center/comsforCenter/patents_Management'
+import account_Management from './../components/Center/comsforCenter/account_Management'
 
 export default [
 	{
@@ -26,8 +26,8 @@ export default [
 			 path:'',
 		},
 		{
-			 path:'patents',
-			 component:patents_Management
+			 path:'account',
+			 component:account_Management
 		},
 		]
 
@@ -54,9 +54,12 @@ export default [
 	},
 
 	{
-		path:'/ItemInfo',
+		path:'/ItemInfo/:newID',
 		name: 'ItemInfo',
 		component:ItemInfo,
+				 children:[{
+						path:'',
+				 }]
 	},
 	{
 		path:'/byType',

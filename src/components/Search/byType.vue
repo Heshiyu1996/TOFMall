@@ -33,7 +33,7 @@
                 <div  v-if="true" style="width:180px;margin:10px">
                   <div style="height:900px;width:960px;text-align:left;margin-left:-100px" >
                     <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
-                      <router-link :to="'/' + esingle.id">
+                      <router-link :to="'/ItemInfo/' + esingle.id">
                         <el-card class="box-card" :body-style="{ padding: '0px' }">
                           <img :src="esingle.img" class="image" >
                           <div style="padding:10px;">

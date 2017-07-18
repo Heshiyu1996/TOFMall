@@ -2,10 +2,10 @@
   <div style="width:100%">
    	<myHeader></myHeader>
     <div class="clearfix"></div>
-    <div style="background-color:#20A0FF;">
-    <div style="margin:0 auto;background-color:#20A0FF;width:1210px;height:630px;padding-right:40px;padding-bottom:50px;">
-      <!-- 轮播图 开始 -->
-      <div style="margin-top:40px;margin-left:-20px;width:800px;height:500px;float:left;padding:30px;">
+    <div :style="{backgroundImage: 'url(' +bg + ')'}" class="css-bg">
+    <div style="margin:0 auto;width:1210px;height:600px;padding-right:40px;padding-bottom:50px;">
+
+      <!-- <div style="margin-top:40px;margin-left:-20px;width:800px;height:500px;float:left;padding:30px;">
         <div class="clearfix" style="padding-top:110px;"></div>
         <el-carousel style="border:2px solid white;
         "i ndicator-position="outside" width="400px" height="260px">
@@ -13,11 +13,10 @@
   		      <img :src="item" width="100%"  />
   		    </el-carousel-item>
 		    </el-carousel>
-      </div>
-      <!-- 轮播图 结束 -->
+      </div> -->
 
       <!-- 注册框 开始 -->
-      <div style="width:200px;height:500px;float:right;margin-top:30px;margin-right:-20px;">
+      <div style="width:200px;height:500px;float:right;margin-top:50px;margin-right:-20px;">
       <registerBox></registerBox>
       </div>
       <!-- 注册框 结束 -->
@@ -47,6 +46,7 @@ export default {
         require('./../../assets/img/car9.jpg'),
         require('./../../assets/img/car8.jpg'),
 		  ],
+      bg:require('./../../assets/img/loginBG.jpg'),
     }
   }
 }

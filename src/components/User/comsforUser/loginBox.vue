@@ -75,9 +75,10 @@
 
             .then(function(res){
               if(res.data.status){
+                that.$router.push({path:'/'})
                 Notification.success({
                           title: '登录成功！',
-                          message: res.data.msg,
+                          message: '开始你的TOF世界之旅吧！',
                           offset: 65,
                             duration:2000
                         })

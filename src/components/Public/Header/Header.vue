@@ -4,13 +4,13 @@
       <div class="css-top-left">
         <router-link to="/">
           <img src="./../../../assets/img/logo.png" id="logo">
-          <span class="css-top-left-title">TOF，你身边的电商平台</span>
+          <span class="css-top-left-title">TOF mall</span>
         </router-link>
       </div>
       <div class="css-top-center">
         <div class="line"></div>
         <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="0">首页</el-menu-item>
+          <el-menu-item index="0" >首页</el-menu-item>
           <el-menu-item index="1">商品分类</el-menu-item>
           <el-menu-item index="2"><a href="javascript:;" target="_blank">购物车</a></el-menu-item>
           <el-submenu index="3">

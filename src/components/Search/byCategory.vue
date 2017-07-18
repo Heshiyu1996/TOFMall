@@ -34,7 +34,7 @@
             <div  v-if="true" style="width:200px;float:left;margin:10px">
               <div style="height:900px;margin-left:-70px;padding:10px;width:1100px;text-align:left" >
                 <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;margin-bottom:25px">
-                  <router-link :to="'/' + esingle.id">
+                  <router-link :to="'/ItemInfo/' + esingle.id">
                     <el-card class="box-card" :body-style="{ padding: '0px' }">
                       <img :src="esingle.img" class="image" style="width=100%">
                       <div style="padding:10px;">
@@ -98,13 +98,7 @@ export default {
       currentCatName: '',
       Tip:'请通过左侧下拉框，选择标签来查询商品',
       Some:false,
-      SomeList:[{
-        img:require('./../../assets/img/car7.jpg'),
-        id:'2',
-        name:'3',
-        price:'5',
-        remain:'6'
-      }],
+      SomeList:[],
 
       totalPage: 0,
       currentPage: 1,

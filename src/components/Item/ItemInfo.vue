@@ -1,15 +1,16 @@
 <template>
     <div>
+        <header></header>
         <!-- 头部 -->
         <div style="width:860px;margin:0 auto;text-align:center;">
 
             <br>
             <br>
             <!-- 专利信息头部开始-->
-            <div style="float:left;width:810px;height:60px;margin-bottom:8px">
+            <div style="float:left;width:810px;height:30px;margin-bottom:8px">
                 <div type="flex" class="row-bg goodsName" justify="space-between">
                     <div :title="name_Msg" class="grid-content bg-purple  goodsName omit" style="font-weight:bold;width:860px;">
-                  {{name_Msg}}
+                  {{myGood.name}}
                     </div>
 
                     <el-col :span="19" :title="purpose_Msg">
@@ -38,25 +39,25 @@
                     <div class="text item block">
                         <span style="float:left;">  单价：</span>
                         <div class="text item shanshuo omit" style="width:170px;font-size:26px;text-align:right">
-                            ¥ {{price_Msg}}
+                            ¥ {{myGood.price}}
                     </div>
                     </div>
                     <div class="text item block" style="text-align:right">
                         <span class="attr">  大类别：</span>
                         <span class="text item shanshuo" style="font-size:16px;text-align:right;color:#677ab7;font-weight:bold">
-                    {{status_Msg}}
+                    {{myGood.btype}}
                       </span>
                     </div>
                     <div class="text item block" style="text-align:right">
                         <span class="attr">  小类别：</span>
                         <span class="text item shanshuo" style="font-size:16px;text-align:right;color:#677ab7;font-weight:bold">
-                    {{status_Msg}}
+                    {{myGood.stype}}
                       </span>
                     </div>
                     <div class="text item block" style="text-align:right">
                         <span class="attr">  剩余数量：</span>
                         <span class="text item shanshuo" style="font-size:20px;text-align:right">
-                        {{seller_Msg}}
+                        {{myGood.remain}}
                     </span>
                     </div>
                 </el-card>
@@ -64,58 +65,9 @@
             <!-- 购买按钮 'status','patentName','patentSummary','seller','price','buyer','imgPath'-->
             <div style="padding-left:10px;width:220px;float:left;margin-bottom:10px">
                 <!-- 立即购买 -->
-                  <el-button v-if="true" type="success" width="350px" @click="applyOrderBox = true ;">立即购买</el-button>
-                  <div >
-                      <el-dialog title="申请订单" v-model="applyOrderBox"  size="300px">
-                        <div style="width:650px;height:220px;padding-bottom:50px">
-                            <el-row>
-                              <el-col :span="8" >
-                                <el-card :body-style="{ padding: '0px' }">
-                                  <!-- <img src="./../assets/img/newyear1.jpg"  class="image_ApplyBox" style="width:260px"> -->
-                                  <img :src="photosList[0]" class="image_ApplyBox" style="width:220px;height:155px">
-                                  <div style="padding: 2px;">
-                                  </div>
-                                </el-card>
-                              </el-col>
-                             <div style="float:left;margin-left:10px">技术名字：</div>
-                             <div class="nameText omit" style="float:left;width:400px;border-bottom:1px dashed gray" >
-                                      {{patentName_Msg}}
-                             </div>
+                  <el-button type="success" @click="buyNow()">立即购买</el-button>
+                  <el-button  type="warning" @click="addCar()">加入购物车</el-button>
 
-                              <div style="float:left;margin-left:10px;width:400px;text-align:left">简介：</div>
-                            <div class="purposeText omit" style="width:300px;height:20px;margin-left:30px;float:left;border-bottom:1px dashed gray;" >
-                                      {{patentPurpose_Msg}}
-                             </div>
-                             <div class="account" style="margin-left:50px;float:right;width:430px;height:73px">
-                               <div style="float:left;font-weight:bold;line-height:20px;width:200px;height:30px;;text-align:right;">实付款：</div>
-                                       <div class="omit" style="float:right;width:150px;height:40px;text-align:right;line-height:20px;font-size:26px;color:#377ab7">¥ {{patentPrice_Msg}}</div>
-
-                               <div  style="float:left;text-align:right;font-weight:bold;margin-top:10px;margin-left:0px;width:200px;height:20px;">收货人：</div>
-                                       <div class="omit" style="float:right;width:150px;font-weight:normal;text-align:right;line-height:20px;float:right;color:rgb(70, 66, 66);font-weight:bold;">{{myName_Msg}}</div>
-                               </div>
-
-                              </el-row>
-
-                              <div style="float:left;margin-top:0px">
-                                <el-tag type="success"> 一口价 商品 </el-tag>
-                                <span  style="font-size:14px">
-                                  卖家：{{sellerName_Msg}}
-                                </span>
-                              </div>
-                              <div slot="footer" class="dialog-footer" style="width:180px;float:right;margin-top:15px">
-                                  <div style="float:left">
-                                    <el-button @click="applyOrderBox = false">返 回</el-button>
-                                  </div>
-
-                                  <div style="float:left;margin-left:20px">
-                                     <!-- <router-link :to="'/tradeSystem/patentOrderDetail/'+product_id"> -->
-                                       <el-button >提交订单</el-button>
-                                     <!-- </router-link> -->
-                                  </div>
-                            </div>
-                              </div>
-                      </el-dialog>
-                  </div>
             </div>
                 <!-- 评论区开始 -->
                 <div style="width:1210px;margin:0 auto;">
@@ -199,7 +151,6 @@ export default {
             sho: false,
             hotList:[],
 
-            buyNow:false,
             notExist:false,
 
             notLogin:false,
@@ -211,25 +162,96 @@ export default {
 
             sellerName_Msg: '',
             reviewList: [],
+            myGood:{},
         }
     },
     methods: {
+      buyNow(){
+        let that = this ;
+        var querystring = require('querystring');//Json数据查询器
+        axios.post(that.rootURL +'/shopping.do',
+           querystring.stringify({
+             cid:3,
+             csize:9,
+           })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+          )
+          .then(function(res){
+          if(res.data.status){
+            Notification.success({
+                      title: '购买成功！',
+                      message: '你直接购买成功了！',
+                      offset: 65,
+                        duration:2000
+                    })
+          } else {
+            Notification.error({
+                      title: '购买失败！',
+                      message: res.data.msg,
+                      offset: 65,
+                      duration:2000
+                    })
+            // window.location = '#/tradeSystem/login'
+          }
+          })
+          .catch(function(error){
+            Message.error('注册不成功！');
+          });
+      },
+        addCar(){
+          let that = this ;
+          var querystring = require('querystring');//Json数据查询器
+          axios.post(that.rootURL +'/addCart.do',
+             querystring.stringify({
+               cid:3,
+               csize:9,
+             })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+            )
+            .then(function(res){
+            if(res.data.status){
+              Notification.success({
+                        title: '购买成功！',
+                        message: '你直接购买成功了！',
+                        offset: 65,
+                          duration:2000
+                      })
+            } else {
+              Notification.error({
+                        title: '购买失败！',
+                        message: res.data.msg,
+                        offset: 65,
+                        duration:2000
+                      })
+              // window.location = '#/tradeSystem/login'
+            }
+            })
+            .catch(function(error){
+              Message.error('注册不成功！');
+            });
+        },
       getItemInfo(){
           let that = this;
-          that.reviewList = [];
 
-          axios.get(that.rootURL+'/queryReview.do?cid=' + 3)
+          axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + that.C)
           .then(function(res){
-            for( that.idx of res.data.list ){
-              var myRev = {
-              };
-              myRev.id = that.idx.id;
-              myRev.text = that.idx.text;
-              myRev.time = that.idx.time;
-              myRev.username = that.idx.username;
-
-              that.reviewList.push(myRev)
-            }
+              that.idx = res.data
+              if(that.idx.status){
+                that.myGood = {
+                };
+                that.myGood.id = that.idx.cid;
+                that.myGood.name = that.idx.cname;
+                that.myGood.btype = that.idx.btype;
+                that.myGood.stype = that.idx.stype;
+                that.myGood.price = that.idx.cprice;
+                that.myGood.remain = that.idx.cremain;
+              } else {
+                that.$router.push({path:'/byCategory'})
+                Notification.error({
+                          title: '请检查是否存在该商品ID！',
+                          message: res.data.msg,
+                          offset: 65,
+                            duration:2000
+                        })
+              }
           })
           .catch(function(error){
             console.error(error)
@@ -239,7 +261,7 @@ export default {
           let that = this;
           that.reviewList = [];
 
-          axios.get(that.rootURL+'/queryReview.do?cid=' + 3)
+          axios.get(that.rootURL+'/queryReview.do?cid=' + that.C)
           .then(function(res){
             for( that.idx of res.data.list ){
               var myRev = {
@@ -264,14 +286,21 @@ export default {
           that.$router.push({path:'/tradeSystem/search/byCategory'})
       },
 
+      hsytt(){
+        let that = this ;
+        that.C= that.$route.params.newID;
+        this.getReviewInfo();
+        this.getItemInfo();
+      },
 
     },
     created() {
-      this.getReviewInfo();
-      this.getItemInfo();
+      let that = this ;
+      that.C= that.$route.params.newID;
+      that.hsytt();
     },
     watch:{
-      '$route':'render'
+      '$route':'hsytt'
     }
 }
 </script>
@@ -468,10 +497,12 @@ export default {
 .el-button--primary{
   width: 130px !important;
 }
-.el-button--success{
-  letter-spacing: 15px;
-  font-size: 22px;
-  width: 220px !important;
+.el-button--success,.el-button--warning{
+  padding: 0px;
+  float:left;
+  letter-spacing: 2px;
+  font-size: 16px;
+  width: 100px !important;
   height: 55px;
   margin-top:15px !important;
 }

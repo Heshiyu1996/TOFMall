@@ -33,11 +33,10 @@
         <el-row class="tac">
           <el-col :span="4">
             <el-menu router class="el-menu-vertical-demo lead" @select="handleClick" @open="handleOpen" @close="handleClose">
-                      <el-menu-item index="0"  :route="{path:'/userIndex/patents'}">技术管理</el-menu-item>
-                      <el-menu-item index="1"  :route="{path:'/userIndex/questions'}">求解管理</el-menu-item>
-                      <el-menu-item index="2"  :route="{path:'/userIndex/financial'}">财务管理</el-menu-item>
-                      <el-menu-item index="4"  :route="{path:'/userIndex/orders'}">订单中心</el-menu-item>
-                      <el-menu-item index="3"  :route="{path:'/userIndex/account'}">账号设置</el-menu-item>
+                      <el-menu-item index="0"  :route="{path:'/userIndex/account'}">账号管理</el-menu-item>
+                      <el-menu-item index="1"  :route="{path:'#'}">我的购物车</el-menu-item>
+                      <el-menu-item index="2"  :route="{path:'#'}">订单管理</el-menu-item>
+                      <el-menu-item index="4"  :route="{path:'#'}">联系客服</el-menu-item>
             </el-menu>
             </el-col>
         </el-row>

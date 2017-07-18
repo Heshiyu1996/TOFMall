@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div style="background-color:#359DF2">
+    <div style="background-color:#FC7700">
       <div class="css-body">
         <div class="css-body-bigPics">
           <el-carousel indicator-position="outside" height="362px">
