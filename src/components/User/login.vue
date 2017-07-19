@@ -7,7 +7,7 @@
 
 
       <!-- 登录框 开始 -->
-      <div style="width:340px;height:500px;float:right;margin-right:-100px;margin-top:135px">
+      <div style="width:340px;height:500px;float:right;margin-top:135px">
         <loginBox></loginBox>
       </div>
       <!-- 登录框 结束 -->
@@ -62,6 +62,7 @@ export default {
 	background-color: #d3dce6;
 }
 .css-bg {
-  margin-left: -300px;
+  background-size:cover;
+  width:100%;
 }
 </style>

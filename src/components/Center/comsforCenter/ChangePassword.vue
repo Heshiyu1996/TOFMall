@@ -142,11 +142,13 @@ export default {
  .updateInfo-box{
  	width: 700px;
  	height: 350px;
- 	float: left;
+ 	float: right;
  	border-radius: 4px;
- 	background: #fff;
+ 	background: rgba(255, 255, 255, 0.5);
  	padding:20px;
-  margin-right:10px;
+  position:relative;
+  left:150px;
+  margin-left:10px;
  	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
  }
 

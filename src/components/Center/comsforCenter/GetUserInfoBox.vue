@@ -120,12 +120,16 @@ export default {
  .updateInfo-box{
  	width: 700px;
  	height: 350px;
- 	float: left;
+ 	float: right;
  	border-radius: 4px;
- 	background: #fff;
- 	padding:20px;
-  margin-right:10px;
+  background:rgba(255,255,255,0.5);
+
+  position:relative;
+  left: 150px;
+ 	padding:50px;
+  margin-left:10px;
  	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+
  }
 
  .updateInfo-box>div{

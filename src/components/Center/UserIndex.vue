@@ -2,7 +2,7 @@
   <div>
     <myHeader></myHeader>
 
-    <div id="whole" :style="{backgroundImage: 'url(' +bg + ')'}" style="width:1210px;height:650px;background-repeat: no-repeat" >
+    <div id="whole" :style="{backgroundImage: 'url(' +bg + ')'}" style="background-size: cover;width:100%;background-repeat: no-repeat" >
 
    <div class="clearfix"></div>
    <div class="hint"></div>
