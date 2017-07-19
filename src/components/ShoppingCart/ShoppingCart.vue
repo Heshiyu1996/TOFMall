@@ -21,47 +21,31 @@
     <div class="clearfix"></div>
 
     <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-      <section>
+      <section v-for="esingle in goods">
         <div class="css-body">
           <div class="css-body-item">
             <div class="css-body-item-select">
-              <el-checkbox :key="cities[0]"  :label="cities[0]" ></el-checkbox>
+              <el-checkbox :key="esingle.cid"  :label="esingle.cid" ></el-checkbox>
             </div>
             <div class="css-body-item-img" style="">
               <img src="./../../assets/img/car9.jpg" />
             </div>
-            <div class="css-body-item-name">汽车</div>
-            <div class="css-body-item-price">汽车</div>
+            <!-- {{esingle.commodity.cname}} -->
+            <div class="css-body-item-name">{{esingle.row}}</div>
+            <div class="css-body-item-price">{{esingle.commodity.cprice}}</div>
             <div class="css-body-item-count">
-              <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="99"></el-input-number>
+              <el-input-number size="small" v-model="esingle.csize" @change="handleChange()" :min="1" :max="99"></el-input-number>
             </div>
-            <div class="css-body-item-sum">¥ 29.99</div>
+            <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
           </div>
         </div>
       </section>
-      <section>
-        <div class="css-body">
-          <div class="css-body-item">
-            <div class="css-body-item-select">
-              <el-checkbox :key="cities[1]"  :label="cities[1]" ></el-checkbox>
-            </div>
-            <div class="css-body-item-img" style="">
-                <img src="./../../assets/img/car9.jpg" />
-            </div>
-            <div class="css-body-item-name">汽车</div>
-            <div class="css-body-item-price">汽车</div>
-            <div class="css-body-item-count">
-              <el-input-number size="small" v-model="count2" @change="handleChange" :min="1" :max="99"></el-input-number>
-            </div>
-            <div class="css-body-item-sum">¥ 29.99</div>
-          </div>
-        </div>
-      </section>
+
     </el-checkbox-group>
     <section>
       <div class="css-footer">
         <div class="css-footer-count">已选商品 <span class="css-footer-count-num">0</span>件</div>
-        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
+        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
         <div class="css-footer-btn"><el-button type="primary">去结算</el-button></div>
       </div>
     </section>
@@ -71,23 +55,107 @@
 <script>
 // const cityOptions = ;
 
+import axios from 'axios'
+import config from './../../publicAPI/config'
+import { Message } from 'element-ui';//信息提示框
+import { Notification } from 'element-ui';
+
 export default {
   data () {
     return {
-      count: 2,
-      count2: 3,
+      rootURL: config.JXURL,
       checked: false,
 
-      cities: ['上海', '北京'],
+      goods: [],
 
       checkedCities: [],
       checkAll: false,
       isIndeterminate: true,
+
+      row: 0,
+      total: 0,
+
     }
   },
   methods: {
-    handleChange(value) {
-      console.log(value);
+    getCartList(){
+      let that = this;
+      that.idx = '';
+      that.row = 0 ;
+      that.goods = [];
+      axios.get(that.rootURL+'/queryCart.do')
+      .then(function(res){
+        for( that.idx of res.data ){
+          var bt = {
+            row : 0,
+            cid : '',
+            uid : '',
+            csize : '',
+            sum : 0,
+            commodity : {},
+          };
+          bt.row = that.row;
+          bt.cid = that.idx.cid;
+          bt.uid = that.idx.uid;
+          bt.csize = that.idx.csize;
+
+          if(that.idx.commodity!=null){
+              var st = {
+                cname : '',
+                cprice : 1,
+                cremain :'',
+              };
+              st.cname = that.idx.commodity.cname;
+              st.cprice = that.idx.commodity.cprice;
+              st.cremain = that.idx.commodity.cremain;
+              bt.sum = bt.csize * st.cprice;
+              bt.commodity =(st);
+          }
+          that.row +=1;
+          that.goods.push(bt);
+        }
+        console.log(that.goods);
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+
+    },
+    handleChange(value,idx) {
+      // var myCid = ;
+      // var myCsize = ;
+      var target = document.activeElement;
+      console.log(target.tagName);
+      // let that = this
+      // var querystring = require('querystring');//Json数据查询器
+      // axios.post(that.rootURL +'/updateCart.do',
+      //    querystring.stringify({
+      //     //  cid : myCid,
+      //     //  csize : myCsize,
+      //    })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+      //   )
+      //   .then(function(res){
+      //   if(res.data.status){
+      //     Notification.success({
+      //               title: '注册成功！',
+      //               message: res.data.msg,
+      //               offset: 65,
+      //                 duration:2000
+      //             })
+      //   } else {
+      //     Notification.error({
+      //               title: '注册失败！',
+      //               message: res.data.msg,
+      //               offset: 65,
+      //                 duration:2000
+      //             })
+      //     // window.location = '#/tradeSystem/login'
+      //   }
+      //   })
+      //   .catch(function(error){
+      //     Message.error('注册不成功！');
+      //   });
+      // console.log(myCid,myCsize+1);
     },
     handleCheckAllChange(event) {
       this.checkedCities = event.target.checked ?  ['上海', '北京'] : [];
@@ -95,10 +163,13 @@ export default {
     },
     handleCheckedCitiesChange(value) {
     let checkedCount = value.length;
-    this.checkAll = checkedCount === this.cities.length;
-    this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+    this.checkAll = checkedCount === this.goods.length;
+    this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
     }
-  }
+  },
+    created(){
+      this.getCartList()
+    }
 }
 </script>
 

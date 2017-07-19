@@ -36,11 +36,11 @@
             <!-- 价格信息 -->
             <div style="float:right">
                 <el-card class="box-card">
-                    <div class="text item block">
-                        <span style="float:left;">  单价：</span>
-                        <div class="text item shanshuo omit" style="width:170px;font-size:26px;text-align:right">
+                    <div class="block">
+                        <span  class="attr" style="float:left;">  一口价：</span>
+                        <div class=" item shanshuo omit" style="width:150px;font-size:26px;text-align:right;margin-left:30px">
                             ¥ {{myGood.price}}
-                    </div>
+                        </div>
                     </div>
                     <div class="text item block" style="text-align:right">
                         <span class="attr">  大类别：</span>
@@ -60,10 +60,17 @@
                         {{myGood.remain}}
                     </span>
                     </div>
+                    <div class="text item block" style="text-align:right;border-bottom:0px solid white">
+                        <span class="attr">  月销量：</span>
+                        <span class="text item shanshuo" style="font-size:20px;text-align:right;">
+                        {{myGood.monthSale}} <span style="font-size:14px">件</span>
+                    </span>
+                    </div>
                 </el-card>
             </div>
             <!-- 购买按钮 'status','patentName','patentSummary','seller','price','buyer','imgPath'-->
             <div style="padding-left:10px;width:220px;float:left;margin-bottom:10px">
+                  <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="myGood.remain"></el-input-number>
                 <!-- 立即购买 -->
                   <el-button type="success" @click="buyNow()">立即购买</el-button>
                   <el-button  type="warning" @click="addCar()">加入购物车</el-button>
@@ -116,6 +123,7 @@ export default {
     },
     data() {
         return {
+            count:1,
             textarea3: '',
             inputContent: '',
             outputContent: '',
@@ -149,16 +157,6 @@ export default {
             design_Msg: '正在拉取...',
 
             sho: false,
-            hotList:[],
-
-            notExist:false,
-
-            notLogin:false,
-            applyOrderBox: false,
-            patentName_Msg:'',
-            patentPurpose_Msg: '',
-            patentPrice_Msg: '',
-            myName_Msg: '',
 
             sellerName_Msg: '',
             reviewList: [],
@@ -166,13 +164,17 @@ export default {
         }
     },
     methods: {
+
+        handleChange(value) {
+          console.log(value);
+        },
       buyNow(){
         let that = this ;
         var querystring = require('querystring');//Json数据查询器
         axios.post(that.rootURL +'/shopping.do',
            querystring.stringify({
-             cid:3,
-             csize:9,
+             cid:that.C,
+             csize:that.count,
            })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
           )
           .then(function(res){
@@ -202,8 +204,8 @@ export default {
           var querystring = require('querystring');//Json数据查询器
           axios.post(that.rootURL +'/addCart.do',
              querystring.stringify({
-               cid:3,
-               csize:9,
+               cid:that.C,
+               csize:that.count,
              })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
             )
             .then(function(res){
@@ -243,6 +245,7 @@ export default {
                 that.myGood.stype = that.idx.stype;
                 that.myGood.price = that.idx.cprice;
                 that.myGood.remain = that.idx.cremain;
+                that.myGood.monthSale = that.idx.monthSale;
               } else {
                 that.$router.push({path:'/byCategory'})
                 Notification.error({
