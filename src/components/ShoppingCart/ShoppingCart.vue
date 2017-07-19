@@ -6,7 +6,7 @@
     <section>
       <div class="css-title">
         <div class="css-title-all">
-          <el-checkbox
+         <el-checkbox
           :indeterminate="isIndeterminate"
           v-model="checkAll"
           @change="handleCheckAllChange">
@@ -25,17 +25,20 @@
         <div class="css-body">
           <div class="css-body-item">
             <div class="css-body-item-select">
-              <el-checkbox :key="esingle.cid"  :label="esingle.cid" ></el-checkbox>
+              <el-checkbox :key="esingle.row"  :label="esingle.row" ></el-checkbox>
             </div>
             <div class="css-body-item-img" style="">
               <img src="./../../assets/img/car9.jpg" />
             </div>
             <!-- {{esingle.commodity.cname}} -->
-            <div class="css-body-item-name">{{esingle.row}}</div>
+            <div class="css-body-item-name">{{esingle.commodity.cname}}</div>
+            <div class="css-body-item-cid">{{esingle.cid}}</div>
+
             <div class="css-body-item-price">{{esingle.commodity.cprice}}</div>
             <div class="css-body-item-count">
-              <el-input-number size="small" v-model="esingle.csize" @change="handleChange()" :min="1" :max="99"></el-input-number>
-            </div>
+              <el-input-number size="small" v-model="esingle.csize" @change="handleChange(esingle.row)" :min="1" :max="999"></el-input-number>
+              <div class="css-body-item-count-remain">剩余库存：<span class="css-body-item-count-remain-span" controls=false>{{esingle.commodity.cremain}}</span> 件</div>
+              </div>
             <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
           </div>
         </div>
@@ -44,9 +47,9 @@
     </el-checkbox-group>
     <section>
       <div class="css-footer">
-        <div class="css-footer-count">已选商品 <span class="css-footer-count-num">0</span>件</div>
+        <div class="css-footer-count">已选商品 <span class="css-footer-count-num">{{itemCount}}</span>件</div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-        <div class="css-footer-btn"><el-button type="primary">去结算</el-button></div>
+        <div class="css-footer-btn"><el-button type="primary" @click="">去结算</el-button></div>
       </div>
     </section>
   </div>
@@ -70,11 +73,12 @@ export default {
 
       checkedCities: [],
       checkAll: false,
-      isIndeterminate: true,
+      isIndeterminate: false,
 
+      itemCount :0,
       row: 0,
       total: 0,
-
+      cityOptions: [],
     }
   },
   methods: {
@@ -83,6 +87,8 @@ export default {
       that.idx = '';
       that.row = 0 ;
       that.goods = [];
+      that.checkedCities = [];
+      that.cityOptions = [];
       axios.get(that.rootURL+'/queryCart.do')
       .then(function(res){
         for( that.idx of res.data ){
@@ -112,56 +118,73 @@ export default {
               bt.commodity =(st);
           }
           that.row +=1;
+          that.checkedCities.push(bt.row);
+          that.cityOptions.push(bt.row);
           that.goods.push(bt);
         }
-        console.log(that.goods);
+        // console.log(that.checkedCities);
       })
       .catch(function(error){
         console.error(error)
       })
 
     },
-    handleChange(value,idx) {
-      // var myCid = ;
-      // var myCsize = ;
-      var target = document.activeElement;
-      console.log(target.tagName);
-      // let that = this
-      // var querystring = require('querystring');//Json数据查询器
-      // axios.post(that.rootURL +'/updateCart.do',
-      //    querystring.stringify({
-      //     //  cid : myCid,
-      //     //  csize : myCsize,
-      //    })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
-      //   )
-      //   .then(function(res){
-      //   if(res.data.status){
-      //     Notification.success({
-      //               title: '注册成功！',
-      //               message: res.data.msg,
-      //               offset: 65,
-      //                 duration:2000
-      //             })
-      //   } else {
-      //     Notification.error({
-      //               title: '注册失败！',
-      //               message: res.data.msg,
-      //               offset: 65,
-      //                 duration:2000
-      //             })
-      //     // window.location = '#/tradeSystem/login'
-      //   }
-      //   })
-      //   .catch(function(error){
-      //     Message.error('注册不成功！');
-      //   });
-      // console.log(myCid,myCsize+1);
+    handleChange(row) {
+      var myRow = document.getElementsByClassName("css-body-item-select")[row].innerText;
+      var myCid = document.getElementsByClassName("css-body-item-cid")[row].innerText;
+      var myPrice = document.getElementsByClassName("css-body-item-price")[row].innerText;
+      var myCsize = document.getElementsByClassName("el-input__inner")[row].value;
+      document.getElementsByClassName("css-body-item-sum")[row].innerText = myPrice * myCsize;
+      // console.log(myCsize);
+      let that = this
+      var querystring = require('querystring');//Json数据查询器
+      axios.post(that.rootURL +'/updateCart.do',
+         querystring.stringify({
+           cid : myCid,
+           csize : myCsize,
+         })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+        )
+        .then(function(res){
+        // if(res.data.status){
+        //   Notification.success({
+        //             title: '注册成功！',
+        //             message: res.data.msg,
+        //             offset: 65,
+        //               duration:2000
+        //           })
+        // } else {
+        //   Notification.error({
+        //             title: '注册失败！',
+        //             message: res.data.msg,
+        //             offset: 65,
+        //               duration:2000
+        //           })
+        //   // window.location = '#/tradeSystem/login'
+        // }
+        })
+        .catch(function(error){
+          Message.error('注册不成功！');
+        });
     },
     handleCheckAllChange(event) {
-      this.checkedCities = event.target.checked ?  ['上海', '北京'] : [];
+      console.log(event)
+      let that = this;
+      this.checkedCities = event.target.checked ?  that.cityOptions : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
+      //读取勾选的cid
+      console.log(value)
+
+      let that = this;
+      that.itemCount = value.length;
+      that.total = 0;
+      var tempTotal = 0;
+      console.log(value.length)
+      for( var i=0; i<value.length; i++ ){
+        tempTotal += 0 + document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
+      }
+      that.total = tempTotal;
     let checkedCount = value.length;
     this.checkAll = checkedCount === this.goods.length;
     this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
@@ -248,6 +271,9 @@ export default {
         text-align: center;
         padding: 20px 0px 0px 0px;
       }
+      .css-body-item-cid {
+        display: none
+      }
       .css-body-item-price {
         float: left;
         width:21.6%;
@@ -260,6 +286,13 @@ export default {
         width:21.7%;
         height:70px;
         padding: 20px 10px 0px 0px;
+        .css-body-item-count-remain {
+          font-size: 12px;
+          color: #cccccc;
+          .css-body-item-count-remain-span {
+            font-weight: bold;
+          }
+        }
       }
       .css-body-item-sum {
         overflow:hidden;

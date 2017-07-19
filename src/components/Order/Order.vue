@@ -89,7 +89,10 @@
     <section>
       <div class="css-footer">
         <div class="css-footer-back">
-            <el-button type="primary" icon="arrow-left">返回购物车</el-button>
+
+            <router-link to="/ShoppingCart">
+            <el-button type="primary" icon="arrow-left" >返回购物车</el-button>
+          </router-link>
         </div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
         <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div>
