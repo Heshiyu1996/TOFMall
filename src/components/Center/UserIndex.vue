@@ -34,7 +34,7 @@
           <el-col :span="4">
             <el-menu router class="el-menu-vertical-demo lead" @select="handleClick" @open="handleOpen" @close="handleClose">
                       <el-menu-item index="0"  :route="{path:'/userIndex/account'}">账号管理</el-menu-item>
-                      <el-menu-item index="1"  :route="{path:'/ShoppingCart'}">我的购物车</el-menu-item>
+                      <el-menu-item index="1"  :route="{path:'/userIndex/ShoppingCart'}">我的购物车</el-menu-item>
                       <el-menu-item index="2"  :route="{path:'/userIndex/order'}">订单管理</el-menu-item>
                       <el-menu-item index="4"  :route="{path:'#'}">联系客服</el-menu-item>
             </el-menu>

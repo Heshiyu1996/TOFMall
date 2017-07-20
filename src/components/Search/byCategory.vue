@@ -4,7 +4,7 @@
     <div id="bigBlock">
       <div class="clearfix"></div>
       <div style="width:1100px;text-align:center;margin:0 auto;height:900px;margin-top:20px;">
-        <div style="float:left;margin-left:-150px;">
+        <div style="float:left;margin-left:20px;">
           <div>
             <el-cascader
             expand-trigger="hover"

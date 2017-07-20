@@ -1,57 +1,59 @@
 <template>
-  <div style="width:860px;margin:0 auto;">
-    <div class="css-top">我的购物车</div>
-    <div class="clearfix"></div>
-    <hr>
-    <section>
-      <div class="css-title">
-        <div class="css-title-all">
-         <!-- <el-checkbox
-          :indeterminate="isIndeterminate"
-          v-model="checkAll"
-          @change="handleCheckAllChange">
-          </el-checkbox> -->
-        </div>
-        <div class="css-title-name">商品信息</div>
-        <div class="css-title-price">单价</div>
-        <div class="css-title-count">数量</div>
-        <div class="css-title-sum">小计&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-      </div>
-    </section>
-    <div class="clearfix"></div>
-
-    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-      <section v-for="esingle in goods">
-        <div class="css-body">
-          <div class="css-body-item">
-            <div class="css-body-item-select">
-              <el-checkbox :key="esingle.row"  :label="esingle.row" ></el-checkbox>
-            </div>
-            <div class="css-body-item-img" style="">
-              <img src="./../../assets/img/car9.jpg" />
-            </div>
-            <!-- {{esingle.commodity.cname}} -->
-            <div class="css-body-item-name">{{esingle.commodity.cname}}</div>
-            <div class="css-body-item-cid">{{esingle.cid}}</div>
-
-            <div class="css-body-item-price">{{esingle.commodity.cprice}}</div>
-            <div class="css-body-item-count">
-              <el-input-number size="small" v-model="esingle.csize" @change="handleChange(esingle.row)" :min="1" :max="999"></el-input-number>
-              <div class="css-body-item-count-remain">剩余库存：<span class="css-body-item-count-remain-span" controls=false>{{esingle.commodity.cremain}}</span> 件</div>
-              </div>
-            <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
+  <div>
+    <div style="width:860px;margin:0 auto">
+      <div class="css-top">我的购物车</div>
+      <div class="clearfix"></div>
+      <hr>
+      <section>
+        <div class="css-title">
+          <div class="css-title-all">
+           <!-- <el-checkbox
+            :indeterminate="isIndeterminate"
+            v-model="checkAll"
+            @change="handleCheckAllChange">
+            </el-checkbox> -->
           </div>
+          <div class="css-title-name">商品信息</div>
+          <div class="css-title-price">单价</div>
+          <div class="css-title-count">数量</div>
+          <div class="css-title-sum">小计&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
         </div>
       </section>
+      <div class="clearfix"></div>
 
-    </el-checkbox-group>
-    <section>
-      <div class="css-footer">
-        <div class="css-footer-count">已选商品 <span class="css-footer-count-num">{{itemCount}}</span>件</div>
-        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-        <div class="css-footer-btn"><el-button type="primary" @click="goToPay()">去结算</el-button></div>
-      </div>
-    </section>
+      <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+        <section v-for="esingle in goods">
+          <div class="css-body">
+            <div class="css-body-item">
+              <div class="css-body-item-select">
+                <el-checkbox :key="esingle.row"  :label="esingle.row" ></el-checkbox>
+              </div>
+              <div class="css-body-item-img" style="">
+                <img src="./../../assets/img/car9.jpg" />
+              </div>
+              <!-- {{esingle.commodity.cname}} -->
+              <div class="css-body-item-name">{{esingle.commodity.cname}}</div>
+              <div class="css-body-item-cid">{{esingle.cid}}</div>
+
+              <div class="css-body-item-price">{{esingle.commodity.cprice}}</div>
+              <div class="css-body-item-count">
+                <el-input-number size="small" v-model="esingle.csize" @change="handleChange(esingle.row)" :min="1" :max="999"></el-input-number>
+                <div class="css-body-item-count-remain">剩余库存：<span class="css-body-item-count-remain-span" controls=false>{{esingle.commodity.cremain}}</span> 件</div>
+                </div>
+              <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
+            </div>
+          </div>
+        </section>
+
+      </el-checkbox-group>
+      <section>
+        <div class="css-footer">
+          <div class="css-footer-count">已选商品 <span class="css-footer-count-num">{{itemCount}}</span>件</div>
+          <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
+          <div class="css-footer-btn"><el-button type="primary" @click="goToPay()">去结算</el-button></div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -64,6 +66,9 @@ import { Message } from 'element-ui';//信息提示框
 import { Notification } from 'element-ui';
 
 export default {
+  components: {
+    // myFooter,
+  },
   data () {
     return {
       rootURL: config.JXURL,

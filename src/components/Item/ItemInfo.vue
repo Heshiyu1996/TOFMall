@@ -187,7 +187,7 @@ export default {
           beforeClose: (action, instance, done) => {
             if (action === 'confirm') {
               instance.confirmButtonLoading = true;
-              instance.confirmButtonText = '跳转中...';
+              instance.confirmButtonText = '购物车呈现中...';
               setTimeout(() => {
                 done();
                 setTimeout(() => {

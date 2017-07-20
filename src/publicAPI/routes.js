@@ -18,6 +18,7 @@ import Header from './../components/Public/Header/Header'
 import UserIndex from './../components/Center/UserIndex'
 import account_Management from './../components/Center/comsforCenter/account_Management'
 import order_Management from './../components/Center/comsforCenter/order_Management'
+import shoppingCart_Management from './../components/ShoppingCart/ShoppingCart'
 import OrdersListResult from './../components/Center/comsforCenter/OrdersListResult'
 
 export default [
@@ -41,6 +42,10 @@ export default [
 		{
 			 path:'order',
 			 component:order_Management
+		},
+		{
+			 path:'shoppingCart_Management',
+			 component:shoppingCart_Management
 		},
 		]
 
