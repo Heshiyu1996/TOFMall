@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="updateInfo-box">
     <div style="width:860px;margin:0 auto">
       <div class="css-top">我的购物车</div>
       <div class="clearfix"></div>
@@ -334,7 +334,7 @@ export default {
         padding: 20px 10px 0px 0px;
         .css-body-item-count-remain {
           font-size: 12px;
-          color: #cccccc;
+          color: rgba(#948f8f, 0.83);
           .css-body-item-count-remain-span {
             font-weight: bold;
           }
@@ -388,4 +388,16 @@ export default {
         float:left;
       }
     }
+
+     .updateInfo-box{
+     	float: left;
+     	border-radius: 4px;
+     	background:rgba(255, 255, 255,0.7);
+       position:relative;
+       left:150px;
+     	padding:50px;
+      margin-left:-100px;
+      margin-top:100px;
+     	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+     }
 </style>

@@ -44,7 +44,7 @@ export default [
 			 component:order_Management
 		},
 		{
-			 path:'shoppingCart_Management',
+			 path:'shoppingCart',
 			 component:shoppingCart_Management
 		},
 		]

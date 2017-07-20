@@ -39,7 +39,7 @@
                 <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;margin-bottom:25px">
                   <router-link :to="'/ItemInfo/' + esingle.id">
                     <transition name="el-fade-in-linear">
-                      <el-card  v-show="show2" class="box-card transition-box" :body-style="{ padding: '0px' }">
+                      <el-card  v-show="show2" class="box-card " :body-style="{ padding: '0px' }">
                         <img :src="esingle.img" class="image" style="width=100%">
                         <div style="padding:10px;">
                           <div style="float:left;width:180px;margin-top:-8px">
@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="clearfix"></div>
-              <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
+              <!-- <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
                 <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentPageChange"
@@ -67,7 +67,7 @@
                 :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper">
               </el-pagination>
-            </div>
+            </div> -->
           </div>
           <!-- 所有专利（模糊）结束 -->
           </div>
