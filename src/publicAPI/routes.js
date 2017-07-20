@@ -11,13 +11,22 @@ import byType from './../components/Search/byType'
 import ItemInfo from './../components/Item/ItemInfo'
 
 import Order from './../components/Order/Order'
+import OrderDetail from './../components/Order/OrderDetail'
 import ShoppingCart from './../components/ShoppingCart/ShoppingCart'
 
 import Header from './../components/Public/Header/Header'
 import UserIndex from './../components/Center/UserIndex'
 import account_Management from './../components/Center/comsforCenter/account_Management'
+import order_Management from './../components/Center/comsforCenter/order_Management'
+import OrdersListResult from './../components/Center/comsforCenter/OrdersListResult'
 
 export default [
+
+	{
+		path: '/OrdersListResult',
+		name: 'OrdersListResult',
+		component: OrdersListResult,
+	},
 	{
 		path: '/UserIndex',
 		name: 'UserIndex',
@@ -29,8 +38,17 @@ export default [
 			 path:'account',
 			 component:account_Management
 		},
+		{
+			 path:'order',
+			 component:order_Management
+		},
 		]
 
+	},
+	{
+		path: '/OrderDetail',
+		name: 'OrderDetail',
+		component: OrderDetail,
 	},
 	{
 		path: '/Header',

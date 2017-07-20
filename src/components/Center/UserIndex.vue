@@ -6,7 +6,7 @@
 
    <div class="clearfix"></div>
    <div class="hint"></div>
-    <div style="float:left;margin-top:-30px;width:200px;height:100px;padding:5px;border-top:7px solid rgb(219, 229, 243)">
+    <div style="float:left;margin-top:-50px;width:200px;height:100px;padding:5px;">
       <div style="float:left;width:90px;height:90px;border:2px dashed black;padding:2px">
       <img v-if="showOn" :src="picPath_Msg" style="width:82px;height:82px">
       </div>
@@ -16,7 +16,7 @@
       <div style="float:left;text-align:right;font-size:12px;width:100px;height:10px;">
         （{{isRealName_Msg}}）
       </div>
-      <div style="float:left;width:100px;height:30px;padding-left:10px;padding-top:10px">
+      <div style="float:left;width:100px;height:30px;padding-left:10px;padding-top:10px;margin-bottom:10px">
         <el-upload
           action="//xiaogong.ftp29.scauidc.com/xiaogong/image/uploadImage"
           :default-file-list="fileList"
@@ -34,8 +34,8 @@
           <el-col :span="4">
             <el-menu router class="el-menu-vertical-demo lead" @select="handleClick" @open="handleOpen" @close="handleClose">
                       <el-menu-item index="0"  :route="{path:'/userIndex/account'}">账号管理</el-menu-item>
-                      <el-menu-item index="1"  :route="{path:'#'}">我的购物车</el-menu-item>
-                      <el-menu-item index="2"  :route="{path:'#'}">订单管理</el-menu-item>
+                      <el-menu-item index="1"  :route="{path:'/ShoppingCart'}">我的购物车</el-menu-item>
+                      <el-menu-item index="2"  :route="{path:'/userIndex/order'}">订单管理</el-menu-item>
                       <el-menu-item index="4"  :route="{path:'#'}">联系客服</el-menu-item>
             </el-menu>
             </el-col>
