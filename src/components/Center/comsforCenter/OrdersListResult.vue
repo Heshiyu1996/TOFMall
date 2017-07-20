@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="updateInfo-box">
     <el-form  class="demo-ruleForm">
     </el-form>
     <div style="width:1000px;margin-left:10px;margin-top:40px">
@@ -213,4 +213,15 @@
       white-space: nowrap;
       /*不换行*/
   }
+
+       .updateInfo-box{
+       	float: left;
+       	border-radius: 4px;
+       	background:rgba(255, 255, 255,0.7);
+         position:relative;
+       	padding:50px;
+        margin-left:-100px;
+        margin-top:0px;
+       	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+       }
 </style>

@@ -1,17 +1,64 @@
 <template>
-    <div class="myBody">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="订单列表" name="first">
-        <div class="myBox">
-          <GetUserInfoBox></GetUserInfoBox>
-        </div>
-        </el-tab-pane>
-        <el-tab-pane label="订单查询" name="second">
-        <div class="myBox">
-          <UpdateUserInfoBox></UpdateUserInfoBox>
-        </div>
-        </el-tab-pane>
-      </el-tabs>
+  <div class="updateInfo-box">
+    <div style="width:300px;float:right;margin:0px 10px 5px 0px">
+      <el-input placeholder="请输入要查询的订单ID..." v-model="myInput">
+        <el-button slot="append" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
+      </el-input>
+    </div>
+    <div class="clearfix"></div>
+    <el-form  class="demo-ruleForm">
+    </el-form>
+    <div style="width:960px;margin:10px">
+      <el-table :data="tableData" style="width: 100%;">
+            <el-table-column prop="orderNum"  width="100px" label="订单ID">
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper " >
+                  <el-button type="text" @click="goToDetail(scope.$index, scope.row)">{{ scope.row.orderNum }}</el-button>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="infos" width="250px" label="商品内容">
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper omit">
+                  哈哈哈是事实上事实上哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈事实上
+                </div>
+              </template>
+
+            </el-table-column>
+            <el-table-column prop="ostime"width="250px" label="创建时间">
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.ostime }}
+                </div>
+              </template>
+
+            </el-table-column>
+            <el-table-column prop="totalPrice" label="总价">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.totalPrice }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ostate" label="状态">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.ostate }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="" label="">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  <el-button type="danger"v-show="scope.row.iShow" @click="beforeDel(scope.$index, scope.row)">取消</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+    </div>
   </div>
 </template>
 
@@ -19,52 +66,138 @@
   import axios from 'axios'
   import config from './../../../publicAPI/config'
   import { Message } from 'element-ui';//信息提示框
-  import ChangePassword from './ChangePassword'
-  import GetUserInfoBox from './GetUserInfoBox'
-  import UpdateUserInfoBox from './UpdateUserInfoBox'
-
 
   export default {
     components: {
-      ChangePassword,
-      GetUserInfoBox,
-      UpdateUserInfoBox,
     },
     data() {
-      return {
-        activeName: 'first',
+    return {
+      rootURL: config.JXURL,
+      balance: '--',//数据由数据库返回
+      activeName: 'first',
+      tableData: [],
+      myInput:'',
     };
   },
   methods: {
-    handleClick(tab, event) {
-    },
+      tryToSearch(){
+        let that = this ;
+        that.$router.push({path:'/orderdetail/' + that.myInput})
+      },
+      beforeDel(index,row) {
+        let that = this ;
+        const h = this.$createElement;
+        this.$msgbox({
+          title: '取消订单确认',
+          message: h('p', null, [
+            h('span', null, '你要取消的是订单号为： '),
+            h('i', { style: 'color: teal' }, row.orderNum),
+              h('span', null, ' 的订单，取消后就不能恢复了，请确认！ '),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '我要取消!',
+          cancelButtonText: '返回',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = '取消订单中...';
+              setTimeout(() => {
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              }, 3000);
+              that.delOrder(index,row);
+            } else {
+              done();
+            }
+          }
+        }).then(action => {
 
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    }
+        });
+      },
+    delOrder(index,row){
+      console.log(row.orderNum)
+      let that = this ;
+      var querystring = require('querystring');//Json数据查询器
+      axios.post(that.rootURL +'/deleteOrders.do',
+         querystring.stringify({
+           oid:row.orderNum,
+         })
+        )
+        .then(function(res){
+        if(res.data.status){
+          Notification.success({
+                    title: '取消成功！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+        } else {
+          Notification.error({
+                    title: '取消失败！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+          // window.location = '#/tradeSystem/login'
+        }
+        })
+        .catch(function(error){
+          Message.error('订单取消不成功！');
+        });
+    },
+    goToDetail(index,row){
+      let that = this;
+      that.$router.push({path:'/orderdetail/'+row.orderNum})
+
+    },
+    getRecord() {
+        let that = this
+        axios.get(that.rootURL+'/queryOrders.do')
+          .then(function(res){
+            that.tableData = []
+            for( var item of res.data ) {
+                var str = '';
+                for( var ite of res.data ) {
+
+                }
+                var tempShow = item.ostate=="已支付"?false:true;
+              that.tableData.push({
+                orderNum: item.oid,
+                oaddress: item.oaddress,
+                oname: item.oname,
+                totalPrice: item.ototalprice,
+                ostime: item.ostime,
+                ostate: item.ostate,
+                iShow: tempShow
+                  // infos:item.id,
+              })
+          }
+          })
+          .catch(function(error){
+            console.error(error)
+          })
+      },
+  },
+  created(){
+    this.getRecord()
   }
-}
+  }
 </script>
-<style scoped lang="scss">
-  .myBody {
-    &.myBox {
-      margin-left:-150px;
-    }
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  .el-row{
+    width: 800px;
   }
   .el-submenu .el-menu-item{
     height: 35px;
     line-height: 35px;
   }
   .bodyBG{
-    min-height: 538px;
-    width:1000px;
-    margin:0 auto
-  }
-  .middle{
-    padding-top:20px;
-    min-height: 608px;
-    width: 1000px;
-    background-color: rgba(218,230,244,0.9);/*#dae6f4*/
+    background-size: 100% 508px;
+    min-height: 508px;
+    width:1080px
   }
   .hint{
     width: 100%;
@@ -76,5 +209,31 @@
   .el-form-item{
     margin-bottom: 30px;
   }
+  big{
+    color: #20a0ff;
+  }
+  .block{
+    margin-top: 25px;
+    text-align: right;
+  }
 
+  .omit {
+      width: 200px;
+      overflow: hidden;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      /*不换行*/
+  }
+
+       .updateInfo-box{
+       	float: left;
+       	border-radius: 4px;
+       	background:rgba(255, 255, 255,0.7);
+         position:relative;
+       	padding:10px 0px;
+        margin-left:10px;
+        margin-top:105px;
+       	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+       }
 </style>

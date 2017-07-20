@@ -192,9 +192,10 @@ export default {
                 done();
                 setTimeout(() => {
                   // instance.confirmButtonLoading = false;
-                    that.$router.push({path:'/ShoppingCart'})
+                    that.$router.push({path:'/userIndex/ShoppingCart'})
                 }, 300);
-              }, 2000);
+              }, 1500);
+                instance.confirmButtonLoading = false;
             } else {
               done();
             }

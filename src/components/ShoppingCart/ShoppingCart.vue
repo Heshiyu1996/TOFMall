@@ -82,7 +82,7 @@ export default {
 
       itemCount :0,
       row: 0,
-      // total: 0,
+      total: 0,
       cityOptions: [],
     }
   },
@@ -90,21 +90,22 @@ export default {
   watch: {
     'goods': {
       handler: function(val,oldVal){
-        // console.log(val);
-        // console.log(oldVal);
+        let that = this;
+        that.updateTotal()
+        // console.log(val)
       },
       deep:true
     }
   },
   computed: {
-    total: function(){
-      let tot = 0;
-      let that = this;
-      that.goods.forEach(function (item){
-        tot += item.sum
-      })
-      return tot;
-    }
+    // total: function(){
+    //   let tot = 0;
+    //   let that = this;
+    //   that.goods.forEach(function (item){
+    //     tot += item.sum
+    //   })
+    //   return tot;
+    // }
   },
   methods: {
     goToPay(){
@@ -133,8 +134,8 @@ export default {
       myCids = myCids + document.getElementsByClassName("css-body-item-cid")[rowIdx[rowIdx.length-1]].innerText
       myCsizes = myCsizes + document.getElementsByClassName("css-body-item-count")[rowIdx[rowIdx.length-1]].firstChild.lastChild.getElementsByTagName('input')[0].value
 
-      console.log(myCids)
-      console.log(myCsizes)
+      // console.log(myCids)
+      // console.log(myCsizes)
       localStorage.removeItem('myUrl')
 
       localStorage.setItem('myUrl',that.rootURL+'/account.do?cids=' + myCids +'&csizes='+ myCsizes)
@@ -191,6 +192,9 @@ export default {
 
     },
     handleChange(row) {
+      setTimeout(() => {
+        // instance.confirmButtonLoading = false;
+      console.log(123213)
       let that = this;
       var myRow = document.getElementsByClassName("css-body-item-select")[row].innerText;
       var myCid = document.getElementsByClassName("css-body-item-cid")[row].innerText;
@@ -212,6 +216,8 @@ export default {
         .catch(function(error){
           Message.error('不成功！');
         });
+
+      }, 100);
     },
     handleCheckAllChange(event) {
       // console.log(document.getElementsByClassName("css-body-item-select").length);
@@ -222,17 +228,44 @@ export default {
     },
     handleCheckedCitiesChange(value) {
       //读取勾选的cid
-      console.log(value)
-
+      // console.log(value)
+      console.log(232323232323)
       let that = this;
       that.itemCount = value.length;
       // console.log(value.length)
+      var tempTotal = 0;
       for( var i=0; i<value.length; i++ ){
-        // tempTotal += 0 + document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
+        var my = document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
+         tempTotal += Number(my.substr(2,my.length));
       }
+      that.total = tempTotal;
+
     let checkedCount = value.length;
     this.checkAll = checkedCount === this.goods.length;
     this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
+    },
+    updateTotal(){
+      setTimeout(() => {
+      let that = this;
+            var domList = document.getElementsByClassName("el-checkbox__inner");
+            var count = 0;
+            var rowIdx = [];
+            for(var i=0 ; i<domList.length;i++){
+              // console.log(domList[i].offsetParent.className)
+              if(domList[i].offsetParent.className=='el-checkbox__input is-checked'){
+                // console.log(domList[i].offsetParent.lastChild.value)
+                rowIdx.push(domList[i].offsetParent.lastChild.value);
+              }
+            }
+            var tempTotal = 0;
+            for( var i=0; i<rowIdx.length; i++ ){
+              var my = document.getElementsByClassName("css-body-item-sum")[rowIdx[i]].innerText;
+               tempTotal += Number(my.substr(2,my.length));
+            }
+            that.total = tempTotal;
+            console.log(tempTotal)
+
+          }, 100);
     }
   },
     created(){
