@@ -2,12 +2,11 @@
     <div>
         <myHeader></myHeader>
         <!-- 头部 -->
-        <div style="width:860px;margin:0 auto;text-align:center;">
+        <div style="width:900px;margin:0 auto;text-align:center;">
 
             <br>
             <br>
-            <!-- 专利信息头部开始-->
-            <div style="margin-top:10px;float:left;width:810px;height:30px;margin-bottom:8px">
+            <div style="margin-top:10px;float:left;width:900px;height:30px;margin-bottom:8px">
                 <div type="flex" class="row-bg goodsName" justify="space-between">
                     <div :title="name_Msg" class="grid-content bg-purple  goodsName omit" style="font-weight:bold;width:860px;">
                   {{myGood.name}}
@@ -20,9 +19,7 @@
                     </el-col>
                 </div>
             </div>
-            <!-- 专利信息头部结束-->
-            <!-- 展示图开始 -->
-            <div style="width:630px;border:1px dashed rgba(186, 192, 193, 0.6);padding:8px;float:left;height:350px">
+            <div style="width:600px;border:1px dashed rgba(186, 192, 193, 0.6);padding:8px;float:left;height:350px">
 
 
                 <el-carousel :interval="5000" arrow="always" height="330px" >
@@ -32,10 +29,10 @@
                 </el-carousel>
 
             </div>
-            <!-- 展示图结束 -->
+
             <!-- 价格信息 -->
-            <div style="float:right">
-                <el-card class="box-card">
+            <div style="float:left">
+                <el-card class="box-card" style="margin-left:10px">
                     <div class="block">
                         <span  class="attr" style="margin-top:-10px;float:left;">  一口价：</span>
                         <div class=" item shanshuo omit" style="width:150px;font-size:26px;text-align:right;margin-left:30px">
@@ -69,12 +66,12 @@
                 </el-card>
             </div>
             <!-- 购买按钮 'status','patentName','patentSummary','seller','price','buyer','imgPath'-->
-            <div style="padding-left:10px;width:220px;float:left;margin-bottom:10px">
-                  <div style="margin-top:10px">
+            <div style="padding-left:10px;width:230px;float:left;margin-bottom:10px">
+                  <div style="margin:10px 0px 0px 30px">
                     <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="myGood.remain"></el-input-number>
                   </div>
                    <!-- 立即购买 -->
-                  <div style="margin-top:-10px">
+                  <div style="margin-left:10px">
                     <el-button type="success"   @click="buyNow()">立即购买</el-button>
                     <el-button  type="warning" @click="addCar()">加入购物车</el-button>
                   </div>
@@ -83,25 +80,16 @@
                 <!-- 评论区开始 -->
                 <div style="width:1210px;margin:0 auto;">
                   <div style="float:left;margin-top:10px">
-                    <el-input
-                      type="textarea"
-                      :autosize="{ minRows: 2, maxRows: 4}"
-                      placeholder="请输入内容"
-                      v-model="textarea3">
-                    </el-input>
-                    <div style="float:right;margin:10px 0px">
-
-                      <el-button type="primary" @click="submit()" >提&nbsp;&nbsp;交&nbsp;&nbsp;评&nbsp;&nbsp;论</el-button>
-
-                    </div>
                     <div class="clearfix"></div>
                       <div style="text-align:left">
                           <el-collapse v-model="activeNames" style="width:861px">
                             <el-collapse-item title="评论区" name="1">
-                                <div v-for="esingle in reviewList" style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px solid gray">
-                                  <div>用户名:{{esingle.username}}</div>
-                                  <div>{{esingle.text}}</div>
-                                  <div>{{esingle.time}}</div>
+                                <div v-for="esingle in reviewList" style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px dotted #cccccc">
+                                  <div style="width:600px;float:left;font-weight:bold;font-size:14px">{{esingle.username}}</div>
+                                  <div style="float:right">发布于：{{esingle.time}}</div>
+                                  <div class="clearfix" ></div>
+                                  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{esingle.text}}</div>
+
                                 </div>
                             </el-collapse-item>
                           </el-collapse>
@@ -140,8 +128,8 @@ export default {
             ],
             photosList: [
       		  	 require('./../../assets/img/car7.jpg'),
-      		  	 require('./../../assets/img/car9.jpg'),
       		  	 require('./../../assets/img/car8.jpg'),
+      		  	 require('./../../assets/img/car9.jpg'),
              ],
             C: '',
             name_Msg: '',
@@ -516,7 +504,7 @@ export default {
 }
 
 .box-card {
-    width: 220px;
+    width: 250px;
     height: 270px
 }
 

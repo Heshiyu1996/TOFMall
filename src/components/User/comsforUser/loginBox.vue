@@ -4,7 +4,7 @@
       <div class="login-box">
         <div style="margin-bottom:15px;width:295px;">
           <h4 style="margin:0 auto;float:left;">用户登录</h4>
-          <a href="#/tradeSystem/register">立即注册</a>
+          <a href="#/register">立即注册</a>
         </div>
         <div class="errorM" style="margin:0;color:#FF4949;"></div>
 

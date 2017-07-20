@@ -8,7 +8,7 @@
    <div class="hint"></div>
     <div style="float:left;margin-top:-50px;width:200px;height:100px;padding:5px;">
       <div style="float:left;width:90px;height:90px;border:2px dashed black;padding:2px">
-      <img v-if="showOn" :src="picPath_Msg" style="width:82px;height:82px">
+      <img :src="picPath_Msg" style="width:82px;height:82px">
       </div>
       <div class="omit" style="text-align:left;float:left;width:100px;height:50px;padding-top:10px;padding-left:10px">
         {{myName_Msg}}
@@ -53,7 +53,7 @@
 
   <div class="clearfix"></div>
 <div style="margin-top:-50px">
-  <!-- <myFooter></myFooter> -->
+  <myFooter></myFooter>
 </div>
 
 </div>
@@ -61,14 +61,14 @@
 
 <script>
   import myHeader from './../Public/Header/Header.vue'
-  // import myFooter  from './../components/myfooter.vue'
+  import myFooter  from './../Public/Footer/Footer.vue'
   import axios from 'axios'
   import config from './../../publicAPI/config'
 
   export default {
     components: {
       myHeader,
-      // myFooter,
+      myFooter,
     },
     data(){
       return{
@@ -82,32 +82,11 @@
         fileList: [],
         extraData:{type:1,tokennum:''},
         showOn:true,
-        picPath_Msg:''
+        picPath_Msg:require('./../../assets/img/myPic.jpg'),
       }
     },
     methods: {
       ok(response, file, fileList){
-          var querystring = require('querystring'); //Json数据查询器
-          console.log(response,file, fileList);
-          let that = this
-          console.log('http://og07ks0jb.bkt.clouddn.com/'+file.response.obj);
-          that.showOn = false
-          that.showOn = true
-          that.picPath_Msg = 'http://og07ks0jb.bkt.clouddn.com/'+file.response.obj
-          axios.post(config.URL + '/user/editUserHeadPhoto',
-                  querystring.stringify({
-                      img:file.response.obj,
-                      tokennum: localStorage.getItem('tokennum')
-                  }) //将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
-              )
-              .then(function(res) {
-                alert('修改头像成功！')
-                localStorage.setItem('headPhoto',that.picPath_Msg)
-                window.location.reload()
-              })
-              .catch(function(error) {
-                alert('修改失败！')
-              });
 
       },
       handleClick(key, keyPath) {
@@ -135,7 +114,7 @@
       that.myName_Msg = localStorage.getItem('userName')
       that.isRealName_Msg = localStorage.getItem('isRealName') == '2' ? '':''
       that.extraData.tokennum = localStorage.getItem('tokennum')
-      that.picPath_Msg = localStorage.getItem('headPhoto')
+      // that.picPath_Msg = localStorage.getItem('headPhoto')
     },
     watch:{
       picPath_Msg(val){
@@ -200,7 +179,7 @@
   }
   .patentList ul li{
     padding: 10px;
-    border-bottom: 1px dotted #D0D0D0;
+    border-bottom: 1px dotted #cccccc;
   }
   .patentList ul li div{
     width: 180px;

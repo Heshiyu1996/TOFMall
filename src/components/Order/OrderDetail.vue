@@ -4,7 +4,9 @@
       <div class="clearfix"></div>
     <div style="width:860px;margin:0 auto;">
     <div class="css-orderDetail">
-      <div class="css-top">订单详情</div>
+      <div class="css-top">订单详情
+        <el-tag type="warning" class="css-tag">{{state}}</el-tag>
+      </div>
       <div class="clearfix"></div>
       <hr>
       <section>
@@ -21,15 +23,21 @@
             <div class="css-body-item">
               <div class="css-body-item-select">
               </div>
-              <div class="css-body-item-img" style="">
-                <img src="./../../assets/img/car9.jpg" />
-              </div>
-              <div class="css-body-item-name">{{esingle.cname}}</div>
+
+              <router-link :to="'/ItemInfo/' + esingle.cid">
+                <div class="css-body-item-img" style="">
+                  <img src="./../../assets/img/car9.jpg" />
+                </div>
+              </router-link>
+              <router-link :to="'/ItemInfo/' + esingle.cid">
+                <div class="css-body-item-name">{{esingle.cname}}</div>
+              </router-link>
               <div class="css-body-item-price">{{esingle.cprice}}</div>
               <div class="css-body-item-count">
                 {{esingle.csize}}
               </div>
               <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
+              <el-button type="primary" size="small" v-show="true" @click="saySomethingBox(esingle.cid)">评论</el-button>
             </div>
           </div>
         </section>
@@ -93,6 +101,7 @@ export default {
   },
   data () {
     return {
+      state: '',
       rootURL: config.JXURL,
       count: 2,
       count2: 3,
@@ -112,6 +121,44 @@ export default {
     }
   },
   methods: {
+    saySomethingBox(myCid){
+
+        var querystring = require('querystring');
+        let that = this
+           this.$prompt('请输入评论', '提示', {
+             confirmButtonText: '发表',
+             cancelButtonText: '返回',
+           }).then(({ value }) => {
+            //  this.$message({
+            //    type: 'success',
+            //    message: '你的邮箱是: ' + value
+            //  });
+            that.saySomething(myCid,value)
+           }).catch(() => {
+
+           });
+    },
+    saySomething(myCid,msg){
+
+        var querystring = require('querystring');
+        let that = this
+        axios.post(that.rootURL +'/publishReview.do',
+           querystring.stringify({
+             cid : myCid,
+             text : msg,
+             oid : that.$route.params.newOrderID
+           })
+          )
+          .then(function(res){
+            if(res.data.status){
+
+                Message.success('评论成功，希望大家看到你的评论后更喜欢这件商品！');
+            }
+          })
+          .catch(function(error){
+            Message.error('不成功！');
+          });
+    },
     getOrderDetail(){
       var querystring = require('querystring');
       let that = this
@@ -142,6 +189,7 @@ export default {
           that.form.stime = res.data.ostime ;
           that.form.etime = res.data.oetime ;
           that.total = res.data.ototalprice ;
+          that.state = res.data.ostate ;
           // console.log(that.goods)
         } else {
 
@@ -322,25 +370,30 @@ export default {
           }
       }
 
-            .css-address,.css-payMethod{
+        .css-address,.css-payMethod{
 
-              float: left;
-              width:100%;
-              font-size:20px;
-              font-weight: bold;
-              border: 1px solid #eaeefb;
-              border-radius: 4px;
-              transition: .2s;
-              padding: 10px 20px;
-              margin: 10px 0px;
-              .css-address-item {
-                height:30px;
-                border-bottom: 1px solid #cccccc;
-              }
-              .css-address-input {
-                width:500px;
-              }
-            }
+          float: left;
+          width:100%;
+          font-size:20px;
+          font-weight: bold;
+          border: 1px solid #eaeefb;
+          border-radius: 4px;
+          transition: .2s;
+          padding: 10px 20px;
+          margin: 10px 0px;
+          .css-address-item {
+            height:30px;
+            border-bottom: 1px solid #cccccc;
+          }
+          .css-address-input {
+            width:500px;
+          }
+        }
+
+        .css-tag {
+          background-color: #FC7500;
+          color: white;
+        }
 
 
 </style>

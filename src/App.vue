@@ -14,7 +14,7 @@
         <div class="css-body-content">
           <div class="css-body-content-type">
             <el-input placeholder="请把要搜索的告诉我们..." v-model="myInput">
-              <el-button slot="append" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
+              <el-button slot="append" class="appBTN" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
             </el-input>
 
             <div  class="resultList"  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
@@ -132,6 +132,7 @@ export default {
       ]
     }
   }
+  
 }
 </script>
 
@@ -219,7 +220,7 @@ export default {
      border-radius: 3px !important;
        border: 2px solid #FC7500 !important;
    }
-   .el-button {
+   .appBTN {
      margin-left: -15px !important;
      background-color: #FC7500 !important;
        border: 0px solid #FC7500 !important;

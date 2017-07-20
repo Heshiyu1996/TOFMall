@@ -16,7 +16,7 @@
           <div class="css-title-name">商品信息</div>
           <div class="css-title-price">单价</div>
           <div class="css-title-count">数量</div>
-          <div class="css-title-sum">小计&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="css-title-sum">小计</div>
         </div>
       </section>
       <div class="clearfix"></div>
@@ -50,7 +50,7 @@
         <div class="css-footer">
           <div class="css-footer-count">已选商品 <span class="css-footer-count-num">{{itemCount}}</span>件</div>
           <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-          <div class="css-footer-btn"><el-button type="primary" @click="goToPay()">去结算</el-button></div>
+          <div class="css-footer-btn"><el-button type="primary" @click="goToPay()" class="appBTN">去结算</el-button></div>
         </div>
       </section>
     </div>
@@ -294,7 +294,7 @@ export default {
     .css-title-price {
       padding-right: 5px;
       float:left;
-      width:20%;
+      width:30%;
     }
     .css-title-count {
       float:left;
@@ -303,7 +303,7 @@ export default {
     .css-title-sum {
       padding-right: 90px;
       float:left;
-      width:30%;
+      width:27.5%;
     }
   }
 
@@ -419,5 +419,12 @@ export default {
       margin-left:-100px;
       margin-top:100px;
      	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+     }
+
+     .appBTN {
+       margin-left: -15px !important;
+       background-color: #FC7500 !important;
+         border: 0px solid #FC7500 !important;
+       color:white !important;
      }
 </style>

@@ -7,9 +7,9 @@
         <div style="margin-top:30px;width:960px;margin: 0 auto;">
           <div style="padding-top:10px;">
             <div style="float:left;margin-top:15px;margin-left:-5px;margin-right:5px"><el-button type="warning"  @click="goBack()"  >按 标 签</el-button></div>
-            <div style="float:left;margin-top: 15px;width:760px">
-              <el-input placeholder="请把要搜索的告诉我们..." v-model="myInput">
-                <el-button slot="append" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
+            <div style="float:left;margin-top: 15px;width:750px">
+              <el-input  @keyup.enter.native="tryToSearch()"  placeholder="请把要搜索的告诉我们..." v-model="myInput">
+                <el-button slot="append" class="appBTN" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
               </el-input>
               <div style="float:left;margin-left:0px;width:760px;margin-top:5px;margin-bottom:5px">
               <el-alert  :title="Tip" :type="tipType":closable="false">
@@ -73,6 +73,7 @@
       <!-- 列表展示区 结束 -->
     </div>
     <div class="clearfix"></div>
+        <myFooter></myFooter>
   </div>
 </template>
 
@@ -82,10 +83,12 @@ import axios from 'axios'
 import { Loading } from 'element-ui';
 import { Notification } from 'element-ui'
 import myHeader from './../Public/Header/Header'
+import myFooter from './../Public/Footer/Footer'
 
 export default {
   components:{
-    myHeader
+    myHeader,
+    myFooter
   },
   data () {
     return {
@@ -417,5 +420,12 @@ h1{
   padding: 40px 20px;
   box-sizing: border-box;
   margin-right: 20px;
+}
+
+.appBTN {
+  margin-left: -15px !important;
+  background-color: #FC7500 !important;
+    border: 0px solid #FC7500 !important;
+  color:white !important;
 }
   </style>

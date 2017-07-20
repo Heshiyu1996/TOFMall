@@ -18,10 +18,10 @@
             <el-submenu index="1">
               <template slot="title">商品分类</template>
               <el-menu-item index="1-1">
-                <router-link to="/byType">按标签</router-link>
+                <router-link to="/byCategory">按标签</router-link>
               </el-menu-item>
               <el-menu-item index="1-2">
-                <router-link to="/byCategory">按关键字</router-link></el-menu-item>
+                <router-link to="/byType">按关键字</router-link></el-menu-item>
             </el-submenu>
 
         <el-submenu index="3">
@@ -38,7 +38,7 @@
           <el-button>登录</el-button>
         </router-link>
         <router-link to="/register">
-        <el-button type="primary" @click="logout()">注册</el-button>
+        <el-button type="primary">注册</el-button>
         </router-link>
       </div>
 
@@ -81,7 +81,7 @@ export default {
       if(!that.login){
         alert('请先登录')
       } else {
-        that.$router.push({path:'/ShoppingCart'})
+        that.$router.push({path:'/userIndex/ShoppingCart'})
       }
     },
     logout(){

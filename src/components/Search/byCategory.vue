@@ -3,7 +3,7 @@
       <myHeader></myHeader>
     <div id="bigBlock">
       <div class="clearfix"></div>
-      <div style="width:1100px;text-align:center;margin:0 auto;height:900px;margin-top:20px;">
+      <div style="width:1100px;text-align:center;margin:0 auto;margin-top:20px;">
         <div style="float:left;margin-left:20px;">
           <div>
             <el-cascader
@@ -32,14 +32,14 @@
         </div>
         <div class="clearfix"  ></div>
         <div style="margin:10px;margin:0 auto">
-          <div class="resultList"  style="margin-left:100px;padding:10px;padding-left:60px;width:960px;text-align:left" >
+          <div class="resultList"  style="margin-left:90px;padding:10px;padding-left:60px;width:960px;text-align:left" >
             <!-- 所有专利（模糊）开始 -->
             <div  v-if="true" style="width:200px;float:left;margin:10px">
-              <div style="height:900px;margin-left:-70px;padding:10px;width:1100px;text-align:left" >
-                <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;margin-bottom:25px">
+              <div style="margin-left:-70px;padding:10px;width:1100px;text-align:left" >
+                <div v-for="esingle in SomeList" style="width:180px;float:left;margin:15px;margin-bottom:25px">
                   <router-link :to="'/ItemInfo/' + esingle.id">
                     <transition name="el-fade-in-linear">
-                      <el-card  v-show="show2" class="box-card " :body-style="{ padding: '0px' }">
+                      <el-card  v-show="show2" class="box-card transition-box" :body-style="{ padding: '0px' }">
                         <img :src="esingle.img" class="image" style="width=100%">
                         <div style="padding:10px;">
                           <div style="float:left;width:180px;margin-top:-8px">
@@ -76,6 +76,7 @@
     </div>
 
     <div class="clearfix"></div>
+        <myFooter></myFooter>
   </div>
 </template>
 
@@ -86,10 +87,12 @@ import axios from 'axios'
 import { Loading } from 'element-ui';
 import { Notification } from 'element-ui'
 import myHeader from './../Public/Header/Header'
+import myFooter from './../Public/Footer/Footer'
 
 export default {
   components:{
-    myHeader
+    myHeader,
+    myFooter
   },
   data () {
     return {
