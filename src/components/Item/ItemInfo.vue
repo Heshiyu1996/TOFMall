@@ -109,8 +109,7 @@
                   </div>
                 <!-- 评论区结束 -->
                 </div>
-
-      </div>
+        </div>
     </div>
 </template>
 <script>
@@ -192,7 +191,7 @@ export default {
                 done();
                 setTimeout(() => {
                   // instance.confirmButtonLoading = false;
-                    that.$router.push({path:'/userIndex/ShoppingCart'})
+                  that.$router.push({path:'/userIndex/ShoppingCart'})
                 }, 300);
               }, 1500);
                 instance.confirmButtonLoading = false;

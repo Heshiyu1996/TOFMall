@@ -1,5 +1,8 @@
 <template>
-  <div style="width:860px;margin:0 auto;">
+  <div>
+      <myHeader></myHeader>
+      <div class="clearfix"></div>
+    <div style="width:860px;margin:0 auto;">
     <div class="css-orderDetail">
       <div class="css-top">订单详情</div>
       <div class="clearfix"></div>
@@ -9,7 +12,7 @@
           <div class="css-title-name">商品信息</div>
           <div class="css-title-price">单价</div>
           <div class="css-title-count">数量</div>
-          <div class="css-title-sum">小计&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <div class="css-title-sum">小计</div>
         </div>
       </section>
       <div class="clearfix"></div>
@@ -34,11 +37,7 @@
     <div class="css-address">收货地址
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="详细地址：" prop="address">
-          <el-col :span="12">
-            <div
-               class="css-address-item"
-            >{{form.address}}</div>
-          </el-col>
+            <div class="css-address-item">{{form.address}}</div>
         </el-form-item>
 
         <el-form-item label="邮编：" prop="ecode">
@@ -76,6 +75,7 @@
       </div>
     </section>
   </div>
+  </div>
 </template>
 
 <script>
@@ -84,7 +84,13 @@
 import axios from 'axios'
 import config from './../../publicAPI/config'
 import { Message } from 'element-ui';//信息提示框
+import myHeader from './../Public/Header/Header'
+
+
 export default {
+  components:{
+    myHeader
+  },
   data () {
     return {
       rootURL: config.JXURL,
@@ -113,7 +119,7 @@ export default {
       axios.post(that.rootURL +'/queryOrderMySelf.do',
          querystring.stringify({
            oid:that.C,
-         })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+         })
         )
         .then(function(res){
         if(res.data){
@@ -121,23 +127,11 @@ export default {
           for(var item of res.data.infos){
               var bt = {
                 cid    :  item.cid,
-                cname  :  '',
-                cprice :  '',
+                cname  :  item.commodity.cname,
+                cprice :  item.commodity.cprice,
                 csize  :  item.csize,
+                sum    :  Number(item.commodity.cprice) * Number(item.csize)
               };
-            // console.log(item)
-                      // axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + item.cid)
-                      // .then(function(response){
-                      //   var ite = response.data
-                      //   bt.cname = ite.cname;
-                      //   bt.cprice = ite.cprice;
-                      //   console.log(bt.cprice);
-                      // })
-                      // .catch(function(error){
-                      //   console.error(error)
-                      // })
-
-              console.log(bt);
               that.goods.push(bt);
           }
 
@@ -180,7 +174,7 @@ export default {
     float:left;
     font-size:20px;
     font-weight: bold;
-    height:40px;
+    // height:40px;
     padding-left: 15px;
   }
   .css-title {
@@ -215,6 +209,8 @@ export default {
   }
 
   .css-body {
+    font-size: 14px;
+    font-weight: normal;
     .css-body-item {
       margin-top: 5px;
       border-bottom: 1px solid black;
@@ -254,7 +250,7 @@ export default {
       }
       .css-body-item-sum {
         overflow:hidden;
-        line-height: 70px;
+        line-height: 55px;
         float: left;
         width:15%;
         height:70px;
@@ -329,7 +325,7 @@ export default {
             .css-address,.css-payMethod{
 
               float: left;
-              width:74%;
+              width:100%;
               font-size:20px;
               font-weight: bold;
               border: 1px solid #eaeefb;

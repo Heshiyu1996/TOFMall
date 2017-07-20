@@ -4,7 +4,7 @@
       <div class="css-top-left">
         <router-link to="/">
           <img src="./../../../assets/img/logo.png" id="logo">
-          <span class="css-top-left-title">TOF mall</span>
+          <span class="css-top-left-title">TOF mall &nbsp;会说话的生活超市</span>
         </router-link>
       </div>
       <div class="css-top-center">
@@ -13,9 +13,6 @@
           <el-menu-item index="0">
             <router-link to="/">首页</router-link>
           </el-menu-item>
-          <!-- <el-menu-item index="1">
-            <router-link to="/">商品分类</router-link>
-          </el-menu-item> -->
               <el-menu-item index="2"><a @click="checkLog()" target="_blank">购物车</a></el-menu-item>
 
             <el-submenu index="1">

@@ -14,7 +14,7 @@
         {{myName_Msg}}
       </div>
       <div style="float:left;text-align:right;font-size:12px;width:100px;height:10px;">
-        （{{isRealName_Msg}}）
+        {{isRealName_Msg}}
       </div>
       <div style="float:left;width:100px;height:30px;padding-left:10px;padding-top:10px;margin-bottom:10px">
         <el-upload
@@ -133,7 +133,7 @@
     created(){
       let that = this
       that.myName_Msg = localStorage.getItem('userName')
-      that.isRealName_Msg = localStorage.getItem('isRealName') == '2' ? '已认证':'未认证'
+      that.isRealName_Msg = localStorage.getItem('isRealName') == '2' ? '':''
       that.extraData.tokennum = localStorage.getItem('tokennum')
       that.picPath_Msg = localStorage.getItem('headPhoto')
     },
@@ -141,7 +141,6 @@
       picPath_Msg(val){
         let that = this
         that.picPath_Msg = val
-        console.log('变了！'+val)
       }
     }
   }

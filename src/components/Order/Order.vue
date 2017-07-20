@@ -1,5 +1,8 @@
 <template>
-  <div style="width:860px;margin:0 auto;">
+  <div>
+    <myHeader></myHeader>
+    <div class="clearfix"></div>
+    <div style="width:860px;margin:0 auto;">
     <div class="css-address">收货地址
       <el-form :rules="rules" ref="form" :model="form" label-width="80px">
         <el-form-item label="详细地址" prop="address">
@@ -69,28 +72,11 @@
           </div>
         </div>
       </section>
-      <!-- <section>
-        <div class="css-body">
-          <div class="css-body-item">
-            <div class="css-body-item-select">
-            </div>
-            <div class="css-body-item-img" style="">
-                <img src="./../../assets/img/car9.jpg" />
-            </div>
-            <div class="css-body-item-name">汽车</div>
-            <div class="css-body-item-price">汽车</div>
-            <div class="css-body-item-count">
-              3
-            </div>
-            <div class="css-body-item-sum">¥ 29.99</div>
-          </div>
-        </div>
-      </section> -->
     <section>
       <div class="css-footer">
         <div class="css-footer-back">
 
-            <router-link to="/ShoppingCart">
+            <router-link to="/userIndex/ShoppingCart">
             <el-button type="primary" icon="arrow-left" >返回购物车</el-button>
           </router-link>
         </div>
@@ -98,6 +84,7 @@
         <div class="css-footer-btn"><el-button type="primary" @click="pushOrder()">确认订单</el-button></div>
       </div>
     </section>
+  </div>
   </div>
 </template>
 
@@ -107,9 +94,15 @@
 import axios from 'axios'
 import config from './../../publicAPI/config'
 import { Notification } from 'element-ui';
+import myHeader from './../Public/Header/Header'
+
 export default {
+  components:{
+    myHeader
+  },
   data () {
     return {
+      rootURL: config.JXURL,
       myPayMethod: 1,//支付方式按钮当前选取
       goods:[],
       count: 2,
@@ -124,19 +117,19 @@ export default {
       restaurants: [],
       rules: {
         address: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' },
-          { min: 3, max: 35, message: '长度在 3 到 35 个字符', trigger: 'blur' }
+          { required: false, message: '请输入详细地址', trigger: 'blur' },
+          { min: 3, max: 100, message: '长度在 3 到 100 个字符', trigger: 'blur' }
         ],
         ecode: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' },
+          { required: false, message: '请输入详细地址', trigger: 'blur' },
           { min: 3, max: 35, message: '长度在 3 到 35 个字符', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入收货人', trigger: 'blur' },
+          { required: false, message: '请输入收货人', trigger: 'blur' },
           { min: 3, max: 35, message: '长度在 3 到 35 个字符', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { required: false, message: '请输入联系电话', trigger: 'blur' },
           { min: 3, max: 35, message: '长度在 3 到 35 个字符', trigger: 'blur' }
         ],
       }
@@ -188,7 +181,7 @@ export default {
       axios.get(url)
       .then(function(res){
         if(res.data.status){
-          alert("下单成功");
+          // alert("下单成功");
           localStorage.removeItem('myUrl');
           Notification.success({
                     title: '下单成功！',
@@ -196,6 +189,7 @@ export default {
                     offset: 65,
                       duration:2000
                   })
+          that.$router.push({path:'/userIndex/order'})
         } else {
           alert("下单成功失败"+res.data.msg);
           localStorage.removeItem('myUrl');
@@ -232,12 +226,10 @@ export default {
     },
     loadAll() {
        return [
-         { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-         { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-         { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-         { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
-         { "value": "贡茶", "address": "上海市长宁区金钟路633号" },
-         { "value": "快乐柠檬（神州智慧店）", "address": "上海市长宁区天山西路567号1层R117号店铺" },
+         { "value": "广东省广州市天河区五山路华南农业大学泰山区24栋", "address": "广东省广州市天河区五山路华南农业大学泰山区24栋" },
+         { "value": "广东省清远市连山县吉田镇市场路个体街36号", "address": "广东省清远市连山县吉田镇市场路个体街36号" },
+         { "value": "广东省广州市荔湾区花海大道", "address": "广东省广州市荔湾区花海大道" },
+         { "value": "湖南省张家界永定区张家界学院北400米", "address": "湖南省张家界永定区张家界学院北400米" },
        ];
      },
     handleChange(value) {
@@ -259,7 +251,7 @@ export default {
     float:left;
     font-size:20px;
     font-weight: bold;
-    height:40px;
+    // height:40px;
     padding-left: 15px;
   }
   .css-title {

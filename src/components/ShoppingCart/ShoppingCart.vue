@@ -193,22 +193,18 @@ export default {
     },
     handleChange(row) {
       setTimeout(() => {
-        // instance.confirmButtonLoading = false;
-      console.log(123213)
       let that = this;
       var myRow = document.getElementsByClassName("css-body-item-select")[row].innerText;
       var myCid = document.getElementsByClassName("css-body-item-cid")[row].innerText;
       var myPrice = document.getElementsByClassName("css-body-item-price")[row].innerText;
       var myCsize = document.getElementsByClassName("el-input__inner")[row].value;
-      // document.getElementsByClassName("css-body-item-sum")[row].innerText = myPrice * myCsize;
       that.goods[row].sum = myPrice * myCsize;
-      // console.log(myCsize);
       var querystring = require('querystring');//Json数据查询器
       axios.post(that.rootURL +'/updateCart.do',
          querystring.stringify({
            cid : myCid,
            csize : myCsize,
-         })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+         })
         )
         .then(function(res){
 
@@ -220,19 +216,14 @@ export default {
       }, 100);
     },
     handleCheckAllChange(event) {
-      // console.log(document.getElementsByClassName("css-body-item-select").length);
-      // console.log(event)
       let that = this;
       this.checkedCities = event.target.checked ?  that.cityOptions : [];
       this.isIndeterminate = false;
     },
     handleCheckedCitiesChange(value) {
       //读取勾选的cid
-      // console.log(value)
-      console.log(232323232323)
       let that = this;
       that.itemCount = value.length;
-      // console.log(value.length)
       var tempTotal = 0;
       for( var i=0; i<value.length; i++ ){
         var my = document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
@@ -251,9 +242,7 @@ export default {
             var count = 0;
             var rowIdx = [];
             for(var i=0 ; i<domList.length;i++){
-              // console.log(domList[i].offsetParent.className)
               if(domList[i].offsetParent.className=='el-checkbox__input is-checked'){
-                // console.log(domList[i].offsetParent.lastChild.value)
                 rowIdx.push(domList[i].offsetParent.lastChild.value);
               }
             }
@@ -263,8 +252,6 @@ export default {
                tempTotal += Number(my.substr(2,my.length));
             }
             that.total = tempTotal;
-            console.log(tempTotal)
-
           }, 100);
     }
   },
