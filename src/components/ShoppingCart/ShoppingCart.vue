@@ -6,11 +6,11 @@
     <section>
       <div class="css-title">
         <div class="css-title-all">
-         <el-checkbox
+         <!-- <el-checkbox
           :indeterminate="isIndeterminate"
           v-model="checkAll"
           @change="handleCheckAllChange">
-          </el-checkbox>
+          </el-checkbox> -->
         </div>
         <div class="css-title-name">商品信息</div>
         <div class="css-title-price">单价</div>
@@ -49,7 +49,7 @@
       <div class="css-footer">
         <div class="css-footer-count">已选商品 <span class="css-footer-count-num">{{itemCount}}</span>件</div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-        <div class="css-footer-btn"><el-button type="primary" @click="">去结算</el-button></div>
+        <div class="css-footer-btn"><el-button type="primary" @click="goToPay()">去结算</el-button></div>
       </div>
     </section>
   </div>
@@ -77,11 +77,66 @@ export default {
 
       itemCount :0,
       row: 0,
-      total: 0,
+      // total: 0,
       cityOptions: [],
     }
   },
+
+  watch: {
+    'goods': {
+      handler: function(val,oldVal){
+        // console.log(val);
+        // console.log(oldVal);
+      },
+      deep:true
+    }
+  },
+  computed: {
+    total: function(){
+      let tot = 0;
+      let that = this;
+      that.goods.forEach(function (item){
+        tot += item.sum
+      })
+      return tot;
+    }
+  },
   methods: {
+    goToPay(){
+      let that = this;
+      var domList = document.getElementsByClassName("el-checkbox__inner");
+      var count = 0;
+      var rowIdx = [];
+      for(var i=0 ; i<domList.length;i++){
+        // console.log(domList[i].offsetParent.className)
+        if(domList[i].offsetParent.className=='el-checkbox__input is-checked'){
+          count ++;
+          // console.log(domList[i].offsetParent.lastChild.value)
+          rowIdx.push(domList[i].offsetParent.lastChild.value);
+        }
+      }
+
+      var myCids = '';
+      var myCsizes = '';
+      for(var i=0 ; i<rowIdx.length -1;i++){
+        var temp = document.getElementsByClassName("css-body-item-cid")[rowIdx[i]].innerText +'_';
+        myCids = myCids  + temp;
+        var temp2 = document.getElementsByClassName("css-body-item-count")[rowIdx[i]];
+        var temp3 = temp2.firstChild.lastChild.getElementsByTagName('input')[0].value +'_';
+        myCsizes = myCsizes  + temp3;
+      }
+      myCids = myCids + document.getElementsByClassName("css-body-item-cid")[rowIdx[rowIdx.length-1]].innerText
+      myCsizes = myCsizes + document.getElementsByClassName("css-body-item-count")[rowIdx[rowIdx.length-1]].firstChild.lastChild.getElementsByTagName('input')[0].value
+
+      console.log(myCids)
+      console.log(myCsizes)
+
+      localStorage.setItem('myUrl',that.rootURL+'/account.do?cids=' + myCids +'&csizes='+ myCsizes)
+
+      that.$router.push({path:'/order'})
+
+
+    },
     getCartList(){
       let that = this;
       that.idx = '';
@@ -118,7 +173,7 @@ export default {
               bt.commodity =(st);
           }
           that.row +=1;
-          that.checkedCities.push(bt.row);
+          // that.checkedCities.push(bt.row);
           that.cityOptions.push(bt.row);
           that.goods.push(bt);
         }
@@ -130,13 +185,14 @@ export default {
 
     },
     handleChange(row) {
+      let that = this;
       var myRow = document.getElementsByClassName("css-body-item-select")[row].innerText;
       var myCid = document.getElementsByClassName("css-body-item-cid")[row].innerText;
       var myPrice = document.getElementsByClassName("css-body-item-price")[row].innerText;
       var myCsize = document.getElementsByClassName("el-input__inner")[row].value;
-      document.getElementsByClassName("css-body-item-sum")[row].innerText = myPrice * myCsize;
+      // document.getElementsByClassName("css-body-item-sum")[row].innerText = myPrice * myCsize;
+      that.goods[row].sum = myPrice * myCsize;
       // console.log(myCsize);
-      let that = this
       var querystring = require('querystring');//Json数据查询器
       axios.post(that.rootURL +'/updateCart.do',
          querystring.stringify({
@@ -145,29 +201,15 @@ export default {
          })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
         )
         .then(function(res){
-        // if(res.data.status){
-        //   Notification.success({
-        //             title: '注册成功！',
-        //             message: res.data.msg,
-        //             offset: 65,
-        //               duration:2000
-        //           })
-        // } else {
-        //   Notification.error({
-        //             title: '注册失败！',
-        //             message: res.data.msg,
-        //             offset: 65,
-        //               duration:2000
-        //           })
-        //   // window.location = '#/tradeSystem/login'
-        // }
+
         })
         .catch(function(error){
           Message.error('注册不成功！');
         });
     },
     handleCheckAllChange(event) {
-      console.log(event)
+      // console.log(document.getElementsByClassName("css-body-item-select").length);
+      // console.log(event)
       let that = this;
       this.checkedCities = event.target.checked ?  that.cityOptions : [];
       this.isIndeterminate = false;
@@ -178,13 +220,10 @@ export default {
 
       let that = this;
       that.itemCount = value.length;
-      that.total = 0;
-      var tempTotal = 0;
-      console.log(value.length)
+      // console.log(value.length)
       for( var i=0; i<value.length; i++ ){
-        tempTotal += 0 + document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
+        // tempTotal += 0 + document.getElementsByClassName("css-body-item-sum")[value[i]].innerText;
       }
-      that.total = tempTotal;
     let checkedCount = value.length;
     this.checkAll = checkedCount === this.goods.length;
     this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
@@ -192,7 +231,8 @@ export default {
   },
     created(){
       this.getCartList()
-    }
+    },
+
 }
 </script>
 

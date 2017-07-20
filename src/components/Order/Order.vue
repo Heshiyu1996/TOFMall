@@ -104,6 +104,8 @@
 <script>
 // const cityOptions = ;
 
+import axios from 'axios'
+import config from './../../publicAPI/config'
 export default {
   data () {
     return {
@@ -138,6 +140,17 @@ export default {
     }
   },
   methods: {
+    getOrderInfo(){
+      console.log(localStorage.getItem('myUrl'));
+      axios.get(myUrl)
+      .then(function(res){
+
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -175,6 +188,9 @@ export default {
     handleChange(value) {
       console.log(value);
     }
+  },
+  created(){
+    this.getOrderInfo();
   },
   mounted() {
     this.restaurants = this.loadAll();
