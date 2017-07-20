@@ -130,6 +130,7 @@ export default {
 
       console.log(myCids)
       console.log(myCsizes)
+      localStorage.removeItem('myUrl')
 
       localStorage.setItem('myUrl',that.rootURL+'/account.do?cids=' + myCids +'&csizes='+ myCsizes)
 
