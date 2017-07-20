@@ -46,9 +46,12 @@ export default [
 
 	},
 	{
-		path: '/OrderDetail',
+		path: '/OrderDetail/:newOrderID',
 		name: 'OrderDetail',
 		component: OrderDetail,
+				 children:[{
+						path:'',
+				 }]
 	},
 	{
 		path: '/Header',

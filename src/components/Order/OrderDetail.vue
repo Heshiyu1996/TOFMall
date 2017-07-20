@@ -13,7 +13,7 @@
         </div>
       </section>
       <div class="clearfix"></div>
-        <section>
+        <section v-for="esingle in goods">
           <div class="css-body">
             <div class="css-body-item">
               <div class="css-body-item-select">
@@ -21,30 +21,58 @@
               <div class="css-body-item-img" style="">
                 <img src="./../../assets/img/car9.jpg" />
               </div>
-              <div class="css-body-item-name">汽车</div>
-              <div class="css-body-item-price">汽车</div>
+              <div class="css-body-item-name">{{esingle.cname}}</div>
+              <div class="css-body-item-price">{{esingle.cprice}}</div>
               <div class="css-body-item-count">
-                2
+                {{esingle.csize}}
               </div>
-              <div class="css-body-item-sum">¥ 29.99</div>
+              <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
             </div>
           </div>
         </section>
     </div>
+    <div class="css-address">收货地址
+      <el-form ref="form" :model="form" label-width="100px">
+        <el-form-item label="详细地址：" prop="address">
+          <el-col :span="12">
+            <div
+               class="css-address-item"
+            >{{form.address}}</div>
+          </el-col>
+        </el-form-item>
 
+        <el-form-item label="邮编：" prop="ecode">
+          <div  class="css-address-item">{{form.ecode}}</div>
+        </el-form-item>
 
+        <el-form-item label="收货人：" prop="name">
+          <div  class="css-address-item">{{form.name}}</div>
+        </el-form-item>
 
+        <el-form-item label="联系电话：" prop="phone">
+          <div  class="css-address-item">{{form.phone}}</div>
+        </el-form-item>
+
+        <el-form-item label="创建时间：" prop="stime">
+          <div  class="css-address-item">{{form.stime}}</div>
+        </el-form-item>
+
+        <el-form-item label="结束时间：" prop="etime">
+          <div  class="css-address-item">{{form.etime}}</div>
+        </el-form-item>
+      </el-form>
+    </div>
 
     <section>
       <div class="css-footer">
         <div class="css-footer-back">
 
-            <router-link to="/ShoppingCart">
-            <el-button type="primary" icon="arrow-left" >返回购物车</el-button>
+            <router-link to="/userIndex/order">
+            <el-button type="primary" icon="arrow-left" >返回订单列表</el-button>
           </router-link>
         </div>
-        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
-        <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div>
+        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
+        <!-- <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div> -->
       </div>
     </section>
   </div>
@@ -58,52 +86,90 @@ import config from './../../publicAPI/config'
 export default {
   data () {
     return {
+      rootURL: config.JXURL,
       count: 2,
       count2: 3,
+      C:'',
+      goods: [],
+      form: {
+        address: '',
+        ecode: '',
+        name: '',
+        phone: '',
+        stime: '',
+        etime: '',
+      },
+      total:0,
+      myCname : '',
+      myCprice : 0,
     }
   },
   methods: {
-    getOrderInfo(){
-      // console.log(localStorage.getItem('myUrl'));
-      axios.get(that.rootURL+'/queryCart.do')
-      .then(function(res){
+    getOrderDetail(){
+      var querystring = require('querystring');
+      let that = this
+      that.goods = [];
+      axios.post(that.rootURL +'/queryOrderMySelf.do',
+         querystring.stringify({
+           oid:that.C,
+         })//将参数放到查询器的查询函数里，这样传过去的json形式的参数才能被发现然后提取
+        )
+        .then(function(res){
+        if(res.data){
+          var myInfos = [];
+          for(var item of res.data.infos){
+              var bt = {
+                cid    :  item.cid,
+                cname  :  '',
+                cprice :  '',
+                csize  :  item.csize,
+              };
+            // console.log(item)
+                      axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + item.cid)
+                      .then(function(response){
+                        var ite = response.data
+                        bt.cname = ite.cname;
+                        bt.cprice = ite.cprice;
+                        console.log(bt.cprice);
+                      })
+                      .catch(function(error){
+                        console.error(error)
+                      })
 
-      })
-      .catch(function(error){
-        console.error(error)
-      })
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!');
+              console.log(bt);
+              that.goods.push(bt);
+          }
+
+          that.form.address = res.data.oaddress ;
+          that.form.ecode = res.data.opostcode ;
+          that.form.name = res.data.oname ;
+          that.form.phone = res.data.ophone ;
+          that.form.stime = res.data.ostime ;
+          that.form.etime = res.data.oetime ;
+          that.total = res.data.ototalprice ;
+          // console.log(that.goods)
         } else {
-          console.log('error submit!!');
-          return false;
+
         }
-      });
+        })
+        .catch(function(error){
+          Message.error('不成功！');
+        });
     },
-    handleSelect(item) {
-      console.log(item);
+    hsytt(){
+      let that = this ;
+      that.C= that.$route.params.newOrderID;
+      this.getOrderDetail();
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return (restaurant.value.indexOf(queryString.toLowerCase()) === 0);
-      };
-    },
-    handleChange(value) {
-      console.log(value);
-    }
   },
   created(){
-    this.getOrderInfo();
+    let that = this ;
+    that.C= that.$route.params.newID;
+    that.hsytt();
   },
+  watch:{
+    '$route':'hsytt'
+  }
 }
 </script>
 
@@ -258,6 +324,26 @@ export default {
             }
           }
       }
+
+            .css-address,.css-payMethod{
+
+              float: left;
+              width:74%;
+              font-size:20px;
+              font-weight: bold;
+              border: 1px solid #eaeefb;
+              border-radius: 4px;
+              transition: .2s;
+              padding: 10px 20px;
+              margin: 10px 0px;
+              .css-address-item {
+                height:30px;
+                border-bottom: 1px solid #cccccc;
+              }
+              .css-address-input {
+                width:500px;
+              }
+            }
 
 
 </style>

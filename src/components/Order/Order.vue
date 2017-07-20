@@ -69,23 +69,7 @@
           </div>
         </div>
       </section>
-      <section>
-        <div class="css-body">
-          <div class="css-body-item">
-            <div class="css-body-item-select">
-            </div>
-            <div class="css-body-item-img" style="">
-                <img src="./../../assets/img/car9.jpg" />
-            </div>
-            <div class="css-body-item-name">汽车</div>
-            <div class="css-body-item-price">汽车</div>
-            <div class="css-body-item-count">
-              3
-            </div>
-            <div class="css-body-item-sum">¥ 29.99</div>
-          </div>
-        </div>
-      </section>
+      
     <section>
       <div class="css-footer">
         <div class="css-footer-back">

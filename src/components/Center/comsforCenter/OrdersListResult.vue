@@ -1,66 +1,58 @@
 <template>
-  <div style="margin-top:-90px;margin-left:-300px;">111
-    <br/>
+  <div>
     <el-form  class="demo-ruleForm">
     </el-form>
     <div style="width:1000px;margin-left:10px;margin-top:40px">
-      <el-table
-        :data="tableData">
+      <el-table :data="tableData" style="width: 100%;">
+            <el-table-column prop="orderNum"  width="100px" label="订单ID">
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper " >
+                  <el-button type="text" @click="goToDetail(scope.$index, scope.row)">{{ scope.row.orderNum }}</el-button>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="infos" width="350px" label="商品内容">
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper omit">
+                  哈哈哈是事实上事实上哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈事实上
+                </div>
+              </template>
 
-        <el-table-column
-          prop="orderNum"
-          label="流水号"
-          min-width=200px>
-        </el-table-column>
-               <el-table-column
-                  prop="listNum"
-                  label="订单ID"
-                  min-width=80px>
-                </el-table-column>
-        <el-table-column
-          prop="seller"
-          label="卖家"
-          min-width=100px>
-        </el-table-column>
-        <el-table-column
-          prop="productID"
-          label="商品ID"
-          min-width=100px>
-        </el-table-column>
-        <el-table-column
-          prop="type"
-          label="订单类型"
-          min-width=120px>
-        </el-table-column>
-        <el-table-column
-          prop="price"
-          label="金额"
-          min-width=100px>
-        </el-table-column>
-        <el-table-column
-          prop="startDate"
-          label="创建时间"
-          min-width=190px>
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          min-width=100px>
-        </el-table-column>
-        </el-table-column>
+            </el-table-column>
+            <el-table-column prop="ostime" label="创建时间">
 
-      </el-table>
-      <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-count = "totalPage"
-          :page-sizes="[5]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper">
-        </el-pagination>
-      </div>
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.ostime }}
+                </div>
+              </template>
+
+            </el-table-column>
+            <el-table-column prop="totalPrice" label="总价">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.totalPrice }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ostate" label="状态">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  {{ scope.row.ostate }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="" label="">
+
+              <template scope="scope">
+                <div slot="reference" class="name-wrapper">
+                  <el-button type="danger" @click="beforeDel(scope.$index, scope.row)">取消</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
     </div>
   </div>
 </template>
@@ -75,60 +67,100 @@
     },
     data() {
     return {
-      isShow: false,
+      rootURL: config.JXURL,
       balance: '--',//数据由数据库返回
       activeName: 'first',
       tableData: [],
-
-            totalPage: 0,  //一口价总页数
-      		  currentPage: 1,  //一口价当前页
-      		  pageSize: 5,  //一口价每页记录
     };
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    handleSizeChange(val) {
-        this.pageSize = val;
+      beforeDel(index,row) {
+        let that = this ;
+        const h = this.$createElement;
+        this.$msgbox({
+          title: '取消订单确认',
+          message: h('p', null, [
+            h('span', null, '你要取消的是订单号为： '),
+            h('i', { style: 'color: teal' }, row.orderNum),
+              h('span', null, ' 的订单，取消后就不能恢复了，请确认！ '),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '我要取消!',
+          cancelButtonText: '返回',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = '取消订单中...';
+              setTimeout(() => {
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              }, 3000);
+              that.delOrder(index,row);
+            } else {
+              done();
+            }
+          }
+        }).then(action => {
 
-        this.getRecord();
-        console.log(`每页 ${val} 条`);
+        });
+      },
+    delOrder(index,row){
+      console.log(row.orderNum)
+      let that = this ;
+      var querystring = require('querystring');//Json数据查询器
+      axios.post(that.rootURL +'/deleteOrders.do',
+         querystring.stringify({
+           oid:row.orderNum,
+         })
+        )
+        .then(function(res){
+        if(res.data.status){
+          Notification.success({
+                    title: '取消成功！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+        } else {
+          Notification.error({
+                    title: '取消失败！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+          // window.location = '#/tradeSystem/login'
+        }
+        })
+        .catch(function(error){
+          Message.error('订单取消不成功！');
+        });
     },
-    handleCurrentChange(val) {
-        this.currentPage = val;
-        this.tableData = [];
-        this.getRecord();
-        console.log(`当前页: ${val}`);
+    goToDetail(index,row){
+      let that = this;
+      that.$router.push({path:'/orderdetail/'+row.orderNum})
     },
     getRecord() {
-        this.isShow = true
         let that = this
-        axios.get(config.URL+'/order/getMyBuyedContracts?page='+ that.currentPage +'&pageSize=' + that.pageSize + '&tokennum='+ localStorage.getItem('tokennum'))
+        axios.get(that.rootURL+'/queryOrders.do')
           .then(function(res){
             that.tableData = []
-            that.totalPage = Math.ceil(res.data.dataCount/that.pageSize)
-            that.total = res.data.dataCount
-            var item = res.data.obj
-            if(item!=null)
-            for(  item of res.data.obj ) {
+            for( var item of res.data ) {
+                var str = '';
+                for( var ite of res.data ) {
+
+                }
               that.tableData.push({
-                orderNum: item.order_num,
-                listNum:item.id,
-                seller: item.seller.name,
-                productID: item.product_id,
-                startTime: item.product_id,
+                orderNum: item.oid,
+                oaddress: item.oaddress,
+                oname: item.oname,
+                totalPrice: item.ototalprice,
+                ostime: item.ostime,
+                ostate: item.ostate,
 
-                type:item.type == 1 ? '一口价' : '拍卖',
-
-                price: item.price,
-                // purpose: item.seller_name,
-                startDate: item.create_time,
-                status:item.state == 1 ? '待付款' : (item.state == 2 ? '待收货' : (item.state == 3 ? '退款中' : '已完成'))
-
+                  // infos:item.id,
               })
-
-
           }
           })
           .catch(function(error){
@@ -137,7 +169,7 @@
       },
   },
   created(){
-    // this.getRecord()
+    this.getRecord()
   }
   }
 </script>
@@ -171,5 +203,14 @@
   .block{
     margin-top: 25px;
     text-align: right;
+  }
+
+  .omit {
+      width: 320px;
+      overflow: hidden;
+      vertical-align: top;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      /*不换行*/
   }
 </style>
