@@ -1,10 +1,13 @@
 <template>
-  <div style="width:100%">
+  <div>
+      <myHeader></myHeader>
     <div id="bigBlock">
-      <div id="home-tb-div" style="width:1100px;text-align:center;margin:0 auto;height:900px">
-        <div style="float:left;margin-left:20px;">
-          <div class="block">
+      <div class="clearfix"></div>
+      <div style="width:1100px;text-align:center;margin:0 auto;height:900px;margin-top:20px;">
+        <div style="float:left;margin-left:-150px;">
+          <div>
             <el-cascader
+            expand-trigger="hover"
             width="900px"
               :options="types"
               v-model="selectedOptions"
@@ -12,8 +15,8 @@
             </el-cascader>
           </div>
         </div>
-        <div style="text-align:center;float:left;margin-left:20px;width:600px">
-          <div style="width:200px;margin-left:-10px;float:left">
+        <div style="text-align:center;float:left;margin-left:10px;width:800px;">
+          <div style="width:200px;margin-left:10px;float:left">
             <div style="float:left;width:100px;">
               <el-button type="primary" @click="handleCat"> 搜 索 </el-button>
             </div>
@@ -21,7 +24,7 @@
               <el-button type="success" @click="goBack">按 关 键 字</el-button>
             </div>
           </div>
-          <div style="float:left;margin-left:12px;width:380px;">
+          <div style="float:right;margin-left:12px;width:550px;">
             <el-alert
               :title="Tip" type="info":closable="false">
             </el-alert>
@@ -29,25 +32,27 @@
         </div>
         <div class="clearfix"  ></div>
         <div style="margin:10px;margin:0 auto">
-          <div style="padding:10px;padding-left:60px;width:1100px;text-align:left" >
+          <div class="resultList"  style="margin-left:100px;padding:10px;padding-left:60px;width:960px;text-align:left" >
             <!-- 所有专利（模糊）开始 -->
             <div  v-if="true" style="width:200px;float:left;margin:10px">
               <div style="height:900px;margin-left:-70px;padding:10px;width:1100px;text-align:left" >
                 <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;margin-bottom:25px">
                   <router-link :to="'/ItemInfo/' + esingle.id">
-                    <el-card class="box-card" :body-style="{ padding: '0px' }">
-                      <img :src="esingle.img" class="image" style="width=100%">
-                      <div style="padding:10px;">
-                        <div style="float:left;width:180px;margin-top:-8px">
-                          <el-tag type="primary" v-for="single in esingle.cat">{{single}}</el-tag>
+                    <transition name="el-fade-in-linear">
+                      <el-card  v-show="show2" class="box-card transition-box" :body-style="{ padding: '0px' }">
+                        <img :src="esingle.img" class="image" style="width=100%">
+                        <div style="padding:10px;">
+                          <div style="float:left;width:180px;margin-top:-8px">
+                            <el-tag type="primary" v-for="single in esingle.cat">{{single}}</el-tag>
+                          </div>
+                          <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
+                          <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                            <div style="text-align:left;width:40px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                          </div>
+                          <div class="clearfix"></div>
                         </div>
-                        <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
-                        <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
-                          <div style="text-align:left;width:40px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
-                        </div>
-                        <div class="clearfix"></div>
-                      </div>
-                    </el-card>
+                      </el-card>
+                    </transition>
                   </router-link>
                 </div>
               </div>
@@ -80,12 +85,15 @@ import config from './../../publicAPI/config'
 import axios from 'axios'
 import { Loading } from 'element-ui';
 import { Notification } from 'element-ui'
+import myHeader from './../Public/Header/Header'
 
 export default {
   components:{
+    myHeader
   },
   data () {
     return {
+      show2: true,
       rootURL: config.JXURL,	//请求的url
 
       idList:[],
@@ -158,6 +166,8 @@ export default {
       let that = this;
       that.index = '';
 
+
+
       axios.get(that.rootURL+'/queryStype.do?btid='+btid)
       .then(function(res){
         for( that.index of res.data.stypeList ){
@@ -176,6 +186,10 @@ export default {
       let that = this;
       var bt = value[0];
       var st = value[1];
+      that.show2 = false;
+      setTimeout(() => {
+        that.show2 = true;
+      }, 100);
       var tmpList = {
 
       };
@@ -227,10 +241,28 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.resultList{
+  /*border: 1px solid gray;*/
+  width: 960px;
+  min-height: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 30px 20px 50px 20px;
+  background-color:rgba(247, 247, 247,0.2);
+  -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
+  -moz-box-shadow: -5px 0px 15px #D0D0D0,
+  5px 0px 15px #D0D0D0;/* for firefox */
+  -webkit-box-shadow: -5px 0px 15px #D0D0D0,
+  5px 0px 15px #D0D0D0;/* for safari or chrome */
+  box-shadow: -5px 0px 15px #D0D0D0,
+  5px 0px 15px #D0D0D0;/* for opera or ie9 */
+}
+
 #bigBlock{
   width: 1210px;
   margin: 0 auto ;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
   margin-bottom: 50px;
   text-align: center;
   color:#444;
@@ -242,13 +274,6 @@ h1{
   text-align: center;
   color: #475669;
   font-size: 28px;
-}
-/*首页的表格*/
-#home-tb-div{
-  width: 1080px;
-  margin: 0 auto !important;
-  margin-top: 20px !important;
-  margin-bottom: 60px;
 }
 
 .image {
@@ -278,4 +303,9 @@ h1{
   float:left;
 }
 
+.transition-box {
+margin-bottom: 10px;
+border-radius: 4px;
+box-sizing: border-box;
+}
 </style>

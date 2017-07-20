@@ -83,6 +83,7 @@
 
 import axios from 'axios'
 import config from './../../publicAPI/config'
+import { Message } from 'element-ui';//信息提示框
 export default {
   data () {
     return {
@@ -125,16 +126,16 @@ export default {
                 csize  :  item.csize,
               };
             // console.log(item)
-                      axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + item.cid)
-                      .then(function(response){
-                        var ite = response.data
-                        bt.cname = ite.cname;
-                        bt.cprice = ite.cprice;
-                        console.log(bt.cprice);
-                      })
-                      .catch(function(error){
-                        console.error(error)
-                      })
+                      // axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + item.cid)
+                      // .then(function(response){
+                      //   var ite = response.data
+                      //   bt.cname = ite.cname;
+                      //   bt.cprice = ite.cprice;
+                      //   console.log(bt.cprice);
+                      // })
+                      // .catch(function(error){
+                      //   console.error(error)
+                      // })
 
               console.log(bt);
               that.goods.push(bt);

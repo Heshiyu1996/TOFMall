@@ -1,6 +1,6 @@
 <template>
   <div class="css-top">
-    <div style="width:1180px;margin:0 auto;">
+    <div style="width:1210px;margin:0 auto;">
       <div class="css-top-left">
         <router-link to="/">
           <img src="./../../../assets/img/logo.png" id="logo">
@@ -10,10 +10,24 @@
       <div class="css-top-center">
         <div class="line"></div>
         <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-          <el-menu-item index="0" >首页</el-menu-item>
-          <el-menu-item index="1">商品分类</el-menu-item>
-          <el-menu-item index="2"><a href="javascript:;" target="_blank">购物车</a></el-menu-item>
-          <el-submenu index="3">
+          <el-menu-item index="0">
+            <router-link to="/">首页</router-link>
+          </el-menu-item>
+          <!-- <el-menu-item index="1">
+            <router-link to="/">商品分类</router-link>
+          </el-menu-item> -->
+              <el-menu-item index="2"><a @click="checkLog()" target="_blank">购物车</a></el-menu-item>
+
+            <el-submenu index="1">
+              <template slot="title">商品分类</template>
+              <el-menu-item index="1-1">
+                <router-link to="/byType">按标签</router-link>
+              </el-menu-item>
+              <el-menu-item index="1-2">
+                <router-link to="/byCategory">按关键字</router-link></el-menu-item>
+            </el-submenu>
+
+        <el-submenu index="3">
             <template slot="title">联系客服</template>
             <el-menu-item index="2-1">帮助中心</el-menu-item>
             <el-menu-item index="2-2">售后服务</el-menu-item>
@@ -22,12 +36,23 @@
             </el-menu>
       </div>
 
-      <div class="css-top-right">
+      <div v-show="!login" class="css-top-right">
+        <router-link to="/login">
+          <el-button>登录</el-button>
+        </router-link>
+        <router-link to="/register">
+        <el-button type="primary" @click="logout()">注册</el-button>
+        </router-link>
+      </div>
+
+      <div v-show="login" class="css-top-right">
         <router-link to="/userIndex">
-          <el-button @click="getUserInfo()">个人中心</el-button>
+          <!-- <el-button @click="getUserInfo()">个人中心</el-button> -->
+          <img src="./../../../assets/img/pic.jpg" id="pic">
+          <div style="float:left;padding:0px 0px 0px 20px"><span class="css-top-right-username">你好！{{username}}</span></div>
         </router-link>
         <router-link to="/login">
-        <el-button type="danger" @click="logout()">退出</el-button>
+          <div style="float:right"><el-button type="danger" @click="logout()">退出</el-button></div>
         </router-link>
       </div>
     </div>
@@ -48,10 +73,20 @@ export default {
     return {
       rootURL: config.JXURL,
       activeIndex2:'1',
+      login: true,
+      username: '',
     }
   },
 
   methods: {
+    checkLog(){
+      let that = this ;
+      if(!that.login){
+        alert('请先登录')
+      } else {
+        that.$router.push({path:'/ShoppingCart'})
+      }
+    },
     logout(){
       let that = this ;
       axios.get(that.rootURL+'/logoutUser.do' )
@@ -84,11 +119,13 @@ export default {
       let that = this
       axios.get(that.rootURL+'/queryInfo.do')
       .then(function(res){
-        if(res.data.status){
-          console.log(res.data.msg);
-        } else {
-          console.log(res.data.msg)
-        }
+          if(res.data.msg!=null){
+            // console.log(res.data.msg);
+            that.login = false;
+          } else {
+            that.login = true;
+            that.username = res.data.uname;
+          }
       })
       .catch(function(error){
         console.error(error)
@@ -116,6 +153,7 @@ export default {
   height:75px;
   padding: 5px 0px;
   background-color:rgb(239,242,247);
+  border-bottom: 1px solid #cccccc;
   .css-top-left {
     float: left;
     width: 30%;
@@ -135,15 +173,29 @@ export default {
     width: 20%;
     height:60px;
     padding-top: 10px;
+    padding-right: 15px;
+    .css-top-right-username {
+      margin-right: 20px;
+
+      margin-top: 10px;
+      font-size: 12px;
+      color:#fc7701;
+      line-height: 40px;
+    }
   }
 }
 
-#logo{
+#logo {
   width: 60px;
   vertical-align:middle;
   border-radius: 7px;
 }
 
+#pic {
+  width: 40px;
+  vertical-align:middle;
+  border-radius: 7px;
+}
 .omit{
 	width:500px;
 	overflow: hidden;

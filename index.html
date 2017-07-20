@@ -56,15 +56,6 @@
     </style>
 
     <div id="app">
-      <h1>测试各个板块：</h1>
-      <p>
-      <router-link to="/">首页</router-link>
-      <router-link to="/login">登陆</router-link>
-      <router-link to="/register">注册</router-link>
-      <router-link to="/userIndex">个人中心</router-link>
-      <router-link to="/byCategory">按标签搜索</router-link>
-      <router-link to="/byType">按模糊搜索</router-link>
-      </p><hr>
         <transition name="slide-user" mode="out-in">
            <router-view class="child-view" v-if="!$route.meta.keepAlive"></router-view>
         </transition>

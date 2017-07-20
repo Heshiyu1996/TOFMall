@@ -52,7 +52,7 @@
       </div>
     </section>
     <div class="clearfix"></div>
-      <section>
+      <section v-for="esingle in goods">
         <div class="css-body">
           <div class="css-body-item">
             <div class="css-body-item-select">
@@ -60,16 +60,32 @@
             <div class="css-body-item-img" style="">
               <img src="./../../assets/img/car9.jpg" />
             </div>
+            <div class="css-body-item-name">{{esingle.cname}}</div>
+            <div class="css-body-item-price">{{esingle.cprice}}</div>
+            <div class="css-body-item-count">
+              {{esingle.csize}}
+            </div>
+            <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
+          </div>
+        </div>
+      </section>
+      <!-- <section>
+        <div class="css-body">
+          <div class="css-body-item">
+            <div class="css-body-item-select">
+            </div>
+            <div class="css-body-item-img" style="">
+                <img src="./../../assets/img/car9.jpg" />
+            </div>
             <div class="css-body-item-name">汽车</div>
             <div class="css-body-item-price">汽车</div>
             <div class="css-body-item-count">
-              2
+              3
             </div>
             <div class="css-body-item-sum">¥ 29.99</div>
           </div>
         </div>
-      </section>
-      
+      </section> -->
     <section>
       <div class="css-footer">
         <div class="css-footer-back">
@@ -78,8 +94,8 @@
             <el-button type="primary" icon="arrow-left" >返回购物车</el-button>
           </router-link>
         </div>
-        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ 99999.00</span></div>
-        <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div>
+        <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
+        <div class="css-footer-btn"><el-button type="primary" @click="pushOrder()">确认订单</el-button></div>
       </div>
     </section>
   </div>
@@ -90,12 +106,15 @@
 
 import axios from 'axios'
 import config from './../../publicAPI/config'
+import { Notification } from 'element-ui';
 export default {
   data () {
     return {
       myPayMethod: 1,//支付方式按钮当前选取
+      goods:[],
       count: 2,
       count2: 3,
+      total : 0,
       form: {
         address: '',
         ecode: '',
@@ -126,14 +145,66 @@ export default {
   methods: {
     getOrderInfo(){
       console.log(localStorage.getItem('myUrl'));
+      var myUrl=localStorage.getItem('myUrl');
+      let that=this;
+      that.idx='';
+      that.goods = [];
       axios.get(myUrl)
       .then(function(res){
+      that.form.address=res.data.address;
+      that.form.ecode=res.data.postcode;
+      that.form.phone=res.data.phone;
+      that.form.name=res.data.name;
+      that.total=res.data.total;
+      for(that.idx of res.data.infos){
+        var bt = {
+
+          cname : '',
+          csize : '',
+          cprice : '',
+          sum : 0,
+        };
+        bt.cname = that.idx.cname;
+        bt.cprice = that.idx.cprice;
+        bt.csize = that.idx.csize;
+        bt.sum = that.idx.sum;
+
+        that.goods.push(bt);
+      }
 
       })
       .catch(function(error){
         console.error(error)
       })
 
+    },
+    pushOrder(){
+      let that=this;
+      var myUrl=localStorage.getItem('myUrl');
+      console.log(url);
+      var url=myUrl.replace('account','pushOrder');
+      url=url+'&oaddress='+that.form.address+'&ophone='+that.form.phone+'&oname='+that.form.name+'&opostcode='+that.form.ecode;
+      console.log(url);
+      axios.get(url)
+      .then(function(res){
+        if(res.data.status){
+          alert("下单成功");
+          localStorage.removeItem('myUrl');
+          Notification.success({
+                    title: '下单成功！',
+                    message: '请查看你的订单详情！',
+                    offset: 65,
+                      duration:2000
+                  })
+        } else {
+          alert("下单成功失败"+res.data.msg);
+          localStorage.removeItem('myUrl');
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+        localStorage.removeItem('myUrl');
+      })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

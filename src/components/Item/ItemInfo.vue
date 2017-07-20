@@ -1,13 +1,13 @@
 <template>
     <div>
-        <header></header>
+        <myHeader></myHeader>
         <!-- 头部 -->
         <div style="width:860px;margin:0 auto;text-align:center;">
 
             <br>
             <br>
             <!-- 专利信息头部开始-->
-            <div style="float:left;width:810px;height:30px;margin-bottom:8px">
+            <div style="margin-top:10px;float:left;width:810px;height:30px;margin-bottom:8px">
                 <div type="flex" class="row-bg goodsName" justify="space-between">
                     <div :title="name_Msg" class="grid-content bg-purple  goodsName omit" style="font-weight:bold;width:860px;">
                   {{myGood.name}}
@@ -37,7 +37,7 @@
             <div style="float:right">
                 <el-card class="box-card">
                     <div class="block">
-                        <span  class="attr" style="float:left;">  一口价：</span>
+                        <span  class="attr" style="margin-top:-10px;float:left;">  一口价：</span>
                         <div class=" item shanshuo omit" style="width:150px;font-size:26px;text-align:right;margin-left:30px">
                             ¥ {{myGood.price}}
                         </div>
@@ -70,10 +70,14 @@
             </div>
             <!-- 购买按钮 'status','patentName','patentSummary','seller','price','buyer','imgPath'-->
             <div style="padding-left:10px;width:220px;float:left;margin-bottom:10px">
-                  <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="myGood.remain"></el-input-number>
-                <!-- 立即购买 -->
-                  <el-button type="success" @click="buyNow()">立即购买</el-button>
-                  <el-button  type="warning" @click="addCar()">加入购物车</el-button>
+                  <div style="margin-top:10px">
+                    <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="myGood.remain"></el-input-number>
+                  </div>
+                   <!-- 立即购买 -->
+                  <div style="margin-top:-10px">
+                    <el-button type="success"   @click="buyNow()">立即购买</el-button>
+                    <el-button  type="warning" @click="addCar()">加入购物车</el-button>
+                  </div>
 
             </div>
                 <!-- 评论区开始 -->
@@ -116,10 +120,12 @@ import axios from 'axios'
 import config from './../../publicAPI/config'
 import { Message } from 'element-ui';//信息提示框
 import { Notification } from 'element-ui';
+import myHeader from './../Public/Header/Header'
 
 export default {
     components: {
         top,
+        myHeader
     },
     data() {
         return {
@@ -164,7 +170,42 @@ export default {
         }
     },
     methods: {
-
+      ifGoToCart(){
+        let that = this;
+        const h = this.$createElement;
+        this.$msgbox({
+          title: '添加购物车成功！',
+          message: h('p', null, [
+            h('span', null, '恭喜你！这件商品已加入进了你的购物车，'),
+            h('br', { style: 'color: teal' }, ''),
+            h('B', { style: 'color: teal' }, '是否 现在'),
+              h('span', null, ' 前往查看？ '),
+          ]),
+          showCancelButton: true,
+          confirmButtonText: '我们走吧！',
+          cancelButtonText: '不，谢谢',
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = '跳转中...';
+              setTimeout(() => {
+                done();
+                setTimeout(() => {
+                  // instance.confirmButtonLoading = false;
+                    that.$router.push({path:'/ShoppingCart'})
+                }, 300);
+              }, 2000);
+            } else {
+              done();
+            }
+          }
+        }).then(action => {
+          // this.$message({
+          //   type: 'info',
+          //   message: 'action: ' + action
+          // });
+        });
+      },
         handleChange(value) {
           console.log(value);
         },
@@ -196,7 +237,7 @@ export default {
           }
           })
           .catch(function(error){
-            Message.error('注册不成功！');
+            Message.error('请检查网络配置！');
           });
       },
         addCar(){
@@ -210,12 +251,13 @@ export default {
             )
             .then(function(res){
             if(res.data.status){
-              Notification.success({
-                        title: '购买成功！',
-                        message: '你直接购买成功了！',
-                        offset: 65,
-                          duration:2000
-                      })
+              that.ifGoToCart();
+              // Notification.success({
+              //           title: '添加成功！',
+              //           message: '加入购物车成功了',
+              //           offset: 65,
+              //             duration:2000
+              //         })
             } else {
               Notification.error({
                         title: '购买失败！',
@@ -227,7 +269,7 @@ export default {
             }
             })
             .catch(function(error){
-              Message.error('注册不成功！');
+              Message.error('请检查网络配置！');
             });
         },
       getItemInfo(){
@@ -475,7 +517,7 @@ export default {
 
 .box-card {
     width: 220px;
-    height: 280px
+    height: 270px
 }
 
 .shanshuo:hover {
@@ -506,7 +548,7 @@ export default {
   letter-spacing: 2px;
   font-size: 16px;
   width: 100px !important;
-  height: 55px;
+  height: 35px;
   margin-top:15px !important;
 }
   .button {

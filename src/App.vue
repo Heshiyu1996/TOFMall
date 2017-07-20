@@ -1,19 +1,19 @@
 <template>
   <div id="app">
-    <div style="background-color:#FC7700">
+    <div>
+      <myHeader></myHeader>
+      <div class="clearfix"></div>
       <div class="css-body">
         <div class="css-body-bigPics">
           <el-carousel indicator-position="outside" height="362px">
             <el-carousel-item v-for="(item,key) in pics" :key="key">
-    		      <img :src="item" height="100%"  />
+    		      <img :src="item" height="100%"  style="border-radius:8px"/>
             </el-carousel-item>
           </el-carousel>
         </div>
         <div class="css-body-content">
           <div class="css-body-content-type">
-
           </div>
-
         </div>
       </div>
     </div>
@@ -25,8 +25,11 @@
 
 <script>
 
+import myHeader from './components/Public/Header/Header'
+
 export default {
   components:{
+    myHeader
   },
   data () {
     return {

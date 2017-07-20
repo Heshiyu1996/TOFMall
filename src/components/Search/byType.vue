@@ -1,16 +1,17 @@
 <template>
   <div style="width:100%">
+      <myHeader></myHeader>
     <div id="bigBlock">
       <!-- 内置搜索栏 开始 -->
       <div  id="searchBox" style="width:1210px;text-align:center;margin:0 auto;">
         <div style="margin-top:30px;width:960px;margin: 0 auto;">
-          <div style="padding-top:10px;width:1000px;">
+          <div style="padding-top:10px;">
             <div style="float:left;margin-top:15px;margin-left:-5px;margin-right:5px"><el-button type="warning"  @click="goBack()"  >按 标 签</el-button></div>
-            <div style="float:left;margin-top: 15px;width:800px">
+            <div style="float:left;margin-top: 15px;width:760px">
               <el-input placeholder="请把要搜索的告诉我们..." v-model="myInput">
                 <el-button slot="append" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
               </el-input>
-              <div style="float:left;margin-left:0px;width:800px;margin-top:5px;margin-bottom:5px">
+              <div style="float:left;margin-left:0px;width:760px;margin-top:5px;margin-bottom:5px">
               <el-alert  :title="Tip" :type="tipType":closable="false">
               </el-alert>
             </div>
@@ -22,33 +23,35 @@
       <div class="clearfix"></div>
 
       <!-- 列表展示区 开始  -->
-      <div id="home-tb-div" style="width:860px;text-align:center;margin:0 auto;">
-        <div>
-          <div style="">
+        <div  class="resultList "  style="margin-left:123px;padding:10px;padding-left:60px;width:860px;text-align:left" >
             <div style="text-align:center;margin:0 auto;">
               <div class="clearfix"></div>
               <div style="margin:10px;margin:0 auto">
                 <div style="padding:10px;width:860px;text-align:left" >
                 <!-- 一口价（模糊）开始 -->
-                <div  v-if="true" style="width:180px;margin:10px">
-                  <div style="height:900px;width:960px;text-align:left;margin-left:-100px" >
+                <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
+                  <div   style="height:600px;width:960px;ext-align:left;margin-left:-100px" >
+
                     <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
                       <router-link :to="'/ItemInfo/' + esingle.id">
-                        <el-card class="box-card" :body-style="{ padding: '0px' }">
-                          <img :src="esingle.img" class="image" >
-                          <div style="padding:10px;">
-                            <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
-                            <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
-                              <div style="text-align:left;width:40px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                        <transition name="el-fade-in-linear">
+                          <el-card  v-show="show2" class="box-card" :body-style="{ padding: '0px' }">
+                            <img :src="esingle.img" class="image" >
+                            <div style="padding:10px;">
+                              <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
+                              <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                                <div style="text-align:left;width:40px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                              </div>
+                              <div class="clearfix"></div>
                             </div>
-                            <div class="clearfix"></div>
-                          </div>
-                        </el-card>
+                          </el-card>
+                          </transition>
                       </router-link>
                     </div>
+
                   </div>
                   <div class="clearfix"></div>
-                  <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
+                  <!-- <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
                     <el-pagination
                     @size-change="handleSizeChange1"
                     @current-change="handleCurrentPageChange1"
@@ -58,15 +61,15 @@
                     :page-size="pageSize1"
                     layout="total, sizes, prev, pager, next, jumper">
                   </el-pagination>
-                </div>
+                </div> -->
               </div>
                 <!-- 一口价（模糊）结束 -->
               </div>
             </div>
             </div>
-          </div>
+
         </div>
-      </div>
+
       <!-- 列表展示区 结束 -->
     </div>
     <div class="clearfix"></div>
@@ -78,14 +81,16 @@ import config from './../../publicAPI/config'
 import axios from 'axios'
 import { Loading } from 'element-ui';
 import { Notification } from 'element-ui'
+import myHeader from './../Public/Header/Header'
 
 export default {
   components:{
+    myHeader
   },
   data () {
     return {
-      rootURL: config.URL,	//请求的url
-      rootURL: config.URL,	//请求的url
+      show2: true,
+      rootURL: config.JXURL,	//请求的url
       tableData:[], 	//一口价表格的内容
       loading3: true, //一口价加载中
 
@@ -197,6 +202,10 @@ export default {
     tryToSearch() {
         let that = this
         var myChoose=that.select
+        that.show2 = false;
+        setTimeout(() => {
+          that.show2 = true;
+        }, 100);
         that.Tip = '【 搜索结果 】 关键字：' + that.myInput
 
         var tmpList = {
@@ -212,7 +221,6 @@ export default {
             tmpList.name = that.idx.cname;
             tmpList.price = that.idx.cprice;
             tmpList.remain = that.idx.cremain;
-            console.log(tmpList)
             that.SomeList.push(tmpList);
           }
         })
@@ -380,4 +388,34 @@ h1{
   .smallCard .el-tag{
     background-color: transparent
   }
+
+  .resultList{
+    /*border: 1px solid gray;*/
+    width: 960px;
+    min-height: 600px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 30px 20px 50px 20px;
+    background-color:rgba(247, 247, 247,0.2);
+    -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
+    -moz-box-shadow: -5px 0px 15px #D0D0D0,
+    5px 0px 15px #D0D0D0;/* for firefox */
+    -webkit-box-shadow: -5px 0px 15px #D0D0D0,
+    5px 0px 15px #D0D0D0;/* for safari or chrome */
+    box-shadow: -5px 0px 15px #D0D0D0,
+    5px 0px 15px #D0D0D0;/* for opera or ie9 */
+  }
+  .transition-box {
+  margin-bottom: 10px;
+  width: 200px;
+  height: 100px;
+  border-radius: 4px;
+  /*background-color: #20A0FF;*/
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
   </style>

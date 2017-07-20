@@ -205,7 +205,7 @@ export default {
 
         })
         .catch(function(error){
-          Message.error('注册不成功！');
+          Message.error('不成功！');
         });
     },
     handleCheckAllChange(event) {

@@ -3,20 +3,11 @@
    	<myHeader></myHeader>
     <div class="clearfix"></div>
     <div :style="{backgroundImage: 'url(' +bg + ')'}" class="css-bg">
-    <div style="margin:0 auto;width:1210px;height:600px;padding-right:40px;padding-bottom:50px;">
+    <div style="margin:0 auto;height:760px;padding-right:40px;padding-bottom:50px;">
 
-      <!-- <div style="margin-top:40px;margin-left:-20px;width:800px;height:500px;float:left;padding:30px;">
-        <div class="clearfix" style="padding-top:110px;"></div>
-        <el-carousel style="border:2px solid white;
-        "i ndicator-position="outside" width="400px" height="260px">
-  		    <el-carousel-item v-for="item in imgSource">
-  		      <img :src="item" width="100%"  />
-  		    </el-carousel-item>
-		    </el-carousel>
-      </div> -->
 
       <!-- 注册框 开始 -->
-      <div style="width:200px;height:500px;float:right;margin-top:50px;margin-right:-20px;">
+      <div style="width:300px;height:500px;float:right;margin-top:85px;margin-right:130px">
       <registerBox></registerBox>
       </div>
       <!-- 注册框 结束 -->
