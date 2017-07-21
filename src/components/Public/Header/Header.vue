@@ -46,7 +46,7 @@
         <router-link to="/userIndex">
           <!-- <el-button @click="getUserInfo()">个人中心</el-button> -->
           <img src="./../../../assets/img/TOF.png" id="pic">
-          <div style="float:left;padding:0px 0px 0px 20px"><span class="css-top-right-username">你好！{{username}}</span></div>
+          <div style="float:left;padding:0px 0px 0px 10px"><span class="css-top-right-username">你好！{{username}}</span></div>
         </router-link>
         <router-link to="/login">
           <div style="float:right"><el-button type="danger" @click="logout()">退出</el-button></div>
@@ -79,7 +79,13 @@ export default {
     checkLog(){
       let that = this ;
       if(!that.login){
-        alert('请先登录')
+
+          Notification.error({
+                    title: '进入购物车失败！',
+                    message: '请先登录~',
+                    offset: 65,
+                      duration:2000
+                  })
       } else {
         that.$router.push({path:'/userIndex/ShoppingCart'})
       }
@@ -121,7 +127,7 @@ export default {
             that.login = false;
           } else {
             that.login = true;
-            that.username = res.data.uname;
+            that.username = res.data.unickname;
           }
       })
       .catch(function(error){
@@ -172,10 +178,10 @@ export default {
     padding-top: 10px;
     padding-right: 15px;
     .css-top-right-username {
-      margin-right: 20px;
-
+      margin-right: 0px;
+      font-weight: bold;
       margin-top: 10px;
-      font-size: 12px;
+      font-size: 16px;
       color:#fc7701;
       line-height: 40px;
     }

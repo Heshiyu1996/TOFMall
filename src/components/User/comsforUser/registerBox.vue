@@ -9,7 +9,9 @@
         <div class="errorM" style="margin:0;color:#FF4949;"></div>
         <div style="height:40px;margin-left:-15px">
           <el-form-item label="用户名" prop="username">
-            <el-input @blur="checkAccount()" v-model="Form_Register.username"></el-input>
+            <el-input @change="checkAccount(Form_Register.username)" v-model="Form_Register.username"></el-input>
+            <div v-show="account" style="position:absolute;color:red;font-size:12px;margin-top:5px"><i class="el-icon-circle-close">该账号已被注册，请更换！</i></div>
+            <div v-show="account2" style="position:absolute;color:green;font-size:12px;margin-top:5px"><i class="el-icon-check">该账号未被使用</i></div>
           </el-form-item>
         </div>
         <div style="height:40px;margin-left:-15px">
@@ -27,14 +29,7 @@
 
         <div style="width:302px;height:40px;margin-left:-15px">
           <el-form-item label="密码提示问题" prop="passAsk">
-              <el-select v-model="Form_Register.passAsk" placeholder="请选择密码提示问题">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+            <el-input v-model="Form_Register.passAsk"></el-input>
 
           </el-form-item>
         </div>
@@ -105,7 +100,7 @@ export default {
           rules: {
             username: [
               { required: true, message: '请输入账号', trigger: 'blur' },
-              { min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+              { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
             ],
             password: [
               { required: true, message: '请输入密码', trigger: 'blur' },
@@ -121,7 +116,7 @@ export default {
             ],
             passAnswer: [
               { required: true, message: '请再次输入密码提示答案', trigger: 'blur' },
-              {  min: 4, max: 20, message: '长度在 4 到 20 个字符', trigger: 'blur' }
+              {  min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
             ],
             agreement: [
                {type: 'array', required: true, message: '注册前请详细阅读！', trigger: 'change' }
@@ -135,30 +130,28 @@ export default {
            value: '我母亲的姓名是',
            label: '我母亲的姓名是'
          }],
+         account: false,
+         account2: false,
     }
   },
   methods:{
-     checkAccount(){
+     checkAccount(myInput){
+       setTimeout(() => {
+         let that = this
+         axios.get(that.rootURL+'/checkUserName.do?unickname= ' + myInput)
+         .then(function(res){
+           that.account = res.data.status;
+           that.account2 = !res.data.status;
+             if(that.myInput==''){
+               that.account2 = false;
+             }
+         })
+         .catch(function(error){
+           console.error(error)
+         })
+       }, 100);
 
-            //  let that = this
-            //  axios.get(that.rootURL+'/queryBtype.do')
-            //  .then(function(res){
-            //    for( that.idx of res.data.btypeList ){
-            //      var bt = {};
-            //      bt.value = that.idx.btid;
-            //      bt.label = that.idx.btname;
-            //      that.types.push(bt)
-            //    }
-             //
-            //   that.btid = '';
-            //    for( that.idx in that.types){
-            //      that.btid = that.types[that.idx].value;
-            //      that.getSmallTypes(that.idx,that.btid);
-            //    }
-            //  })
-            //  .catch(function(error){
-            //    console.error(error)
-            //  })
+
      },
 
       submitForm(formName) {
@@ -183,6 +176,7 @@ export default {
                             offset: 65,
                               duration:2000
                           })
+                  that.$router.push({path:'/login'})
                 } else {
                   Notification.error({
                             title: '注册失败！',

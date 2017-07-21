@@ -13,7 +13,7 @@
         </div>
         <div class="css-body-content">
           <div class="css-body-content-type">
-            <el-input placeholder="请把要搜索的告诉我们..." v-model="myInput">
+            <el-input @keyup.enter.native="tryToSearch()" placeholder="请把要搜索的告诉我们..." v-model="myInput">
               <el-button slot="append" class="appBTN" icon="search" @click="tryToSearch()"> 搜 索 </el-button>
             </el-input>
 
@@ -76,7 +76,7 @@
 
                         <div v-for="esingle in TypeList" style="width:380px;float:left;margin:40px;">
                           <h1>{{esingle.name}}</h1>
-                          <router-link :to="'/ItemInfo/' + esingle.id">
+                          <router-link to="/byCategory">
                               <el-card  class="types" :body-style="{ padding: '0px' }">
                                 <img :src="esingle.img" class="image" >
                               </el-card>
