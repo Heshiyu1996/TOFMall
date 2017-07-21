@@ -191,7 +191,8 @@ export default {
   methods:{
     tryToSearch(){
       let that = this;
-      localStorage.setItem('myInput',that.myInput);
+      console.log(that.myInput)
+      window.localStorage.setItem('myInput',that.myInput);
       that.$router.push({path:'/byType'})
     }
   }

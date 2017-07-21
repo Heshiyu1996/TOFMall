@@ -204,9 +204,17 @@ export default {
 
     tryToSearch() {
         let that = this
-        var myChoose=that.select
+        var url = '';
+        if(localStorage.getItem('myInput')!=null){
+          that.myInput = localStorage.getItem('myInput');
+          url = that.rootURL+'/search.do?condition='+ that.myInput
+        } else {
+          url = that.rootURL+'/search.do?condition='
+        }
+        if(localStorage.getItem('myInput')==null && that.myInput!=''){
+        url = that.rootURL+'/search.do?condition='+ that.myInput
 
-        localStorage.removeItem('myInput')
+        }
         that.show2 = false;
         setTimeout(() => {
           that.show2 = true;
@@ -217,7 +225,7 @@ export default {
 
         };
         that.SomeList = [];
-        axios.get(that.rootURL+'/search.do?condition='+ that.myInput)
+        axios.get(url)
         .then(function(res){
           for( that.idx of res.data ){
             tmpList = [];
@@ -228,6 +236,8 @@ export default {
             tmpList.remain = that.idx.cremain;
             that.SomeList.push(tmpList);
           }
+          localStorage.removeItem('myInput')
+
         })
         .catch(function(error){
           console.error(error)
@@ -284,6 +294,9 @@ created(){
 
   that.tryToSearch();
 },
+watch:{
+  '$route':'tryToSearch'
+}
 }
 </script>
 
