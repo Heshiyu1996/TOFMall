@@ -52,7 +52,7 @@
   </div>
 
   <div class="clearfix"></div>
-<div style="margin-top:-50px">
+<div style="margin-top:130px">
   <myFooter></myFooter>
 </div>
 

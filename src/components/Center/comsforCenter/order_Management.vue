@@ -221,7 +221,7 @@
   }
 
   .omit {
-      width: 200px;
+      width: 190px;
       overflow: hidden;
       vertical-align: top;
       text-overflow: ellipsis;

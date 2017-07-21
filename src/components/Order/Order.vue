@@ -3,6 +3,15 @@
     <myHeader></myHeader>
     <div class="clearfix"></div>
     <div style="width:860px;margin:0 auto;">
+    <div style="margin-top:30px;">
+      <el-steps :space="100" :active="active" finish-status="success">
+        <el-step title="加入购物车"></el-step>
+        <el-step title="生成订单"></el-step>
+        <el-step title="提交订单"></el-step>
+        <el-step title="确认订单"></el-step>
+        <el-step title="评论"></el-step>
+      </el-steps>
+    </div>
     <div class="css-address">收货地址
       <el-form :rules="rules" ref="form" :model="form" label-width="80px">
         <el-form-item label="详细地址" prop="address">
@@ -63,7 +72,7 @@
             <div class="css-body-item-img" style="">
               <img src="./../../assets/img/car9.jpg" />
             </div>
-            <div class="css-body-item-name">{{esingle.cname}}</div>
+            <div class="css-body-item-name ">{{esingle.cname}}</div>
             <div class="css-body-item-price">{{esingle.cprice}}</div>
             <div class="css-body-item-count">
               {{esingle.csize}}
@@ -81,10 +90,15 @@
           </router-link>
         </div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-        <div class="css-footer-btn"><el-button type="primary" @click="pushOrder()">确认订单</el-button></div>
+        <div class="css-footer-btn"><el-button type="primary" @click="pushOrder()">提交订单</el-button></div>
       </div>
     </section>
   </div>
+
+    <div class="clearfix"></div>
+    <div style="margin-top:0px">
+      <myFooter></myFooter>
+    </div>
   </div>
 </template>
 
@@ -95,13 +109,16 @@ import axios from 'axios'
 import config from './../../publicAPI/config'
 import { Notification } from 'element-ui';
 import myHeader from './../Public/Header/Header'
+import myFooter from './../Public/Footer/Footer'
 
 export default {
   components:{
-    myHeader
+    myHeader,
+    myFooter
   },
   data () {
     return {
+      active: 2,
       rootURL: config.JXURL,
       myPayMethod: 1,//支付方式按钮当前选取
       goods:[],
@@ -403,5 +420,13 @@ export default {
           }
       }
 
+        .omit {
+            width: 100px;
+            overflow: hidden;
+            vertical-align: top;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            /*不换行*/
+        }
 
 </style>

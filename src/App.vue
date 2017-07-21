@@ -31,7 +31,7 @@
                           <router-link :to="'/ItemInfo/' + esingle.id">
                             <transition name="el-fade-in-linear">
                               <el-card  class="box-card" :body-style="{ padding: '0px' }">
-                                <img :src="esingle.img" class="image" >
+                                <img :src="esingle.img" class="imgSmall" >
                                 <div style="padding:10px;">
                                   <div id="name" class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
                                   <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
@@ -64,6 +64,34 @@
                 </div>
 
             </div>
+            <div  class=""  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
+                <div style="text-align:left;">
+                  <div style="font-size:18px;font-weight:bold;padding-top:10px">热门分类</div>
+                  <div class="clearfix"></div>
+                  <div style="margin:10px;margin:0 auto">
+                    <div style="padding:10px;width:860px;text-align:left" >
+                    <!-- 一口价（模糊）开始 -->
+                    <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
+                      <div style="width:1080px;ext-align:left;" >
+
+                        <div v-for="esingle in TypeList" style="width:380px;float:left;margin:40px;">
+                          <h1>{{esingle.name}}</h1>
+                          <router-link :to="'/ItemInfo/' + esingle.id">
+                              <el-card  class="types" :body-style="{ padding: '0px' }">
+                                <img :src="esingle.img" class="image" >
+                              </el-card>
+                          </router-link>
+                        </div>
+
+                      </div>
+                      <div class="clearfix"></div>
+                  </div>
+                    <!-- 一口价（模糊）结束 -->
+                  </div>
+                </div>
+                </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -86,7 +114,35 @@ export default {
   },
   data () {
     return {
-
+            TypeList:[{
+              img:require('./assets/img/item2.png'),
+              id:'2',
+              name:'懂酒酒懂他',
+              price:'2.50',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/item3.png'),
+              id:'2',
+              name:'爱美的夏天',
+              price:'3.00',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/item1.png'),
+              id:'2',
+              name:'进口的最爱',
+              price:'6.50',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/item4.png'),
+              id:'2',
+              name:'渴了就来这',
+              price:'14.50',
+              seller:'5',
+              cat:'6'
+            }],
             SomeList:[{
               img:require('./assets/img/suannai.jpg'),
               id:'2',
@@ -131,8 +187,15 @@ export default {
 		  	 require('./assets/img/index0.png'),
       ]
     }
+  },
+  methods:{
+    tryToSearch(){
+      let that = this;
+      localStorage.setItem('myInput',that.myInput);
+      that.$router.push({path:'/byType'})
+    }
   }
-  
+
 }
 </script>
 
@@ -201,8 +264,8 @@ export default {
    }
 
    .image {
-     width: 180px;
-     height:150px;
+     width: 360px;
+     height:250px;
      display: block;
    }
    .el-input__inner{
@@ -225,5 +288,10 @@ export default {
      background-color: #FC7500 !important;
        border: 0px solid #FC7500 !important;
      color:white !important;
+   }
+   .imgSmall {
+      width: 180px;
+      height:150px;
+      display: block;
    }
 </style>

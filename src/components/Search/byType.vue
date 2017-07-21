@@ -30,7 +30,7 @@
                 <div style="padding:10px;width:860px;text-align:left" >
                 <!-- 一口价（模糊）开始 -->
                 <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
-                  <div   style="height:600px;width:960px;ext-align:left;margin-left:-100px" >
+                  <div   style="height:900px;width:960px;ext-align:left;margin-left:-100px" >
 
                     <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
                       <router-link :to="'/ItemInfo/' + esingle.id">
@@ -205,6 +205,8 @@ export default {
     tryToSearch() {
         let that = this
         var myChoose=that.select
+
+        localStorage.removeItem('myInput')
         that.show2 = false;
         setTimeout(() => {
           that.show2 = true;
@@ -273,7 +275,14 @@ watch:{
 },
 created(){
   let that = this
-  that.tryToSearch()
+
+  if(localStorage.getItem('myInput')!='' ||localStorage.getItem('myInput')!=null){
+    that.myInput = localStorage.getItem('myInput');
+  } else{
+    that.myInput = ''
+  }
+
+  that.tryToSearch();
 },
 }
 </script>

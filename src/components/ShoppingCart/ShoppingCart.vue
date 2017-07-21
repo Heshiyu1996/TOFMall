@@ -1,5 +1,14 @@
 <template>
   <div class="updateInfo-box">
+    <div style="margin-top:-30px;">
+      <el-steps :space="100" :active="active" finish-status="success">
+        <el-step title="加入购物车"></el-step>
+        <el-step title="生成订单"></el-step>
+        <el-step title="提交订单"></el-step>
+        <el-step title="确认订单"></el-step>
+        <el-step title="评论"></el-step>
+      </el-steps>
+    </div>
     <div style="width:860px;margin:0 auto">
       <div class="css-top">我的购物车</div>
       <div class="clearfix"></div>
@@ -71,6 +80,7 @@ export default {
   },
   data () {
     return {
+      active: 1,
       rootURL: config.JXURL,
       checked: false,
 

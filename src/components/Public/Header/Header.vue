@@ -45,7 +45,7 @@
       <div v-show="login" class="css-top-right">
         <router-link to="/userIndex">
           <!-- <el-button @click="getUserInfo()">个人中心</el-button> -->
-          <img src="./../../../assets/img/pic.jpg" id="pic">
+          <img src="./../../../assets/img/TOF.png" id="pic">
           <div style="float:left;padding:0px 0px 0px 20px"><span class="css-top-right-username">你好！{{username}}</span></div>
         </router-link>
         <router-link to="/login">

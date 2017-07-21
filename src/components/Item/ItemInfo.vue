@@ -2,7 +2,7 @@
     <div>
         <myHeader></myHeader>
         <!-- 头部 -->
-        <div style="width:900px;margin:0 auto;text-align:center;">
+        <div style="width:900px;height:1000px;margin:0 auto;text-align:center;">
 
             <br>
             <br>

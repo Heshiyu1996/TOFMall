@@ -3,6 +3,16 @@
       <myHeader></myHeader>
       <div class="clearfix"></div>
     <div style="width:860px;margin:0 auto;">
+
+      <div style="margin-top:30px;">
+        <el-steps :space="100" :active="active" finish-status="success">
+          <el-step title="加入购物车"></el-step>
+          <el-step title="生成订单"></el-step>
+          <el-step title="提交订单"></el-step>
+          <el-step title="确认订单"></el-step>
+          <el-step title="评论"></el-step>
+        </el-steps>
+      </div>
     <div class="css-orderDetail">
       <div class="css-top">订单详情
         <el-tag type="warning" class="css-tag">{{state}}</el-tag>
@@ -37,7 +47,9 @@
                 {{esingle.csize}}
               </div>
               <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
-              <el-button type="primary" size="small" v-show="true" @click="saySomethingBox(esingle.cid)">评论</el-button>
+              <div class="css-body-item-comment">
+                <el-button type="primary" size="small"  v-show="!confirm"  @click="saySomethingBox(esingle.cid)">评论</el-button>
+              </div>
             </div>
           </div>
         </section>
@@ -79,10 +91,14 @@
           </router-link>
         </div>
         <div class="css-footer-sum">合计 ： <span class="css-footer-sum-num">¥ {{total}}</span></div>
-        <!-- <div class="css-footer-btn"><el-button type="primary">确认订单</el-button></div> -->
+        <div v-show="confirm" class="css-footer-btn"><el-button type="primary" @click="confirmOrder()">确认订单</el-button></div>
       </div>
     </section>
   </div>
+      <div class="clearfix"></div>
+      <div style="margin-top:0px">
+        <myFooter></myFooter>
+      </div>
   </div>
 </template>
 
@@ -93,14 +109,19 @@ import axios from 'axios'
 import config from './../../publicAPI/config'
 import { Message } from 'element-ui';//信息提示框
 import myHeader from './../Public/Header/Header'
+import myFooter from './../Public/Footer/Footer'
+import { Notification } from 'element-ui';
 
 
 export default {
   components:{
-    myHeader
+    myHeader,
+    myFooter
   },
   data () {
     return {
+      active:3,
+      confirm: true,
       state: '',
       rootURL: config.JXURL,
       count: 2,
@@ -121,6 +142,36 @@ export default {
     }
   },
   methods: {
+    confirmOrder(){
+      let that = this ;
+      axios.get(that.rootURL +'/confirmReceipt.do?oid=' + that.$route.params.newOrderID)
+        .then(function(res){
+        if(res.data.status){
+
+          Notification.success({
+                    title: '确认成功！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+                  that.confirm = false; 
+                  that.active = 4;
+
+          // that.getRecord();
+        } else {
+          Notification.error({
+                    title: '确认失败！',
+                    message: res.data.msg,
+                    offset: 65,
+                      duration:2000
+                  })
+          // window.location = '#/tradeSystem/login'
+        }
+        })
+        .catch(function(error){
+          // Message.error('订单确认不成功！');
+        });
+    },
     saySomethingBox(myCid){
 
         var querystring = require('querystring');
@@ -152,7 +203,9 @@ export default {
           .then(function(res){
             if(res.data.status){
 
+                that.$router.push({path:'/userIndex/order'})
                 Message.success('评论成功，希望大家看到你的评论后更喜欢这件商品！');
+                that.active = 5;
             }
           })
           .catch(function(error){
@@ -190,7 +243,12 @@ export default {
           that.form.etime = res.data.oetime ;
           that.total = res.data.ototalprice ;
           that.state = res.data.ostate ;
+          that.confirm = (res.data.ostate!='已支付'?false:true) ;
           // console.log(that.goods)
+          if(that.confirm == false){
+
+            that.active = 4;
+          }
         } else {
 
         }
@@ -243,7 +301,7 @@ export default {
     .css-title-price {
       padding-right: 5px;
       float:left;
-      width:20%;
+      width:17%;
     }
     .css-title-count {
       float:left;
@@ -252,7 +310,7 @@ export default {
     .css-title-sum {
       padding-right: 90px;
       float:left;
-      width:30%;
+      width:26%;
     }
   }
 
@@ -277,7 +335,7 @@ export default {
       }
       .css-body-item-name {
         float: left;
-        width:24.7%;
+        width:20.7%;
         height:70px;
         text-align: center;
         padding: 20px 0px 0px 0px;
@@ -300,7 +358,17 @@ export default {
         overflow:hidden;
         line-height: 55px;
         float: left;
-        width:15%;
+        width:10%;
+        height:70px;
+        color: red;
+        text-align: center;
+        font-weight: bold;
+      }
+      .css-body-item-comment {
+        overflow:hidden;
+        line-height: 55px;
+        float: left;
+        width:8%;
         height:70px;
         color: red;
         text-align: center;
