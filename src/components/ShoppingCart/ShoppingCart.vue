@@ -46,10 +46,11 @@
 
               <div class="css-body-item-price">{{esingle.commodity.cprice}}</div>
               <div class="css-body-item-count">
-                <el-input-number size="small" v-model="esingle.csize" @change="handleChange(esingle.row)" :min="1" :max="999"></el-input-number>
+                <el-input-number size="small" v-model="esingle.csize" @change="handleChange(esingle.row)" :min="1" :max="99999999"></el-input-number>
                 <div class="css-body-item-count-remain">剩余库存：<span class="css-body-item-count-remain-span" controls=false>{{esingle.commodity.cremain}}</span> 件</div>
                 </div>
               <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
+              <div class="css-body-item-delete"><el-button type="primary" @click="deleteCart(esingle)">删除</el-button></div>
             </div>
           </div>
         </section>
@@ -118,6 +119,25 @@ export default {
     // }
   },
   methods: {
+    deleteCart(esingle){
+      let that=this;
+      axios.get(that.rootURL+'/deleteCart.do?cid=' + esingle.cid).then(function(res){
+        if(res.data.status){
+          Notification.success({
+                  title: '移除成功',
+                  message: res.data.msg,
+                  offset: 65,
+                  duration:2000
+                })
+          that.getCartList();
+          // window.location.reload();
+          // getCartList();
+        }
+      }).catch(function(error){
+        console.error(error)
+      })
+
+    },
     goToPay(){
       let that = this;
       var domList = document.getElementsByClassName("el-checkbox__inner");
@@ -149,10 +169,27 @@ export default {
       localStorage.removeItem('myUrl')
 
       localStorage.setItem('myUrl',that.rootURL+'/account.do?cids=' + myCids +'&csizes='+ myCsizes)
-
-      that.$router.push({path:'/order'})
-
-
+      var myUrl=localStorage.getItem('myUrl');
+      axios.get(myUrl)
+      .then(function(res){
+        if(res.data.status){
+          that.$router.push({path:'/order'})
+        }
+        else {
+          if(res.data.msg === '未登录'){
+          Notification.error({
+                  title: '下单失败',
+                  message: res.data.msg,
+                  offset: 65,
+                  duration:2000
+                })
+          that.$router.push({path:'/login'})
+        }
+      }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
     },
     getCartList(){
       let that = this;
@@ -304,16 +341,16 @@ export default {
     .css-title-price {
       padding-right: 5px;
       float:left;
-      width:30%;
+      width:27%;
     }
     .css-title-count {
       float:left;
-      width:20%;
+      width:18%;
     }
     .css-title-sum {
       padding-right: 90px;
       float:left;
-      width:27.5%;
+      width:27%;
     }
   }
 
@@ -352,7 +389,7 @@ export default {
       }
       .css-body-item-price {
         float: left;
-        width:21.6%;
+        width:15.6%;
         height:70px;
         text-align: center;
         padding: 20px 0px 0px 0px;
@@ -378,6 +415,11 @@ export default {
         height:70px;
         color: red;
         text-align: center;
+        font-weight: bold;
+      }
+      .css-body-item-delete {
+        overflow:hidden;
+        line-height: 70px;
         font-weight: bold;
       }
     }

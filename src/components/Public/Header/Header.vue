@@ -78,17 +78,17 @@ export default {
   methods: {
     checkLog(){
       let that = this ;
-      if(!that.login){
-
-          Notification.error({
-                    title: '进入购物车失败！',
-                    message: '请先登录~',
-                    offset: 65,
-                      duration:2000
-                  })
-      } else {
+      // if(!that.login){
+      //
+      //     Notification.error({
+      //               title: '进入购物车失败！',
+      //               message: '请先登录~',
+      //               offset: 65,
+      //                 duration:2000
+      //             })
+      // } else {
         that.$router.push({path:'/userIndex/ShoppingCart'})
-      }
+      // }
     },
     logout(){
       let that = this ;
@@ -101,6 +101,7 @@ export default {
                     offset: 65,
                       duration:2000
                   })
+          // that.$router.push({path:'/login'})
         } else {
           Notification.error({
                     title: '注销失败！',

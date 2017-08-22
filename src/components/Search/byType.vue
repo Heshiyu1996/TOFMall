@@ -14,7 +14,7 @@
               <div style="float:left;margin-left:0px;width:760px;margin-top:5px;margin-bottom:5px">
               <el-alert  :title="Tip" :type="tipType":closable="false">
               </el-alert>
-            </div>
+              </div>
             </div>
           </div>
         </div>
