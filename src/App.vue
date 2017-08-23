@@ -19,15 +19,15 @@
 
             <div  class="resultList"  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
                 <div style="text-align:left;">
-                  <div style="font-size:18px;font-weight:bold;padding-top:10px">本周热卖商品</div>
+                  <div style="font-size:16px;font-weight:bold;padding-top:10px">本周热卖商品</div>
                   <div class="clearfix"></div>
                   <div style="margin:10px;margin:0 auto">
                     <div style="padding:10px;width:860px;text-align:left" >
-                    <!-- 一口价（模糊）开始 -->
+                    <!-- 本周热卖 开始 -->
                     <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
                       <div style="width:1080px;ext-align:left;margin-left:-100px" >
 
-                        <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
+                        <div  @mouseenter="shakes" v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
                           <router-link :to="'/ItemInfo/' + esingle.id">
                             <transition name="el-fade-in-linear">
                               <el-card  class="box-card" :body-style="{ padding: '0px' }">
@@ -46,23 +46,46 @@
 
                       </div>
                       <div class="clearfix"></div>
-                      <!-- <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
-                        <el-pagination
-                        @size-change="handleSizeChange1"
-                        @current-change="handleCurrentPageChange1"
-                        :current-page="currentPage1"
-                        :page-count = "totalPage1"
-                        :page-sizes="[10, 20, 30, 40]"
-                        :page-size="pageSize1"
-                        layout="total, sizes, prev, pager, next, jumper">
-                      </el-pagination>
-                    </div> -->
                   </div>
-                    <!-- 一口价（模糊）结束 -->
+                    <!-- 本周热卖 结束 -->
                   </div>
                 </div>
                 </div>
+            </div>
+            <div  class="resultList"  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
+                <div style="text-align:left;">
+                  <div style="font-size:16px;font-weight:bold;padding-top:10px">猜你喜欢</div>
+                  <div class="clearfix"></div>
+                  <div style="margin:10px;margin:0 auto">
+                    <div style="padding:10px;width:860px;text-align:left" >
+                    <!-- 猜你喜欢 开始 -->
+                    <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
+                      <div style="width:1080px;ext-align:left;margin-left:-100px" >
 
+                        <div  @mouseenter="shakes" v-for="esingle in LoveList" style="width:180px;float:left;margin:10px;">
+                          <router-link :to="'/ItemInfo/' + esingle.id">
+                            <transition name="el-fade-in-linear">
+                              <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                <img :src="esingle.img" class="imgSmall" >
+                                <div style="padding:10px;">
+                                  <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                  <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                                    <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </el-card>
+                              </transition>
+                          </router-link>
+                        </div>
+
+                      </div>
+                      <div class="clearfix"></div>
+                  </div>
+                    <!-- 猜你喜欢 结束 -->
+                  </div>
+                </div>
+                </div>
             </div>
             <div  class=""  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
                 <div style="text-align:left;">
@@ -179,6 +202,42 @@ export default {
               seller:'5',
               cat:'6'
             }],
+            LoveList:[{
+              img:require('./assets/img/suannai.jpg'),
+              id:'2',
+              name:'华农酸奶（原味）',
+              price:'2.50',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/weitanai.jpg'),
+              id:'2',
+              name:'维他奶（原味）',
+              price:'3.00',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/pijiu.jpg'),
+              id:'2',
+              name:'百威啤酒（罐装）',
+              price:'6.50',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/zhishi.jpg'),
+              id:'2',
+              name:'芝士蛋卷',
+              price:'14.50',
+              seller:'5',
+              cat:'6'
+            },{
+              img:require('./assets/img/dikaila.jpg'),
+              id:'2',
+              name:'凯迪拉克S168',
+              price:'1999999.99',
+              seller:'5',
+              cat:'6'
+            }],
       myInput:'',
       pics: [
   		   require('./assets/img/index3.png'),
@@ -194,6 +253,30 @@ export default {
       console.log(that.myInput)
       window.localStorage.setItem('myInput',that.myInput);
       that.$router.push({path:'/byType'})
+    },
+    shakes(e){
+      e = (e.targetclassName= 'imgSmall')? e.target :null;
+  		if (!time) var time=650;
+  		if (!distance) var distance=4;
+  		var originalStyle=e.style.cssText;
+  		e.style.position='relative';
+  		var start=(new Date()).getTime();
+  		animate();
+  		function animate(){
+  		  var now=(new Date()).getTime();
+  			var elapsed=now-start;
+  			var fraction=elapsed/time; //按下按钮后经过长度为time的时间后 还原，也就是说动画执行的时间
+  			if (fraction<1)
+  			{
+  			 var x=distance*Math.sin(fraction*4*Math.PI);
+  				e.style.left=x+'px';
+  				setTimeout(animate,Math.min(25,time-elapsed));
+  			}
+  			else
+  			{
+  			  e.style.cssText=originalStyle;
+  			}
+  		}
     }
   }
 
