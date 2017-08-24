@@ -214,6 +214,7 @@ export default {
       that.tryToSearch();
     },
     handleCurrentPageChange(val) {
+      let that =this
       this.currentPage = val;
       that.tryToSearch();
     },
@@ -222,6 +223,7 @@ export default {
     tryToSearch() {
         let that = this
         var url = that.rootURL+'/search.do?currentPage='+that.currentPage+'&&pageSize='+that.pageSize+'&&condition=';
+
         if(localStorage.getItem('myInput')!=null){
           that.myInput = localStorage.getItem('myInput');
           url = url+ that.myInput
