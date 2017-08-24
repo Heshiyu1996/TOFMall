@@ -48,41 +48,43 @@
               </div>
               <div class="css-body-item-sum">¥ {{esingle.sum}}</div>
               <div class="css-body-item-comment">
-                <el-button type="primary" size="small"  v-show="!confirm"  @click="showMyCommentBox(esingle.cid)">评论</el-button>
-                <el-dialog title="评论" :visible.sync="showMyComment" >
-                  <el-form :model="form">
-                    <el-form-item label="商品打分" label-width="120px">
-                      <div style="padding-top:8px;text-align:left">
-                        <el-rate
-                          v-model="myStart"
-                          show-text
-                          :texts="texts"
-                          text-color="#403939"
-                          style="vertical-align:middle">
-                        </el-rate>
-                      </div>
-                    </el-form-item>
-                    <el-form-item label="评论" label-width="120px">
-                      <div style="padding-top:8px">
-                        <el-input
-                          type="textarea"
-                          :rows="2"
-                          placeholder="还是要说几句..."
-                          v-model="myComment">
-                        </el-input>
-                      </div>
-                    </el-form-item>
-                  </el-form>
-                  <div slot="footer" class="dialog-footer">
-                    <el-button @click="showMyComment = false">返 回</el-button>
-                    <el-button type="primary" @click="submitMyComment()">提 交</el-button>
-                  </div>
-                </el-dialog>
+                <!-- <el-button type="primary" size="small"  @click="saySomethingBox(esingle.cid)">评论</el-button> -->
               </div>
             </div>
           </div>
         </section>
     </div>
+    <el-button type="primary" size="small"  @click="showMyComment = true">评论</el-button>
+    <el-dialog title="评论" :visible.sync="showMyComment" >
+      <el-form :model="form">
+        <el-form-item label="商品打分" label-width="120px">
+          <div style="padding-top:8px">
+            <el-rate
+              v-model="myStart"
+              show-text
+              :texts="texts"
+              text-color="#403939"
+              style="vertical-align:middle">
+            </el-rate>
+          </div>
+        </el-form-item>
+        <el-form-item label="评论" label-width="120px">
+          <div style="padding-top:8px">
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="还是要说几句..."
+              v-model="myComment">
+            </el-input>
+          </div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showMyComment = false">返 回</el-button>
+        <el-button type="primary" @click="showMyComment = false;submitMyComment()">提 交</el-button>
+      </div>
+    </el-dialog>
+
     <div class="css-address">收货地址
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="详细地址：" prop="address">
@@ -149,6 +151,10 @@ export default {
   },
   data () {
     return {
+      myStart:null,
+      texts:['一点也不好！','还过得去~','一般啦！','合格','超喜欢！！！'],
+      myComment:'',
+      showMyComment: false,
       active:3,
       confirm: true,
       state: '',
@@ -168,13 +174,6 @@ export default {
       total:0,
       myCname : '',
       myCprice : 0,
-      Cid : '',
-      //评论变量
-      myStart:null,
-      texts:['一点也不好！','还过得去~','一般啦！','合格','超喜欢！！！'],
-      myComment:'',
-      showMyComment: false,
-
     }
   },
   methods: {
@@ -208,65 +207,43 @@ export default {
           // Message.error('订单确认不成功！');
         });
     },
-    showMyCommentBox(myCid){
-      let that = this;
-      that.Cid = myCid;
-      that.myStart = 0;
-      that.myComment = '';
-      that.showMyComment = true;
-      // that.submitMyComment(myCid);
-    },
-    saySomethingBox(myCid){
-        //
-        // var querystring = require('querystring');
-        // let that = this
-        //    this.$prompt('请输入评论', '提示', {
-        //      confirmButtonText: '发表',
-        //      cancelButtonText: '返回',
-        //    }).then(({ value }) => {
-        //     //  this.$message({
-        //     //    type: 'success',
-        //     //    message: '你的邮箱是: ' + value
-        //     //  });
-        //     that.saySomething(myCid,value)
-        //    }).catch(() => {
-        //
-        //    });
-    },
-    submitMyComment(){
-      let that = this
-      if(that.myStart == 0){
-          Message.error('给这件商品打个分吧！');
-      } else {
-        if(that.myComment == ''){
-            Message.error('对这件商品随便说点什么吧！');
-        } else{
-          var querystring = require('querystring');
-          axios.post(that.rootURL +'/publishReview.do',
-             querystring.stringify({
-               cid : that.Cid,
-               text : that.myComment,
-               oid : that.$route.params.newOrderID,
-               grade : that.myStart
-             })
-            )
-            .then(function(res){
-              if(res.data.status){
-                  // that.$router.push({path:'/userIndex/order'})
-                  Message.success('评论成功，希望大家看到你的评论后更喜欢这件商品！');
-                  that.active = 5;
-              } else {
-                  Message.error(res.data.msg);
-              }
-            })
-            .catch(function(error){
-              Message.error('不成功！');
-            });
-            that.showMyComment = false;
-        }
-      }
+    // saySomethingBox(myCid){
+    //
+    //     var querystring = require('querystring');
+    //     let that = this
+    //        this.$prompt('<span>1</span>', '提示', {
+    //          confirmButtonText: '发表',
+    //          cancelButtonText: '返回',
+    //        }).then(({ value }) => {
+    //         that.saySomething(myCid,value)
+    //        }).catch(() => {
+    //
+    //        });
+    // },
+    submitMyComment(myCid,msg){
+        var querystring = require('querystring');
+        let that = this
+        axios.post(that.rootURL +'/publishReview.do',
+           querystring.stringify({
+            //  cid : myCid,
+            cid : 1,
+             text : that.myComment,
+            //  oid : that.$route.params.newOrderID
+             oid : 1,
+             grade : that.myStart
+           })
+          )
+          .then(function(res){
+            if(res.data.status){
 
-
+                that.$router.push({path:'/userIndex/order'})
+                Message.success('评论成功，希望大家看到你的评论后更喜欢这件商品！');
+                that.active = 5;
+            }
+          })
+          .catch(function(error){
+            Message.error('不成功！');
+          });
     },
     getOrderDetail(){
       var querystring = require('querystring');
@@ -322,8 +299,8 @@ export default {
   },
   created(){
     let that = this ;
-    that.C= that.$route.params.newID;
-    that.hsytt();
+    // that.C= that.$route.params.newID;
+    // that.hsytt();
   },
   watch:{
     '$route':'hsytt'
@@ -377,7 +354,7 @@ export default {
     .css-body-item {
       margin-top: 5px;
       border-bottom: 1px solid black;
-      width:818px;
+      width:100%;
       height:100px;
       padding: 10px 30px 10px 20px;
       text-align: right;
@@ -519,6 +496,4 @@ export default {
           background-color: #FC7500;
           color: white;
         }
-
-
 </style>

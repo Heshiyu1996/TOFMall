@@ -1,22 +1,22 @@
 <template>
   <div class="css-top">
     <div style="width:1210px;margin:0 auto;">
-      <div class="css-top-left">
+      <div class="css-top-left ">
         <router-link to="/">
-          <img src="./../../../assets/img/logo.png" id="logo">
-          <span class="css-top-left-title">TOF mall &nbsp;会说话的生活超市</span>
+          <img   src="./../../../assets/img/logo.png" class="logo" id="logo">
+          <div class="css-top-left-title" @mouseenter="shakes">TOF mall &nbsp;会说话的生活超市</div>
         </router-link>
       </div>
       <div class="css-top-center">
         <div class="line"></div>
         <el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item index="0">
-            <router-link to="/">首页</router-link>
+            <router-link to="/"><span class="header_guide">首页</span></router-link>
           </el-menu-item>
-              <el-menu-item index="2"><a @click="checkLog()" target="_blank">购物车</a></el-menu-item>
+              <el-menu-item index="2"><a class="header_guide" @click="checkLog()" target="_blank">购物车</a></el-menu-item>
 
             <el-submenu index="1">
-              <template slot="title">商品分类</template>
+              <template slot="title" ><span class="header_guide">商品分类</span></template>
               <el-menu-item index="1-1">
                 <router-link to="/byCategory">按标签</router-link>
               </el-menu-item>
@@ -25,7 +25,7 @@
             </el-submenu>
 
         <el-submenu index="3">
-            <template slot="title">联系客服</template>
+            <template slot="title"><span class="header_guide">联系客服</span></template>
             <el-menu-item index="2-1">帮助中心</el-menu-item>
             <el-menu-item index="2-2">售后服务</el-menu-item>
             <el-menu-item index="2-3">意见建议</el-menu-item>
@@ -134,6 +134,27 @@ export default {
       .catch(function(error){
         console.error(error)
       })
+    },
+
+    shakes(e){
+      e = e.target ;
+  		if (!time) var time=700;
+  		if (!distance) var distance=5;
+  		e.style.position='relative';
+      e.style.marginLeft="90px";
+  		var start=(new Date()).getTime();
+  		animate();
+  		function animate(){
+  		  var now=(new Date()).getTime();
+  			var elapsed=now-start;
+  			var fraction=elapsed/time; //按下按钮后经过长度为time的时间后 还原，也就是说动画执行的时间
+  			if (fraction<1)
+  			{
+  			 var x=distance*Math.sin(fraction*4*Math.PI);
+  				e.style.left=x+'px';
+  				setTimeout(animate,Math.min(15,time-elapsed));
+  			}
+  		}
     }
 
 
@@ -152,25 +173,30 @@ export default {
 <style lang="scss">
 
 .css-top {
-  float: left;
+  // float: left;
 	width: 100%;
   height:75px;
   padding: 5px 0px;
   background-color:rgb(239,242,247);
   border-bottom: 1px solid #cccccc;
+  box-shadow: 0 0 5px #888;
+  
   .css-top-left {
     float: left;
-    width: 30%;
+    width: 33%;
     .css-top-left-title {
+      display: block;
+      position: relative;
+      top:-46px;
+      left:90px;
       padding-left: 10px;
-      font-size: 18px;
-      font-weight: bold;
+      font-size: 22px;
     }
   }
   .css-top-center {
-    padding-left: 100px;
+    padding-left: 60px;
     float: left;
-    width: 50%;
+    width: 45%;
   }
   .css-top-right {
     float: left;
@@ -206,5 +232,37 @@ export default {
 	vertical-align: top;
 	text-overflow:ellipsis;
 	white-space: nowrap;/*不换行*/
+}
+.el-menu-item .header_guide,.el-submenu .header_guide{
+  font-size: 18px;
+  color:rgba(10, 10, 10, 0.53);
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 10px #999;
+}
+.logo,{
+  position: relative;;
+  top: 0px;
+  left: 15px;
+  -webkit-animation: clockwise 2s  ; animation: clockwise 2s linear   ;
+  transform-origin: 10px 10px;
+}
+
+.logo {
+    display: block;
+    position: relative;
+    top:5px;
+    left:25px;
+    color:fff;
+    -webkit-animation: counter-clockwise 1s linear infinite; animation: counter-clockwise 3s linear  infinite ;
+}
+
+@keyframes clockwise {
+  50%  { transform: rotate(-5deg) ; }
+  60%{ transform: rotate(5deg); }
+}
+
+@-webkit-keyframes counter-clockwise {
+  40%  { -webkit-transform: rotate(10deg) ;  }
+  60%{ -webkit-transform: rotate(-10deg); }
 }
 </style>

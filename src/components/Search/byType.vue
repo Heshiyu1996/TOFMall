@@ -1,6 +1,7 @@
 <template>
   <div style="width:100%">
       <myHeader></myHeader>
+      <div class="clearfix"></div>
     <div id="bigBlock">
       <!-- 内置搜索栏 开始 -->
       <div  id="searchBox" style="width:1210px;text-align:center;margin:0 auto;">
@@ -112,7 +113,6 @@ export default {
       loading3: true, //一口价加载中
 
       myInput: '',
-      select: '所有专利',
 
       Some:false,
       FixPriceSome:false,
@@ -190,22 +190,9 @@ export default {
     }
   },
   methods:{
-    getDates(date){//此函数用于从日期选择器获得input
-      let that = this
-      this.timeRange_Auc = date
-      that.timeRange_Auc_Left  = that.timeRange_Auc.split(' - ')[0]
-      that.timeRange_Auc_Right = that.timeRange_Auc.split(' - ')[1]
-    },
     goBack(){
       let that = this
       that.$router.push({path:'/byCategory'})
-    },
-    searchAll(){
-      this.tryToSearch()
-    },
-
-    getSomeList(){
-
     },
 
     handleSizeChange(val) {
@@ -224,18 +211,24 @@ export default {
         let that = this
         var url = that.rootURL+'/search.do?currentPage='+that.currentPage+'&&pageSize='+that.pageSize+'&&condition=';
 
+        //情况一（从主页的搜索栏里跳进来时）：localStorage里存有“关键字”时
         if(localStorage.getItem('myInput')!=null){
           that.myInput = localStorage.getItem('myInput');
           url = url+ that.myInput
         }
-        if(localStorage.getItem('myInput')==null && that.myInput!=''){
+        //情况二（从非主页跳进来时）：localStorage里没有“关键字”，且搜索页里搜索栏不为空时
+        if(localStorage.getItem('myInput')==null && that.myInput!=null){
           url = url+ that.myInput
+        }
+        //情况三：搜索页里的搜索栏为null时
+        if(that.myInput==null){
+          url = url+ ''
         }
         that.show2 = false;
         setTimeout(() => {
           that.show2 = true;
         }, 100);
-        that.Tip = '【 搜索结果 】 关键字：' + that.myInput
+        that.Tip = (that.myInput==null)?'【已为您呈现所有商品】':('【 搜索结果 】 关键字：' + that.myInput)
 
         var tmpList = {
 
@@ -271,39 +264,6 @@ watch:{
     let that = this
     that.myInput = val
   },
-  someTF(val) {
-    let that = this
-    if(val == true){
-      this.SomeT = true
-      that.FixPriceSomeTF = false
-      that.auctionSomeTF = false
-      that.tipType = 'info'
-      that.show_conditions_Fix=false
-      that.show_conditions_Auc=false
-      that.SomeList = [];
-      that.aucSomeList = [];
-      that.fixSomeList = [];
-      //  that.tryToSearch()
-      //  alert('someTF变化时执行的')
-    }else{
-      that.SomeTF = false
-    }
-  },
-  select(val){
-    let that = this
-    that.select = val
-    that.SomeList = [];
-    that.aucSomeList = [];
-    that.fixSomeList = [];
-    that.tryToSearch()
-    if(that.select == '所有专利'){
-      that.show_conditions_Auc=false
-      that.show_conditions_Fix=false
-      that.tipType = 'info'
-
-    }
-
-  }
 },
 created(){
   let that = this

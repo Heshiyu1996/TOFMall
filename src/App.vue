@@ -2,7 +2,6 @@
   <div id="app">
     <div>
       <myHeader></myHeader>
-      <div class="clearfix"></div>
       <div class="css-body">
         <div class="css-body-bigPics">
           <el-carousel indicator-position="outside" height="362px">

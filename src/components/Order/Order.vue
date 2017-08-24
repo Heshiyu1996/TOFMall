@@ -195,7 +195,7 @@ export default {
       var url=myUrl.replace('account','pushOrder');
       url=url+'&oaddress='+that.form.address+'&ophone='+that.form.phone+'&oname='+that.form.name+'&opostcode='+that.form.ecode;
       console.log(url);
-      axios.get(url)
+      axios.post(url)
       .then(function(res){
         if(res.data.status){
           // alert("下单成功");

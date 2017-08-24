@@ -21,8 +21,15 @@ import order_Management from './../components/Center/comsforCenter/order_Managem
 import shoppingCart_Management from './../components/ShoppingCart/ShoppingCart'
 import OrdersListResult from './../components/Center/comsforCenter/OrdersListResult'
 
+import test from './../components/Test/test'
+
 export default [
 
+	{
+		path: '/test',
+		name: 'test',
+		component: test,
+	},
 	{
 		path: '/OrdersListResult',
 		name: 'OrdersListResult',

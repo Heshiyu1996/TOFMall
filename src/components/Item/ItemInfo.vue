@@ -66,7 +66,7 @@
                 </el-card>
             </div>
             <!-- 购买按钮 'status','patentName','patentSummary','seller','price','buyer','imgPath'-->
-            <div style="padding-left:10px;width:230px;float:left;margin-bottom:10px">
+            <div style="padding-left:20px;width:260px;float:left;margin-bottom:10px">
                   <div style="margin:10px 0px 0px 30px">
                     <el-input-number size="small" v-model="count" @change="handleChange" :min="1" :max="myGood.remain"></el-input-number>
                   </div>
@@ -85,7 +85,18 @@
                           <el-collapse v-model="activeNames" style="width:861px">
                             <el-collapse-item title="评论区" name="1">
                                 <div v-for="esingle in reviewList" style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px dotted #cccccc">
-                                  <div style="width:600px;float:left;font-weight:bold;font-size:14px">{{esingle.username}}</div>
+                                  <div style="width:600px;float:left;font-size:14px;"><img :src="tx" width=25px height=25px style="vertical-align:middle;margin-right:5px">
+                                    <span>{{esingle.username}}</span>
+                                    <span>
+                                      <el-rate
+                                        v-model="esingle.grade"
+                                        disabled
+                                        text-color="#ff9900"
+                                        text-template="{value}"
+                                        style="display:inline;line-height:15px;margin-left:10px">
+                                      </el-rate>
+                                    </span>
+                                  </div>
                                   <div style="float:right">发布于：{{esingle.time}}</div>
                                   <div class="clearfix" ></div>
                                   <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{esingle.text}}</div>
@@ -99,64 +110,35 @@
                   <div class="clearfix"></div>
                     <div style="float:left;margin-top:10px">
                       <div class="clearfix"></div>
-                        <div style="text-align:left">
+                        <div style="text-align:left;">
                             <el-collapse v-model="activeNames" style="width:861px">
                               <el-collapse-item title="购买了这件商品的人还买了" name="2">
-                                <div @mouseenter="shakes" v-for="esingle in LoveList" style="width:145px;float:left;margin:10px;">
-                                  <router-link :to="'/ItemInfo/' + esingle.id">
-                                    <transition name="el-fade-in-linear">
-                                      <el-card  class="box-card" :body-style="{ padding: '0px' }">
-                                        <img :src="esingle.img" class="imgSmall" >
-                                        <div style="padding:10px;">
-                                          <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
-                                          <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
-                                            <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                <div style="display:flex;justify-content:space-between">
+                                  <div @mouseenter="shakes" v-for="esingle in LoveList" style="float:left;">
+                                    <router-link :to="'/ItemInfo/' + esingle.id">
+                                      <transition name="el-fade-in-linear">
+                                        <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                          <img :src="esingle.img" class="imgSmall" >
+                                          <div style="padding:10px;">
+                                            <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                            <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                                              <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                            </div>
+                                            <div class="clearfix"></div>
                                           </div>
-                                          <div class="clearfix"></div>
-                                        </div>
-                                      </el-card>
-                                      </transition>
-                                  </router-link>
+                                        </el-card>
+                                        </transition>
+                                    </router-link>
+                                  </div>
                                 </div>
                               </el-collapse-item>
                             </el-collapse>
                         </div>
                     </div>
-                  <!-- <div  class="resultList"  style="padding:10px;padding-left:60px;width:1080px;text-align:left" >
-                      <div style="text-align:left;">
-                        <div style="font-size:16px;font-weight:bold;padding-top:10px">猜你喜欢</div>
-
-                        <div style="margin:10px;margin:0 auto">
-                          <div style="padding:10px;width:860px;text-align:left" >
-                          <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
-                            <div style="width:960px;ext-align:left;" >
-                              <div  v-for="esingle in LoveList" style="width:180px;float:left;margin:10px;">
-                                <router-link :to="'/ItemInfo/' + esingle.id">
-                                  <transition name="el-fade-in-linear">
-                                    <el-card  class="box-card" :body-style="{ padding: '0px' }">
-                                      <img :src="esingle.img" class="imgSmall" >
-                                      <div style="padding:10px;">
-                                        <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
-                                        <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
-                                          <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                      </div>
-                                    </el-card>
-                                    </transition>
-                                </router-link>
-                              </div>
-
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        </div>
-                      </div>
-                      </div>
-                  </div> -->
-                <!-- 评论区结束 -->
                 </div>
         </div>
+        <div class="clearfix"></div>
+            <myFooter></myFooter>
     </div>
 </template>
 <script>
@@ -167,11 +149,13 @@ import config from './../../publicAPI/config'
 import { Message } from 'element-ui';//信息提示框
 import { Notification } from 'element-ui';
 import myHeader from './../Public/Header/Header'
+import myFooter from './../Public/Footer/Footer'
 
 export default {
     components: {
         top,
-        myHeader
+        myHeader,
+        myFooter
     },
     data() {
         return {
@@ -182,6 +166,9 @@ export default {
             uploadURL: '',
             item: '',
             rootURL: config.JXURL,
+            tx: [
+                require('./../../assets/img/tx.jpg'),
+            ],
             xx: [
                 require('./../../assets/img/buy.png'),
             ],
@@ -401,7 +388,8 @@ export default {
               myRev.id = that.idx.id;
               myRev.text = that.idx.text;
               myRev.time = that.idx.time;
-              myRev.username = that.idx.username;
+              myRev.grade = that.idx.grade;
+              myRev.username = (that.idx.username)?that.idx.username:'匿名用户'
 
               that.reviewList.push(myRev)
             }
