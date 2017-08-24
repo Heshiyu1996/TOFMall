@@ -203,7 +203,7 @@ export default {
         for( that.idx of res.data ){
             if(that.idx.cid!=null){
             tmpList = [];
-            tmpList.img = require('./../../assets/img/car7.jpg'),
+            tmpList.img = that.rootURL+'/'+that.idx.miniPic,
             tmpList.id = that.idx.cid;
             tmpList.name = that.idx.cname;
             tmpList.price = that.idx.cprice;

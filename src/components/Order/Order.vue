@@ -70,7 +70,7 @@
             <div class="css-body-item-select">
             </div>
             <div class="css-body-item-img" style="">
-              <img src="./../../assets/img/car9.jpg" />
+              <img :src="esingle.img" />
             </div>
             <div class="css-body-item-name ">{{esingle.cname}}</div>
             <div class="css-body-item-price">{{esingle.cprice}}</div>
@@ -178,7 +178,7 @@ export default {
         bt.cprice = that.idx.cprice;
         bt.csize = that.idx.csize;
         bt.sum = that.idx.sum;
-
+        bt.img=that.rootURL+'/'+that.idx.img;
         that.goods.push(bt);
       }
 

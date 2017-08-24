@@ -262,7 +262,7 @@ export default {
         for( that.idx of res.data ){
           console.log('推荐商品');
             tmpList = [];
-            tmpList.img = require('./assets/img/car7.jpg'),
+            tmpList.img = that.rootURL+'/'+that.idx.commodity.miniPic,
             tmpList.id = that.idx.cid;
             tmpList.name = that.idx.commodity.cname;
             tmpList.price = that.idx.commodity.cprice;

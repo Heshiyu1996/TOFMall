@@ -358,6 +358,7 @@ export default {
       getItemInfo(){
           let that = this;
 
+          that.photosList=[];
           axios.get(that.rootURL+'/getGoodsByCid.do?cid=' + that.C)
           .then(function(res){
               that.idx = res.data
@@ -371,6 +372,9 @@ export default {
                 that.myGood.price = that.idx.cprice;
                 that.myGood.remain = that.idx.cremain;
                 that.myGood.monthSale = that.idx.monthSale;
+                that.photosList.push(that.rootURL+'/'+that.idx.pic1);
+                that.photosList.push(that.rootURL+'/'+that.idx.pic2);
+                that.photosList.push(that.rootURL+'/'+that.idx.pic3);
               } else {
                 that.$router.push({path:'/byCategory'})
                 Notification.error({
@@ -492,7 +496,7 @@ export default {
                 for( that.idx of res.data ){
                   console.log('推荐商品');
                     tmpList = [];
-                    tmpList.img = require('./../../assets/img/car7.jpg'),
+                    tmpList.img = that.rootURL+'/'+that.idx.commodity.miniPic,
                     tmpList.id = that.idx.introCid;
                     tmpList.name = that.idx.commodity.cname;
                     tmpList.price = that.idx.commodity.cprice;

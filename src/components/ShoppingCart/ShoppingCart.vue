@@ -38,7 +38,7 @@
                 <el-checkbox :key="esingle.row"  :label="esingle.row" ></el-checkbox>
               </div>
               <div class="css-body-item-img" style="">
-                <img src="./../../assets/img/car9.jpg" />
+                <img :src="esingle.img" />
               </div>
               <!-- {{esingle.commodity.cname}} -->
               <div class="css-body-item-name">{{esingle.commodity.cname}}</div>
@@ -202,6 +202,7 @@ export default {
       .then(function(res){
         for( that.idx of res.data ){
           var bt = {
+            img:'',
             row : 0,
             cid : '',
             uid : '',
@@ -209,6 +210,7 @@ export default {
             sum : 0,
             commodity : {},
           };
+          bt.img=that.rootURL+'/'+that.idx.commodity.miniPic;
           bt.row = that.row;
           bt.cid = that.idx.cid;
           bt.uid = that.idx.uid;

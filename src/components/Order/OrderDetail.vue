@@ -36,7 +36,7 @@
 
               <router-link :to="'/ItemInfo/' + esingle.cid">
                 <div class="css-body-item-img" style="">
-                  <img src="./../../assets/img/car9.jpg" />
+                  <img :src="esingle.img" />
                 </div>
               </router-link>
               <router-link :to="'/ItemInfo/' + esingle.cid">
@@ -154,7 +154,7 @@ export default {
                     offset: 65,
                       duration:2000
                   })
-                  that.confirm = false; 
+                  that.confirm = false;
                   that.active = 4;
 
           // that.getRecord();
@@ -226,6 +226,7 @@ export default {
           var myInfos = [];
           for(var item of res.data.infos){
               var bt = {
+                img    :  that.rootURL+'/'+item.commodity.miniPic, 
                 cid    :  item.cid,
                 cname  :  item.commodity.cname,
                 cprice :  item.commodity.cprice,
