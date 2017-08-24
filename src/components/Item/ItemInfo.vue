@@ -95,6 +95,65 @@
                           </el-collapse>
                       </div>
                   </div>
+
+                  <div class="clearfix"></div>
+                    <div style="float:left;margin-top:10px">
+                      <div class="clearfix"></div>
+                        <div style="text-align:left">
+                            <el-collapse v-model="activeNames" style="width:861px">
+                              <el-collapse-item title="浏览过这件商品的人还查看过这些" name="2">
+                                <div @mouseenter="shakes" v-for="esingle in LoveList" style="width:145px;float:left;margin:10px;">
+                                  <router-link :to="'/ItemInfo/' + esingle.id">
+                                    <transition name="el-fade-in-linear">
+                                      <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                        <img :src="esingle.img" class="imgSmall" >
+                                        <div style="padding:10px;">
+                                          <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                          <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                                            <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                          </div>
+                                          <div class="clearfix"></div>
+                                        </div>
+                                      </el-card>
+                                      </transition>
+                                  </router-link>
+                                </div>
+                              </el-collapse-item>
+                            </el-collapse>
+                        </div>
+                    </div>
+                  <!-- <div  class="resultList"  style="padding:10px;padding-left:60px;width:1080px;text-align:left" >
+                      <div style="text-align:left;">
+                        <div style="font-size:16px;font-weight:bold;padding-top:10px">猜你喜欢</div>
+
+                        <div style="margin:10px;margin:0 auto">
+                          <div style="padding:10px;width:860px;text-align:left" >
+                          <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
+                            <div style="width:960px;ext-align:left;" >
+                              <div  v-for="esingle in LoveList" style="width:180px;float:left;margin:10px;">
+                                <router-link :to="'/ItemInfo/' + esingle.id">
+                                  <transition name="el-fade-in-linear">
+                                    <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                      <img :src="esingle.img" class="imgSmall" >
+                                      <div style="padding:10px;">
+                                        <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                        <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                                          <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                      </div>
+                                    </el-card>
+                                    </transition>
+                                </router-link>
+                              </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        </div>
+                      </div>
+                      </div>
+                  </div> -->
                 <!-- 评论区结束 -->
                 </div>
         </div>
@@ -153,7 +212,42 @@ export default {
 
             sellerName_Msg: '',
             reviewList: [],
-            myGood:{},
+            myGood:{},  LoveList:[{
+                img:require('./../../assets/img/suannai.jpg'),
+                id:'2',
+                name:'华农酸奶（原味）',
+                price:'2.50',
+                seller:'5',
+                cat:'6'
+              },{
+                img:require('./../../assets/img/weitanai.jpg'),
+                id:'2',
+                name:'维他奶（原味）',
+                price:'3.00',
+                seller:'5',
+                cat:'6'
+              },{
+                img:require('./../../assets/img/pijiu.jpg'),
+                id:'2',
+                name:'百威啤酒（罐装）',
+                price:'6.50',
+                seller:'5',
+                cat:'6'
+              },{
+                img:require('./../../assets/img/zhishi.jpg'),
+                id:'2',
+                name:'芝士蛋卷',
+                price:'14.50',
+                seller:'5',
+                cat:'6'
+              },{
+                img:require('./../../assets/img/dikaila.jpg'),
+                id:'2',
+                name:'凯迪拉克S168',
+                price:'1999999.99',
+                seller:'5',
+                cat:'6'
+              }],
         }
     },
     methods: {
@@ -326,6 +420,63 @@ export default {
         this.getItemInfo();
       },
 
+      shakes(e){
+        e = (e.targetclassName= 'imgSmall')? e.target :null;
+        if (!time) var time=650;
+        if (!distance) var distance=4;
+        var originalStyle=e.style.cssText;
+        e.style.position='relative';
+        var start=(new Date()).getTime();
+        animate();
+        function animate(){
+          var now=(new Date()).getTime();
+          var elapsed=now-start;
+          var fraction=elapsed/time; //按下按钮后经过长度为time的时间后 还原，也就是说动画执行的时间
+          if (fraction<1)
+          {
+           var x=distance*Math.sin(fraction*4*Math.PI);
+            e.style.left=x+'px';
+            setTimeout(animate,Math.min(25,time-elapsed));
+          }
+          else
+          {
+            e.style.cssText=originalStyle;
+          }
+        }
+      },
+
+            fade(e){
+              clearInterval(timer);
+              e =e.target;
+              console.log(e)
+              var speed = 1;
+              var timer = null;
+              var alpha=50;
+              e.onmouseover = function(){
+                startrun(60);
+              }
+              e.onmouseout = function(){
+                startrun(20);
+              }
+              function startrun(target){
+                clearInterval(timer);
+                timer = setInterval(function(){
+                  if(target > alpha){
+                    speed = 1;
+                  }else{
+                    speed = -1;
+                  }
+                  if(alpha == target){
+                    clearInterval(timer);
+                  }
+                  else{
+                    alpha = alpha + speed;
+                    e.style.filter = 'alpha(opacity='+alpha+')';
+                    e.style.opacity = alpha/60;
+                  }
+                },10)
+              }
+            }
     },
     created() {
       let that = this ;
@@ -504,8 +655,8 @@ export default {
 }
 
 .box-card {
-    width: 250px;
-    height: 270px
+    width: 150px;
+    height: 190px
 }
 
 .shanshuo:hover {
@@ -604,4 +755,28 @@ export default {
       width: 100%;
       display: block;
     }
+
+       .resultList{
+         /*border: 1px solid gray;*/
+         width: 960px;
+         min-height: 300px;
+         margin: 0 auto;
+         margin-top: 20px;
+         padding: 30px 20px 50px 20px;
+         background-color:rgba(247, 247, 247,0.2);
+         -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
+         filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
+         -moz-box-shadow: -5px 0px 15px #D0D0D0,
+         5px 0px 15px #D0D0D0;/* for firefox */
+         -webkit-box-shadow: -5px 0px 15px #D0D0D0,
+         5px 0px 15px #D0D0D0;/* for safari or chrome */
+         box-shadow: -5px 0px 15px #D0D0D0,
+         5px 0px 15px #D0D0D0;/* for opera or ie9 */
+       }
+
+       .imgSmall {
+          width: 150px;
+          height:120px;
+          display: block;
+       }
 </style>
