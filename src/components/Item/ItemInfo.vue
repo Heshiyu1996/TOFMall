@@ -32,7 +32,7 @@
 
             <!-- 价格信息 -->
             <div style="float:left">
-                <el-card class="box-card" style="margin-left:10px">
+                <el-card style="margin-left:10px">
                     <div class="block">
                         <span  class="attr" style="margin-top:-10px;float:left;">  一口价：</span>
                         <div class=" item shanshuo omit" style="width:150px;font-size:26px;text-align:right;margin-left:30px">
@@ -101,7 +101,7 @@
                       <div class="clearfix"></div>
                         <div style="text-align:left">
                             <el-collapse v-model="activeNames" style="width:861px">
-                              <el-collapse-item title="浏览过这件商品的人还查看过这些" name="2">
+                              <el-collapse-item title="购买了这件商品的人还买了" name="2">
                                 <div @mouseenter="shakes" v-for="esingle in LoveList" style="width:145px;float:left;margin:10px;">
                                   <router-link :to="'/ItemInfo/' + esingle.id">
                                     <transition name="el-fade-in-linear">
@@ -212,7 +212,8 @@ export default {
 
             sellerName_Msg: '',
             reviewList: [],
-            myGood:{},  LoveList:[{
+            myGood:{},
+            LoveList:[{
                 img:require('./../../assets/img/suannai.jpg'),
                 id:'2',
                 name:'华农酸奶（原味）',
@@ -418,6 +419,7 @@ export default {
         that.C= that.$route.params.newID;
         this.getReviewInfo();
         this.getItemInfo();
+        this.getRecommendByCid();
       },
 
       shakes(e){
@@ -476,7 +478,33 @@ export default {
                   }
                 },10)
               }
+            },
+            getRecommendByCid(){
+              // console.log("获取商品相关推荐");
+              let that=this
+              var url=that.rootURL+'/getRecommendByCid.do?cid='+that.C;
+              var tmpList = {
+
+              };
+              that.LoveList = [];
+              axios.get(url)
+              .then(function(res){
+                for( that.idx of res.data ){
+                  console.log('推荐商品');
+                    tmpList = [];
+                    tmpList.img = require('./../../assets/img/car7.jpg'),
+                    tmpList.id = that.idx.introCid;
+                    tmpList.name = that.idx.commodity.cname;
+                    tmpList.price = that.idx.commodity.cprice;
+                    tmpList.remain = that.idx.commodity.cremain;
+                    that.LoveList.push(tmpList);
+                }
+              })
+              .catch(function(error){
+                console.error(error)
+              })
             }
+
     },
     created() {
       let that = this ;

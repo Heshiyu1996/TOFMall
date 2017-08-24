@@ -126,7 +126,8 @@
 </template>
 
 <script>
-
+import config from './publicAPI/config'
+import axios from 'axios'
 import myHeader from './components/Public/Header/Header'
 import myFooter from './components/Public/Footer/Footer'
 
@@ -137,6 +138,7 @@ export default {
   },
   data () {
     return {
+      rootURL: config.JXURL,	//请求的url
             TypeList:[{
               img:require('./assets/img/item2.png'),
               id:'2',
@@ -248,6 +250,30 @@ export default {
     }
   },
   methods:{
+    getRecommendByUser(){
+      let that=this
+      var url=that.rootURL+'/getRecommendByUser.do';
+      var tmpList = {
+
+      };
+      that.LoveList = [];
+      axios.get(url)
+      .then(function(res){
+        for( that.idx of res.data ){
+          console.log('推荐商品');
+            tmpList = [];
+            tmpList.img = require('./assets/img/car7.jpg'),
+            tmpList.id = that.idx.cid;
+            tmpList.name = that.idx.commodity.cname;
+            tmpList.price = that.idx.commodity.cprice;
+            tmpList.remain = that.idx.commodity.cremain;
+            that.LoveList.push(tmpList);
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    },
     tryToSearch(){
       let that = this;
       console.log(that.myInput)
@@ -278,6 +304,10 @@ export default {
   			}
   		}
     }
+  },
+  created(){
+    console.log("首页")
+    this.getRecommendByUser();
   }
 
 }
