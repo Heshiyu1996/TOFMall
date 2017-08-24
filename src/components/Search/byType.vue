@@ -30,7 +30,7 @@
                 <div style="padding:10px;width:860px;text-align:left" >
                 <!-- 一口价（模糊）开始 -->
                 <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
-                  <div   style="height:900px;width:960px;ext-align:left;margin-left:-100px" >
+                  <div   style="height:700px;width:960px;ext-align:left;margin-left:-100px" >
 
                     <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
                       <router-link :to="'/ItemInfo/' + esingle.id">
@@ -51,6 +51,7 @@
 
                   </div>
                   <div class="clearfix"></div>
+
                   <!-- <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
                     <el-pagination
                     @size-change="handleSizeChange1"
@@ -65,11 +66,24 @@
               </div>
                 <!-- 一口价（模糊）结束 -->
               </div>
+
+
             </div>
             </div>
 
         </div>
-
+        <!--分页组件-->
+        <div class="pagination">
+          <el-pagination class="pagination"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentPageChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCount">
+          </el-pagination>
+        </div>
       <!-- 列表展示区 结束 -->
     </div>
     <div class="clearfix"></div>
@@ -112,8 +126,9 @@ export default {
 
       totalPage: 0,
       currentPage: 1,
-      pageSize: 12,
+      pageSize: 10,
 
+      totalCount:0,
 
       totalPage1: 0,  //一口价总页数
       currentPage1: 1,  //一口价当前页
@@ -193,27 +208,26 @@ export default {
 
     },
 
-    handleSizeChange1(val) {
+    handleSizeChange(val) {
       let that = this
-      this.pageSize1 = val;
+      this.pageSize = val;
+      that.tryToSearch();
     },
-    handleCurrentPageChange1(val) {
-      this.currentPage1 = val;
+    handleCurrentPageChange(val) {
+      this.currentPage = val;
+      that.tryToSearch();
     },
 
 
     tryToSearch() {
         let that = this
-        var url = '';
+        var url = that.rootURL+'/search.do?currentPage='+that.currentPage+'&&pageSize='+that.pageSize+'&&condition=';
         if(localStorage.getItem('myInput')!=null){
           that.myInput = localStorage.getItem('myInput');
-          url = that.rootURL+'/search.do?condition='+ that.myInput
-        } else {
-          url = that.rootURL+'/search.do?condition='
+          url = url+ that.myInput
         }
         if(localStorage.getItem('myInput')==null && that.myInput!=''){
-        url = that.rootURL+'/search.do?condition='+ that.myInput
-
+          url = url+ that.myInput
         }
         that.show2 = false;
         setTimeout(() => {
@@ -228,13 +242,19 @@ export default {
         axios.get(url)
         .then(function(res){
           for( that.idx of res.data ){
-            tmpList = [];
-            tmpList.img = require('./../../assets/img/car7.jpg'),
-            tmpList.id = that.idx.cid;
-            tmpList.name = that.idx.cname;
-            tmpList.price = that.idx.cprice;
-            tmpList.remain = that.idx.cremain;
-            that.SomeList.push(tmpList);
+            if(that.idx.cid!=null){
+              tmpList = [];
+              tmpList.img = require('./../../assets/img/car7.jpg'),
+              tmpList.id = that.idx.cid;
+              tmpList.name = that.idx.cname;
+              tmpList.price = that.idx.cprice;
+              tmpList.remain = that.idx.cremain;
+              that.SomeList.push(tmpList);
+            }
+            if (that.idx.totalCount!=null) {
+              that.totalCount=that.idx.totalCount;
+              console.log('总记录数：'+that.idx.totalCount);
+            }
           }
           localStorage.removeItem('myInput')
 
@@ -449,5 +469,8 @@ h1{
   background-color: #FC7500 !important;
     border: 0px solid #FC7500 !important;
   color:white !important;
+}
+.pagination{
+  float: none;
 }
   </style>

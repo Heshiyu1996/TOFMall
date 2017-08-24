@@ -69,6 +69,7 @@
               </el-pagination>
             </div> -->
           </div>
+
           <!-- 所有专利（模糊）结束 -->
           </div>
         </div>
@@ -200,14 +201,16 @@ export default {
       axios.get(that.rootURL+'/search.do?btid='+ bt + '&' +'stid=' + st)
       .then(function(res){
         for( that.idx of res.data ){
-          tmpList = [];
-          tmpList.img = require('./../../assets/img/car7.jpg'),
-          tmpList.id = that.idx.cid;
-          tmpList.name = that.idx.cname;
-          tmpList.price = that.idx.cprice;
-          tmpList.remain = that.idx.cremain;
-          console.log(tmpList)
-          that.SomeList.push(tmpList);
+            if(that.idx.cid!=null){
+            tmpList = [];
+            tmpList.img = require('./../../assets/img/car7.jpg'),
+            tmpList.id = that.idx.cid;
+            tmpList.name = that.idx.cname;
+            tmpList.price = that.idx.cprice;
+            tmpList.remain = that.idx.cremain;
+            console.log(tmpList)
+            that.SomeList.push(tmpList);
+          }
         }
       })
       .catch(function(error){
