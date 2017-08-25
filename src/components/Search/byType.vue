@@ -53,17 +53,7 @@
                   </div>
                   <div class="clearfix"></div>
 
-                  <!-- <div class="block"  style="float:left;margin-top:-10px;margin-left:650px;width:420px;">
-                    <el-pagination
-                    @size-change="handleSizeChange1"
-                    @current-change="handleCurrentPageChange1"
-                    :current-page="currentPage1"
-                    :page-count = "totalPage1"
-                    :page-sizes="[10, 20, 30, 40]"
-                    :page-size="pageSize1"
-                    layout="total, sizes, prev, pager, next, jumper">
-                  </el-pagination>
-                </div> -->
+
               </div>
                 <!-- 一口价（模糊）结束 -->
               </div>
@@ -209,7 +199,7 @@ export default {
 
     tryToSearch() {
         let that = this
-        var url = that.rootURL+'/search.do?currentPage='+that.currentPage+'&&pageSize='+that.pageSize+'&&condition=';
+        var url = that.rootURL+'/search.do?currentPage='+that.currentPage+'&pageSize='+that.pageSize+'&&condition=';
 
         //情况一（从主页的搜索栏里跳进来时）：localStorage里存有“关键字”时
         if(localStorage.getItem('myInput')!=null){
