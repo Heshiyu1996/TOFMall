@@ -64,7 +64,7 @@
                       <div v-for="esingle in SomeList" style="width:180px;float:left;margin:10px;">
                         <router-link :to="'/ItemInfo/' + esingle.id">
                           <transition name="el-fade-in-linear">
-                            <el-card  v-show="show2" class="box-card" :body-style="{ padding: '0px' }">
+                            <el-card  v-show="show2" class="box-card" style="float:none;margin : 0;" :body-style="{ padding: '0px' }">
                               <img :src="esingle.img" class="image" >
                               <div style="padding:10px;">
                                 <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
@@ -277,6 +277,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .resultList{
   /*border: 1px solid gray;*/
   width: 960px;

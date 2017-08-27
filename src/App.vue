@@ -18,7 +18,7 @@
 
             <div  class="resultList"  style="margin-left:-250px;padding:10px;padding-left:60px;width:1080px;text-align:left" >
                 <div style="text-align:left;">
-                  <div style="font-size:16px;font-weight:bold;padding-top:10px">本周热卖商品</div>
+                  <div style="font-size:16px;font-weight:bold;padding-top:10px">热卖商品</div>
                   <div class="clearfix"></div>
                   <div style="margin:10px;margin:0 auto">
                     <div style="padding:10px;width:860px;text-align:left" >
@@ -141,7 +141,7 @@ export default {
             TypeList:[{
               img:require('./assets/img/item2.png'),
               id:'2',
-              name:'懂酒酒懂他',
+              name:'懂酒就懂他',
               price:'2.50',
               seller:'5',
               cat:'6'
@@ -273,6 +273,31 @@ export default {
         console.error(error)
       })
     },
+    getRecommendBySale(){
+      let that=this
+      var url=that.rootURL+'/getRecommendBySale.do';
+      var tmpList = {
+
+      };
+      that.SomeList = [];
+      axios.get(url)
+      .then(function(res){
+        for( that.idx of res.data ){
+          console.log('推荐商品');
+            tmpList = [];
+            tmpList.img = that.rootURL+'/'+that.idx.commodity.miniPic,
+            tmpList.id = that.idx.commodity.cid;
+            tmpList.name = that.idx.commodity.cname;
+            tmpList.price = that.idx.commodity.cprice;
+            tmpList.sale = that.idx.sales;
+            tmpList.grade=that.idx.commodity.grade;
+            that.SomeList.push(tmpList);
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    },
     tryToSearch(){
       let that = this;
       console.log(that.myInput)
@@ -307,6 +332,7 @@ export default {
   created(){
     console.log("首页")
     this.getRecommendByUser();
+    this.getRecommendBySale();
   }
 
 }

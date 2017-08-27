@@ -57,11 +57,18 @@
                         {{myGood.remain}}
                     </span>
                     </div>
-                    <div class="text item block" style="text-align:right;border-bottom:0px solid white">
+                    <div class="text item block" style="text-align:right">
                         <span class="attr">  月销量：</span>
                         <span class="text item shanshuo" style="font-size:20px;text-align:right;">
                         {{myGood.monthSale}} <span style="font-size:14px">件</span>
                     </span>
+                    </div>
+                    <div class="text item block" style="text-align:right;border-bottom:0px solid white">
+                        <span class="attr">  商品评分：</span>
+                        <span class="text item shanshuo" style="font-size:20px;text-align:right;color:#ff9900">
+                        {{myGood.grade}}</span>
+                        <!-- <span style="text-align:right;font-size:14px">分</span> -->
+
                     </div>
                 </el-card>
             </div>
@@ -359,6 +366,11 @@ export default {
                 that.myGood.price = that.idx.cprice;
                 that.myGood.remain = that.idx.cremain;
                 that.myGood.monthSale = that.idx.monthSale;
+                if(that.idx.grade!=null&&that.idx.grade!=0){
+                  that.myGood.grade = that.idx.grade;
+                }else {
+                  that.myGood.grade = '暂无评分'
+                }
                 that.photosList.push(that.rootURL+'/'+that.idx.pic1);
                 that.photosList.push(that.rootURL+'/'+that.idx.pic2);
                 that.photosList.push(that.rootURL+'/'+that.idx.pic3);
