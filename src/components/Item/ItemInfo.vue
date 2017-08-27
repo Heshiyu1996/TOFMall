@@ -91,6 +91,7 @@
                       <div style="text-align:left">
                           <el-collapse v-model="activeNames" style="width:861px">
                             <el-collapse-item title="评论区" name="1">
+                                <div v-show="noComment" style="text-shadow:0px 0px 5px #9ab9f5;color:gray;;">还没有人评论过这件商品喔~~你要不要成为第一个？</div>
                                 <div v-for="esingle in reviewList" style="height:auto!important;min-height:50px;margin-bottom:5px;border-bottom:1px dotted #cccccc">
                                   <div style="width:600px;float:left;font-size:14px;"><img :src="tx" width=25px height=25px style="vertical-align:middle;margin-right:5px">
                                     <span>{{esingle.username}}</span>
@@ -120,14 +121,19 @@
                         <div style="text-align:left;">
                             <el-collapse v-model="activeNames" style="width:861px">
                               <el-collapse-item title="购买了这件商品的人还买了" name="2">
-                                <div style="display:flex;justify-content:space-between">
-                                  <div @mouseenter="shakes" v-for="esingle in LoveList" style="float:left;">
+                                <div style="display:flex;justify-content:space-around;padding:5px 0px;">
+                                  <div @mouseenter="shakes" v-for="esingle in LoveList" style="float:left;width:150px;margin-left:0px;">
                                     <router-link :to="'/ItemInfo/' + esingle.id">
                                       <transition name="el-fade-in-linear">
                                         <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                          <div style="position:absolute;z-index:9999" v-if="esingle.haveGrade">
+                                            <span class="css-item-grade" style="position:absolute;width:17px;text-align:center;margin-left:134px;margin-top:-5px;color:white;font-weight:bold;text-shadow:0px 0px 5px yellow">{{esingle.grade}}</span>
+                                              <i class="el-icon-star-on" style="margin:-15px 0px 0px 125px;font-size:34px;color:#FC7500;">
+                                              </i>
+                                          </div>
                                           <img :src="esingle.img" class="imgSmall" >
                                           <div style="padding:10px;">
-                                            <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                            <div  class="omit" style="font-size:16px;line-height:30px;width:130px;height:35px;float:left">{{esingle.name}}</div>
                                             <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
                                               <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
                                             </div>
@@ -166,6 +172,7 @@ export default {
     },
     data() {
         return {
+            noComment:true,
             count:1,
             textarea3: '',
             inputContent: '',
@@ -405,6 +412,8 @@ export default {
 
               that.reviewList.push(myRev)
             }
+            that.noComment =
+              (that.reviewList.length == 0 ? true:false);
           })
           .catch(function(error){
             console.error(error)
@@ -451,38 +460,38 @@ export default {
         }
       },
 
-            fade(e){
-              clearInterval(timer);
-              e =e.target;
-              console.log(e)
-              var speed = 1;
-              var timer = null;
-              var alpha=50;
-              e.onmouseover = function(){
-                startrun(60);
+        fade(e){
+          clearInterval(timer);
+          e =e.target;
+          console.log(e)
+          var speed = 1;
+          var timer = null;
+          var alpha=50;
+          e.onmouseover = function(){
+            startrun(60);
+          }
+          e.onmouseout = function(){
+            startrun(20);
+          }
+          function startrun(target){
+            clearInterval(timer);
+            timer = setInterval(function(){
+              if(target > alpha){
+                speed = 1;
+              }else{
+                speed = -1;
               }
-              e.onmouseout = function(){
-                startrun(20);
-              }
-              function startrun(target){
+              if(alpha == target){
                 clearInterval(timer);
-                timer = setInterval(function(){
-                  if(target > alpha){
-                    speed = 1;
-                  }else{
-                    speed = -1;
-                  }
-                  if(alpha == target){
-                    clearInterval(timer);
-                  }
-                  else{
-                    alpha = alpha + speed;
-                    e.style.filter = 'alpha(opacity='+alpha+')';
-                    e.style.opacity = alpha/60;
-                  }
-                },10)
               }
-            },
+              else{
+                alpha = alpha + speed;
+                e.style.filter = 'alpha(opacity='+alpha+')';
+                e.style.opacity = alpha/60;
+              }
+            },10)
+          }
+        },
             getRecommendByCid(){
               // console.log("获取商品相关推荐");
               let that=this
@@ -501,6 +510,13 @@ export default {
                     tmpList.name = that.idx.commodity.cname;
                     tmpList.price = that.idx.commodity.cprice;
                     tmpList.remain = that.idx.commodity.cremain;
+                    if(that.idx.commodity.grade!=null){
+                      tmpList.grade = that.idx.commodity.grade;
+                      tmpList.haveGrade=true;
+                    }else {
+                      tmpList.haveGrade=true;
+                      tmpList.grade ='5.0';
+                    }
                     that.LoveList.push(tmpList);
                 }
               })
@@ -534,7 +550,9 @@ export default {
     text-align: right;
     padding-right: 18px
 }
-
+.el-card{
+  margin: 0px;
+}
 .buttons tr td button {
     width: 318px;
     height: 46px;
@@ -788,27 +806,31 @@ export default {
       display: block;
     }
 
-       .resultList{
-         /*border: 1px solid gray;*/
-         width: 960px;
-         min-height: 300px;
-         margin: 0 auto;
-         margin-top: 20px;
-         padding: 30px 20px 50px 20px;
-         background-color:rgba(247, 247, 247,0.2);
-         -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
-         filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
-         -moz-box-shadow: -5px 0px 15px #D0D0D0,
-         5px 0px 15px #D0D0D0;/* for firefox */
-         -webkit-box-shadow: -5px 0px 15px #D0D0D0,
-         5px 0px 15px #D0D0D0;/* for safari or chrome */
-         box-shadow: -5px 0px 15px #D0D0D0,
-         5px 0px 15px #D0D0D0;/* for opera or ie9 */
-       }
+     .resultList{
+       /*border: 1px solid gray;*/
+       width: 960px;
+       min-height: 300px;
+       margin: 0 auto;
+       margin-top: 20px;
+       padding: 30px 20px 50px 20px;
+       background-color:rgba(247, 247, 247,0.2);
+       -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
+       filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
+       -moz-box-shadow: -5px 0px 15px #D0D0D0,
+       5px 0px 15px #D0D0D0;/* for firefox */
+       -webkit-box-shadow: -5px 0px 15px #D0D0D0,
+       5px 0px 15px #D0D0D0;/* for safari or chrome */
+       box-shadow: -5px 0px 15px #D0D0D0,
+       5px 0px 15px #D0D0D0;/* for opera or ie9 */
+     }
 
-       .imgSmall {
-          width: 150px;
-          height:120px;
-          display: block;
-       }
+     .imgSmall {
+        width: 150px;
+        height:120px;
+        display: block;
+     }
+
+     .css-item-grade{
+
+     }
 </style>

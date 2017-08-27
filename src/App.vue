@@ -30,11 +30,21 @@
                           <router-link :to="'/ItemInfo/' + esingle.id">
                             <transition name="el-fade-in-linear">
                               <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                <div style="position:absolute;" v-if="esingle.haveGrade">
+                                  <span class="css-item-grade" style="position:absolute;margin-left:168px;font-size:15px;margin-top:-5px;color:white;font-weight:bold;text-shadow:0px 0px 5px yellow">{{esingle.grade}}</span>
+                                    <i class="el-icon-star-on" style="margin:-15px 0px 0px 160px;font-size:36px;color:#FC7500;">
+                                    </i>
+                                </div>
+
                                 <img :src="esingle.img" class="imgSmall" >
                                 <div style="padding:10px;">
                                   <div id="name" class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                  <div>
                                   <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
                                     <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                  </div>
+                                  <div style="text-align:left;float:right;font-size:12px;font-weight:bold;">总销量:<span style="color:green;">{{esingle.sales}}</span>
+                                  </div>
                                   </div>
                                   <div class="clearfix"></div>
                                 </div>
@@ -65,12 +75,22 @@
                           <router-link :to="'/ItemInfo/' + esingle.id">
                             <transition name="el-fade-in-linear">
                               <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                                <div style="position:absolute;" v-if="esingle.haveGrade">
+                                  <span class="css-item-grade" style="position:absolute;margin-left:168px;font-size:15px;margin-top:-5px;color:white;font-weight:bold;text-shadow:0px 0px 5px yellow">{{esingle.grade}}</span>
+                                    <i class="el-icon-star-on" style="margin:-15px 0px 0px 160px;font-size:36px;color:#FC7500;">
+                                    </i>
+                                </div>
+
                                 <img :src="esingle.img" class="imgSmall" >
                                 <div style="padding:10px;">
                                   <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                                  <div>
                                   <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
-                                    <div style="text-align:left;width:80px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                                    <div style="text-align:left;width:50px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
                                   </div>
+                                  <div style="text-align:left;float:right;font-size:12px;font-weight:bold;">人气值:<span style="color:green;">{{esingle.rank}}</span>
+                                  </div>
+                                </div>
                                   <div class="clearfix"></div>
                                 </div>
                               </el-card>
@@ -266,6 +286,14 @@ export default {
             tmpList.name = that.idx.commodity.cname;
             tmpList.price = that.idx.commodity.cprice;
             tmpList.remain = that.idx.commodity.cremain;
+            tmpList.rank = that.idx.rank;
+            if(that.idx.commodity.grade!=null){
+            tmpList.grade = that.idx.commodity.grade.toFixed(1);
+              tmpList.haveGrade=true;
+            }else {
+              tmpList.haveGrade=true;
+              tmpList.grade ='5.0';
+            }
             that.LoveList.push(tmpList);
         }
       })
@@ -289,8 +317,14 @@ export default {
             tmpList.id = that.idx.commodity.cid;
             tmpList.name = that.idx.commodity.cname;
             tmpList.price = that.idx.commodity.cprice;
-            tmpList.sale = that.idx.sales;
-            tmpList.grade=that.idx.commodity.grade;
+            tmpList.sales = that.idx.sales;
+            if(that.idx.commodity.grade!=null){
+              tmpList.grade = that.idx.commodity.grade.toFixed(1);
+              tmpList.haveGrade=true;
+            }else {
+              tmpList.haveGrade=true;
+              tmpList.grade ='5.0';
+            }
             that.SomeList.push(tmpList);
         }
       })

@@ -37,6 +37,11 @@
                       <router-link :to="'/ItemInfo/' + esingle.id">
                         <transition name="el-fade-in-linear">
                           <el-card  v-show="show2" class="box-card" :body-style="{ padding: '0px' }">
+                            <div style="position:absolute;" v-if="esingle.haveGrade">
+                              <span class="css-item-grade" style="position:absolute;margin-left:168px;font-size:15px;margin-top:-5px;color:white;font-weight:bold;text-shadow:0px 0px 5px yellow">{{esingle.grade}}</span>
+                                <i class="el-icon-star-on" style="margin:-15px 0px 0px 160px;font-size:36px;color:#FC7500;">
+                                </i>
+                            </div>
                             <img :src="esingle.img" class="image" >
                             <div style="padding:10px;">
                               <div id="name" class="omit" style="font-size:16px;line-height:30px;width:120px;height:35px;float:left">{{esingle.name}}</div>
@@ -234,6 +239,13 @@ export default {
               tmpList.name = that.idx.cname;
               tmpList.price = that.idx.cprice;
               tmpList.remain = that.idx.cremain;
+              if(that.idx.grade!=null){
+                tmpList.grade = that.idx.grade.toFixed(1);
+                tmpList.haveGrade=true;
+              }else {
+                tmpList.haveGrade=true;
+                tmpList.grade ='5.0';
+              }
               that.SomeList.push(tmpList);
             }
             if (that.idx.totalCount!=null) {

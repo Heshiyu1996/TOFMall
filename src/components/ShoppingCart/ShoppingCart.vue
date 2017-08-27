@@ -1,5 +1,7 @@
 <template>
   <div class="updateInfo-box">
+    <div class="info-box">
+      <div>
     <div style="margin-top:-30px;">
       <el-steps :space="100" :active="active" finish-status="success">
         <el-step title="加入购物车"></el-step>
@@ -64,6 +66,57 @@
         </div>
       </section>
     </div>
+</div>
+    </div>
+    <div style="">
+      <div  class="resultList">
+          <div style="text-align:left;">
+            <div style="font-size:16px;font-weight:bold;padding-top:10px">猜你喜欢</div>
+            <div class="clearfix"></div>
+            <div style="margin:10px;margin:0 auto">
+              <div style="padding:0px 80px 0px 80px;width:860px;text-align:left" >
+              <!-- 猜你喜欢 开始 -->
+              <div  style="padding: 0px 20px;width:180px;margin-left:10px;">
+                <div style="width:1080px;ext-align:left;margin-left:-100px" >
+
+                  <div  @mouseenter="shakes" v-for="esingle in LoveList" style="width:180px;float:left;margin:20px;">
+                    <router-link :to="'/ItemInfo/' + esingle.id">
+                      <transition name="el-fade-in-linear">
+                        <el-card  class="box-card" :body-style="{ padding: '0px' }">
+                          <div style="position:absolute;" v-if="esingle.haveGrade">
+                            <span class="css-item-grade" style="position:absolute;margin-left:168px;font-size:15px;margin-top:-5px;color:white;font-weight:bold;text-shadow:0px 0px 5px yellow">{{esingle.grade}}</span>
+                              <i class="el-icon-star-on" style="margin:-15px 0px 0px 160px;font-size:36px;color:#FC7500;">
+                              </i>
+                          </div>
+
+
+                          <img :src="esingle.img" class="imgSmall" >
+                          <div style="padding:10px;">
+                            <div  class="omit" style="font-size:16px;line-height:30px;width:150px;height:35px;float:left">{{esingle.name}}</div>
+                            <div>
+                            <div style="text-align:left;float:left;font-size:12px;font-weight:bold;color:rgb(230, 94, 64)" >￥
+                              <div style="text-align:left;width:50px;font-size:14px;float:right;line-height:17px;" class="omit" >{{esingle.price}}</div>
+                            </div>
+                            <div style="text-align:left;float:right;font-size:12px;font-weight:bold;">人气值:<span style="color:green;">{{esingle.rank}}</span>
+                            </div>
+                          </div>
+                            <div class="clearfix"></div>
+                          </div>
+                        </el-card>
+                        </transition>
+                    </router-link>
+                  </div>
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+              <!-- 猜你喜欢 结束 -->
+            </div>
+          </div>
+          </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -95,6 +148,7 @@ export default {
       row: 0,
       total: 0,
       cityOptions: [],
+      LoveList:[],
     }
   },
 
@@ -119,6 +173,44 @@ export default {
     // }
   },
   methods: {
+    getRecommendByUser(){
+      let that=this
+      var url=that.rootURL+'/getRecommendByUser.do';
+      var tmpList = {
+
+      };
+      var count=1;
+      that.LoveList = [];
+      axios.get(url)
+      .then(function(res){
+        for( that.idx of res.data ){
+          if(count>4){
+            break;
+          }
+          count=count+1;
+
+          console.log('推荐商品');
+            tmpList = [];
+            tmpList.img = that.rootURL+'/'+that.idx.commodity.miniPic,
+            tmpList.id = that.idx.cid;
+            tmpList.name = that.idx.commodity.cname;
+            tmpList.price = that.idx.commodity.cprice;
+            tmpList.remain = that.idx.commodity.cremain;
+            tmpList.rank = that.idx.rank;
+            if(that.idx.commodity.grade!=null){
+              tmpList.grade = that.idx.commodity.grade.toFixed(1);
+              tmpList.haveGrade=true;
+            }else {
+              tmpList.haveGrade=true;
+              tmpList.grade ='5.0';
+            }
+            that.LoveList.push(tmpList);
+        }
+      })
+      .catch(function(error){
+        console.error(error)
+      })
+    },
     deleteCart(esingle){
       let that=this;
       axios.get(that.rootURL+'/deleteCart.do?cid=' + esingle.cid).then(function(res){
@@ -284,6 +376,30 @@ export default {
     this.checkAll = checkedCount === this.goods.length;
     this.isIndeterminate = checkedCount > 0 && checkedCount < this.goods.length;
     },
+    shakes(e){
+      e = (e.targetclassName= 'imgSmall')? e.target :null;
+      if (!time) var time=650;
+      if (!distance) var distance=4;
+      var originalStyle=e.style.cssText;
+      e.style.position='relative';
+      var start=(new Date()).getTime();
+      animate();
+      function animate(){
+        var now=(new Date()).getTime();
+        var elapsed=now-start;
+        var fraction=elapsed/time; //按下按钮后经过长度为time的时间后 还原，也就是说动画执行的时间
+        if (fraction<1)
+        {
+         var x=distance*Math.sin(fraction*4*Math.PI);
+          e.style.left=x+'px';
+          setTimeout(animate,Math.min(25,time-elapsed));
+        }
+        else
+        {
+          e.style.cssText=originalStyle;
+        }
+      }
+    },
     updateTotal(){
       setTimeout(() => {
       let that = this;
@@ -305,7 +421,8 @@ export default {
     }
   },
     created(){
-      this.getCartList()
+      this.getCartList();
+      this.getRecommendByUser();
     },
 
 }
@@ -314,7 +431,9 @@ export default {
 <style scoped lang="scss">
 
   .css-top {
-    float:left;
+    //float:left;
+    margin-top: 10px;
+    padding-left: 20px;
     font-size:20px;
     font-weight: bold;
     height:40px;
@@ -355,7 +474,9 @@ export default {
       width:27%;
     }
   }
-
+  .el-card{
+    margin: 0px;
+  }
   .css-body {
     .css-body-item {
       margin-top: 5px;
@@ -466,19 +587,53 @@ export default {
      .updateInfo-box{
      	float: left;
      	border-radius: 4px;
-     	background:rgba(255, 255, 255,0.7);
+    //  background:rgba(255, 255, 255,0.7);
        position:relative;
-       left:150px;
-     	padding:50px;
+       left:100px;
+     	padding:50px 50px 20px 50px;
       margin-left:-100px;
-      margin-top:100px;
-     	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    //  margin-bottom: 20px;
+      //box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
      }
 
+     .info-box{
+      // float: left;
+       border-radius: 4px;
+       background:rgba(255, 255, 255,0.7);
+       position:relative;
+      //  left:150px;
+        padding:50px 50px 60px 50px;
+      // margin-left:-100px;
+     //margin-bottom:30px;
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+     }
+     .resultList{
+       /*border: 1px solid gray;*/
+       background:rgba(255, 255, 255,0.7);
+       width: 960px;
+       min-height: 300px;
+       margin: 0 auto;
+       margin-top: 20px;
+       padding: 10px 20px 10px 20px;
+      //  background-color:rgba(247, 247, 247,0.2);
+       -ms-filter:progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 8 */
+       filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#000000');  /* For IE 5.5 - 7 */
+       -moz-box-shadow: -5px 0px 15px #D0D0D0,
+       5px 0px 15px #D0D0D0;/* for firefox */
+       -webkit-box-shadow: -5px 0px 15px #D0D0D0,
+       5px 0px 15px #D0D0D0;/* for safari or chrome */
+       box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+       border-radius: 4px;
+     }
      .appBTN {
        margin-left: -15px !important;
        background-color: #FC7500 !important;
          border: 0px solid #FC7500 !important;
        color:white !important;
+     }
+     .imgSmall {
+        width: 180px;
+        height:150px;
+        display: block;
      }
 </style>

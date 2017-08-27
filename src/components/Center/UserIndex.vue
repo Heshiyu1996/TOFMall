@@ -42,8 +42,8 @@
         </el-row>
       </div>
     </div>
-    <div style="margin-top:50px;margin-left:200px;width:980px;height:550px;padding-right:40px;padding-bottom:50px">
-            <div style="margin-top:-100px;float:left;width:1000px;height:550px">
+    <div style="margin-top:50px;margin-left:200px;width:980px;min-height:550px;padding-right:40px;padding-bottom:50px">
+            <div style="margin-top:-100px;float:left;width:1000px;min-height:550px">
               <transition name="slide-user" mode="out-in">
                 <router-view class="child-view"></router-view>
               </transition>
@@ -52,7 +52,7 @@
   </div>
 
   <div class="clearfix"></div>
-<div style="margin-top:130px">
+<div style="margin-top:10px">
   <myFooter></myFooter>
 </div>
 

@@ -29,8 +29,8 @@ export default {
 #footer{
 	width:1210px;
   margin: 0 auto;
-	margin-top: 60px;
-	padding: 50px;
+	margin-top: 5px;
+	padding: 50px 50px 50px 50px;
 	background-color: #EFF2F7;
 	text-align: center;
 }

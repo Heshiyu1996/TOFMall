@@ -17,11 +17,16 @@
 
             <el-submenu index="1">
               <template slot="title" ><span class="header_guide">商品分类</span></template>
+              <router-link to="/byCategory">
               <el-menu-item index="1-1">
-                <router-link to="/byCategory">按标签</router-link>
+                按标签
               </el-menu-item>
+              </router-link>
+              <router-link to="/byType">
               <el-menu-item index="1-2">
-                <router-link to="/byType">按关键字</router-link></el-menu-item>
+                按关键字
+              </el-menu-item>
+              </router-link>
             </el-submenu>
 
         <el-submenu index="3">
@@ -45,7 +50,7 @@
       <div v-show="login" class="css-top-right">
         <router-link to="/userIndex">
           <!-- <el-button @click="getUserInfo()">个人中心</el-button> -->
-          <img src="./../../../assets/img/TOF.png" id="pic">
+          <img src="./../../../assets/img/TOF.jpg" id="pic">
           <div style="float:left;padding:0px 0px 0px 10px"><span class="css-top-right-username">你好！{{username}}</span></div>
         </router-link>
         <router-link to="/login">
@@ -180,7 +185,7 @@ export default {
   background-color:rgb(239,242,247);
   border-bottom: 1px solid #cccccc;
   box-shadow: 0 0 5px #888;
-  
+
   .css-top-left {
     float: left;
     width: 33%;
